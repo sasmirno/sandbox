@@ -52,20 +52,31 @@ for (i = 0; i < btn.length; i++) {
 				if (plus == false && out != undefined) {
 					out += input;
 					plus = true;
+				} else if (out == undefined) {
+					out = input;
+					plus = true;
 				} else {
 					console.log('Хватит с тебя плюсиков');
 				}
 				break;
 			case '-':
 				point = false;
-				if (minus == false && out != undefined) {
+				if (plus == true) {
+					//out = input;
+					//out[out.length-1] = input;
+					//out[1] = input;
+					out = out.replace('+','минусик');
+					console.log('минусик');
+					minus = true;
+					plus = false;
+				} else if (minus == false && out != undefined) {
 					out += input;
 					minus = true;
 				} else if (out == undefined) {
 					out = input;
 					minus = true;
 				} else {
-					console.log('Хватит с тебя минусовик');
+					console.log('Хватит с тебя минусочков');
 				}
 				break;
 			default:
