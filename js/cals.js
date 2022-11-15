@@ -49,7 +49,20 @@ for (i = 0; i < btn.length; i++) {
 				break;
 			case '+':
 				point = false;
-				if (plus == false && out != undefined) {
+				if (minus = true) {
+					let rewrite;
+					for (x=0; x<out.length-1; x++) {
+						if (rewrite == undefined) {
+							rewrite = out[x];
+						} else {
+							rewrite += out[x];
+						}
+					}
+					rewrite += input;
+					out = rewrite;
+					minus = false;
+					plus = true;
+				} else if (plus == false && out != undefined) {
 					out += input;
 					plus = true;
 				} else if (out == undefined) {
@@ -62,11 +75,18 @@ for (i = 0; i < btn.length; i++) {
 			case '-':
 				point = false;
 				if (plus == true) {
-					//out = input;
-					//out[out.length-1] = input;
-					//out[1] = input;
-					out = out.replace('+','минусик');
-					console.log('минусик');
+					let rewrite;
+					for (x=0; x<out.length-1; x++) {
+						if (rewrite == undefined) {
+							rewrite = out[x];
+						} else {
+							rewrite += out[x];
+						}
+					}
+					rewrite += input;
+					out = rewrite;
+					//console.log('минусик');
+					//console.log(rewrite);
 					minus = true;
 					plus = false;
 				} else if (minus == false && out != undefined) {
@@ -104,6 +124,7 @@ for (i = 0; i < btn.length; i++) {
 		screen();
 	});
 }
+function rewrite() {}
 
 // Преобразование строки  в числа
 calc.addEventListener("click", function() {
