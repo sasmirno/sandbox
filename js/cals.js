@@ -6,14 +6,16 @@ let out; // Конечный результат
 
 // Вывод вычисления на экран
 function screen() {
-	if (out != undefined) {
+	if (out == undefined) {
+		document.querySelector(".cals__screen").innerHTML = '';
+	} else {
 		document.querySelector(".cals__screen").innerHTML = out;
 	}
 }
 
 // Кнопка обнуления
 zero.addEventListener("click", function() {
-	out = '';
+	out = undefined;
 	point = false;
 	plus = false;
 	minus = false;
@@ -28,6 +30,8 @@ for (i = 0; i < btn.length; i++) {
 	var point = false;
 	var plus = false;
 	var minus = false;
+	var multiplication = false;
+	var segmentation = false;
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
 		//let check = parseInt(out[out.length-1]);
@@ -49,46 +53,30 @@ for (i = 0; i < btn.length; i++) {
 				break;
 			case '+':
 				point = false;
-				if (minus = true) {
-					let rewrite;
-					for (x=0; x<out.length-1; x++) {
-						if (rewrite == undefined) {
-							rewrite = out[x];
-						} else {
-							rewrite += out[x];
-						}
-					}
-					rewrite += input;
-					out = rewrite;
-					minus = false;
+				if (minus == true || multiplication == true || segmentation == true) {
+					rewrite();
 					plus = true;
+					minus = false;
+					multiplication = false;
+					segmentation = false;
 				} else if (plus == false && out != undefined) {
 					out += input;
 					plus = true;
 				} else if (out == undefined) {
-					out = input;
-					plus = true;
+					//out = input;
+					//plus = true;
 				} else {
 					console.log('Хватит с тебя плюсиков');
 				}
 				break;
 			case '-':
 				point = false;
-				if (plus == true) {
-					let rewrite;
-					for (x=0; x<out.length-1; x++) {
-						if (rewrite == undefined) {
-							rewrite = out[x];
-						} else {
-							rewrite += out[x];
-						}
-					}
-					rewrite += input;
-					out = rewrite;
-					//console.log('минусик');
-					//console.log(rewrite);
-					minus = true;
+				if (plus == true /*|| multiplication == true || segmentation == true*/) {
+					rewrite();
 					plus = false;
+					minus = true;
+					//multiplication = false;
+					//segmentation = false;
 				} else if (minus == false && out != undefined) {
 					out += input;
 					minus = true;
@@ -99,14 +87,67 @@ for (i = 0; i < btn.length; i++) {
 					console.log('Хватит с тебя минусочков');
 				}
 				break;
+			case '*':
+				point = false;
+				if (plus == true || minus == true || segmentation == true) {
+					rewrite();
+					plus = false;
+					minus = false;
+					multiplication = true;
+					segmentation = false;
+				} else if (multiplication == false && out != undefined) {
+					out += input;
+					multiplication = true;
+				} else if (out == undefined) {
+					//out = input;
+					//multiplication = true;
+				} else {
+					console.log('Хватит с тебя *');
+				}
+				break;
+			case '/':
+				point = false;
+				if (plus == true || minus == true || multiplication == true) {
+					rewrite();
+					plus = false;
+					minus = false;
+					multiplication = false;
+					segmentation = true;
+				} else if (segmentation == false && out != undefined) {
+					out += input;
+					segmentation = true;
+				} else if (out == undefined) {
+					//out = input;
+					//segmentation = true;
+				} else {
+					console.log('Хватит с тебя /');
+				}
+				break;
 			default:
-				plus = false;
+				segmentation = false;
 				minus = false;
 				if (out != undefined) {
 					out += input;
 				} else {
 					out = input;
 				}
+		}
+		function rewrite() {
+			let rewrite;
+			for (x=0; x<out.length-1; x++) {
+				if (rewrite == undefined) {
+					rewrite = out[x];
+				} else {
+					rewrite += out[x];
+				}
+			}
+			if (rewrite == undefined) {
+				rewrite = input;
+			} else {
+				rewrite += input;
+			}
+			if (input == '-') {}
+			out = rewrite;
 		}
 		/*if (point == true && input == '.') {
 			console.log('Хватит с тебя точек');
@@ -124,7 +165,6 @@ for (i = 0; i < btn.length; i++) {
 		screen();
 	});
 }
-function rewrite() {}
 
 // Преобразование строки  в числа
 calc.addEventListener("click", function() {
