@@ -19,10 +19,12 @@ zero.addEventListener("click", function() {
 	point = false;
 	plus = false;
 	minus = false;
+	multiplication = false;
+	segmentation = false;
 	screen();
 });
 
-/*let pr = +10.9+1.15;
+/*let pr = +10.+1.15-.15;
 console.log(pr);*/
 
 // Прочие кнопки
@@ -40,10 +42,17 @@ for (i = 0; i < btn.length; i++) {
 				if (point == false && out != undefined) {
 					out += input;
 					point = true;
+					plus = false;
+					minus = false;
+					multiplication = false;
+					segmentation = false;
 				} else if (out == undefined) {
-					//out = '0';
 					out = input;
 					point = true;
+					plus = false;
+					minus = false;
+					multiplication = false;
+					segmentation = false;
 				}/* else if (isNaN(check) == true) {
 					out += '0.';
 					point = true;
@@ -124,8 +133,10 @@ for (i = 0; i < btn.length; i++) {
 				}
 				break;
 			default:
-				segmentation = false;
+				plus = false;
 				minus = false;
+				multiplication = false;
+				segmentation = false;
 				if (out != undefined) {
 					out += input;
 				} else {
@@ -191,8 +202,8 @@ calc.addEventListener("click", function() {
 		}
 	} else {}
 	arr2.push(out2);
-	//console.log(arr2);
-	console.log(out);
+	console.log(arr2);
+	//console.log(out);
 	//console.log(parseInt(out));
 	//screen();
 	//const regex = /[0-9]+|[\+*/\-]/g;
