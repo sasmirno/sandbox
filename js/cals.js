@@ -24,7 +24,7 @@ zero.addEventListener("click", function() {
 	screen();
 });
 
-/*let pr = +10.+1.15-.15;
+/*let pr = 0.+1;
 console.log(pr);*/
 
 // Прочие кнопки
@@ -34,43 +34,50 @@ for (i = 0; i < btn.length; i++) {
 	var minus = false;
 	var multiplication = false;
 	var segmentation = false;
+	let dhh = '0'; //
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
-		//let check = parseInt(out[out.length-1]);
+		dhh += input; //
+		let check = parseInt(dhh[dhh.length-1]); //
 		switch (input) {
 			case '.':
 				if (point == false && out != undefined) {
 					out += input;
 					point = true;
-					plus = false;
-					minus = false;
-					multiplication = false;
-					segmentation = false;
+					//plus = true;
+					//minus = true;
+					//multiplication = true;
+					//segmentation = true;
 				} else if (out == undefined) {
-					out = input;
+					out = '0.';
+					//out = input;
 					point = true;
-					plus = false;
-					minus = false;
-					multiplication = false;
-					segmentation = false;
-				}/* else if (isNaN(check) == true) {
+					//plus = true;
+					//minus = true;
+					//multiplication = true;
+					//segmentation = true;
+				} else if (isNaN(check) == true) {
 					out += '0.';
 					point = true;
-				}*/ else {
+					console.log('hf,jnftn');
+				}/**/ else {
 					console.log('Хватит с тебя точек');
 				}
 				break;
 			case '+':
-				point = false;
 				if (minus == true || multiplication == true || segmentation == true) {
-					rewrite();
-					plus = true;
-					minus = false;
-					multiplication = false;
-					segmentation = false;
+					if (point == false) {
+						rewrite();
+						point = false;
+						plus = true;
+						minus = false;
+						multiplication = false;
+						segmentation = false;
+					}
 				} else if (plus == false && out != undefined) {
 					out += input;
 					plus = true;
+						point = false;
 				} else if (out == undefined) {
 					//out = input;
 					//plus = true;
