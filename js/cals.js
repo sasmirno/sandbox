@@ -42,7 +42,13 @@ for (i = 0; i < btn.length; i++) {
 		switch (input) {
 			case '.':
 				if (point == false && out != undefined) {
-					out += input;
+					if (check == '+') {
+						out += '0.';
+					console.log('1.1');
+					} else {
+						out += input;
+					console.log('1.2');
+					}
 					point = true;
 					//plus = true;
 					//minus = true;
@@ -56,11 +62,12 @@ for (i = 0; i < btn.length; i++) {
 					//minus = true;
 					//multiplication = true;
 					//segmentation = true;
-				} else if (isNaN(check) == true) {
+					console.log('2');
+				}/* else if (isNaN(check) == true) {
 					out += '0.';
 					point = true;
-					console.log('hf,jnftn');
-				}/**/ else {
+					console.log('3');
+				}*/ else {
 					console.log('Хватит с тебя точек');
 				}
 				break;
