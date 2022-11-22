@@ -16,6 +16,7 @@ function screen() {
 // Кнопка обнуления
 zero.addEventListener("click", function() {
 	out = undefined;
+	double = undefined;
 	point = false;
 	plus = false;
 	minus = false;
@@ -34,20 +35,23 @@ for (i = 0; i < btn.length; i++) {
 	var minus = false;
 	var multiplication = false;
 	var segmentation = false;
-	let dhh = '0'; //
+	var double;
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
-		dhh += input; //
-		let check = parseInt(dhh[dhh.length-1]); //
+		double += input; //
+		let check = double[double.length-2];
+		//let check = parseInt(double[double.length-1]); //
+		//console.log('> '+check+' <');
+		//console.log(double);
 		switch (input) {
 			case '.':
 				if (point == false && out != undefined) {
-					if (check == '+') {
+					if (check == '+' || check == '*') {
 						out += '0.';
-					console.log('1.1');
+						console.log('1.1');
 					} else {
 						out += input;
-					console.log('1.2');
+						console.log('1.2');
 					}
 					point = true;
 					//plus = true;
@@ -63,11 +67,7 @@ for (i = 0; i < btn.length; i++) {
 					//multiplication = true;
 					//segmentation = true;
 					console.log('2');
-				}/* else if (isNaN(check) == true) {
-					out += '0.';
-					point = true;
-					console.log('3');
-				}*/ else {
+				} else {
 					console.log('Хватит с тебя точек');
 				}
 				break;
