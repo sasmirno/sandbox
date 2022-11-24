@@ -40,57 +40,51 @@ for (i = 0; i < btn.length; i++) {
 		let input = this.textContent;
 		double += input; //
 		let check = double[double.length-2];
-		//let check = parseInt(double[double.length-1]); //
 		//console.log('> '+check+' <');
 		//console.log(double);
 		switch (input) {
 			case '.':
 				if (point == false && out != undefined) {
-					if (check == '+' || check == '*') {
+					if (isNaN(check) == true/* check == '+' || check == '-' || check == '*' || check == '/'*/) {
 						out += '0.';
-						console.log('1.1');
+						//console.log('1.1');
 					} else {
 						out += input;
-						console.log('1.2');
+						//console.log('1.2');
 					}
-					point = true;
-					//plus = true;
-					//minus = true;
-					//multiplication = true;
-					//segmentation = true;
 				} else if (out == undefined) {
 					out = '0.';
-					//out = input;
-					point = true;
-					//plus = true;
-					//minus = true;
-					//multiplication = true;
-					//segmentation = true;
-					console.log('2');
+					//console.log('2');
 				} else {
 					console.log('Хватит с тебя точек');
 				}
+				point = true;
+				plus = false;
+				minus = false;
+				multiplication = false;
+				segmentation = false;
 				break;
 			case '+':
-				if (minus == true || multiplication == true || segmentation == true) {
-					if (point == false) {
+				if (isNaN(check) == true/* minus == true || multiplication == true || segmentation == true*/) {
+					//if (point == false) {}
 						rewrite();
-						point = false;
+						//point = false;
 						plus = true;
 						minus = false;
 						multiplication = false;
 						segmentation = false;
-					}
-				} else if (plus == false && out != undefined) {
+					
+				} else if (/*plus == false isNaN(check) == false && */out != undefined && check != '.') {
 					out += input;
 					plus = true;
-						point = false;
+					//point = false;
 				} else if (out == undefined) {
 					//out = input;
 					//plus = true;
 				} else {
 					console.log('Хватит с тебя плюсиков');
 				}
+				point = false;
 				break;
 			case '-':
 				point = false;
