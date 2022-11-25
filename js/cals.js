@@ -25,7 +25,7 @@ zero.addEventListener("click", function() {
 	screen();
 });
 
-/*let pr = 0.+1;
+/*let pr = 1+2/0+1;
 console.log(pr);*/
 
 // Прочие кнопки
@@ -44,17 +44,17 @@ for (i = 0; i < btn.length; i++) {
 		//console.log(double);
 		switch (input) {
 			case '.':
-				if (point == false && out != undefined) {
-					if (isNaN(check) == true/* check == '+' || check == '-' || check == '*' || check == '/'*/) {
+				if (point == false) {
+					if (isNaN(check) == true && out != undefined) {
 						out += '0.';
 						//console.log('1.1');
+					} else if (out == undefined) {
+						out = '0.';
+						//console.log('2');
 					} else {
 						out += input;
 						//console.log('1.2');
 					}
-				} else if (out == undefined) {
-					out = '0.';
-					//console.log('2');
 				} else {
 					console.log('Хватит с тебя точек');
 				}
@@ -65,36 +65,48 @@ for (i = 0; i < btn.length; i++) {
 				segmentation = false;
 				break;
 			case '+':
-				if (isNaN(check) == true/* minus == true || multiplication == true || segmentation == true*/) {
-					//if (point == false) {}
+				/*if (isNaN(check) == true && out != undefined) {
+					rewrite();
+					plus = true;
+					minus = false;
+					multiplication = false;
+					segmentation = false;
+				} else if (check != '.') {
+					out += input;
+					plus = true;
+					minus = false;
+					multiplication = false;
+					segmentation = false;
+				} else if (out == undefined) {
+					//
+				} else {
+					console.log('Хватит с тебя плюсиков');
+				}*/
+				if (out != undefined) {
+					if (isNaN(check) == true) {
 						rewrite();
-						//point = false;
 						plus = true;
 						minus = false;
 						multiplication = false;
 						segmentation = false;
-					
-				} else if (/*plus == false isNaN(check) == false && */out != undefined && check != '.') {
-					out += input;
-					plus = true;
-					//point = false;
-				} else if (out == undefined) {
-					//out = input;
-					//plus = true;
+					}/* else if () {
+						//
+					}*/ else {
+						console.log('Хватит с тебя плюсиков');
+					}
 				} else {
-					console.log('Хватит с тебя плюсиков');
+					//
 				}
 				point = false;
 				break;
 			case '-':
-				point = false;
 				if (plus == true /*|| multiplication == true || segmentation == true*/) {
 					rewrite();
 					plus = false;
 					minus = true;
 					//multiplication = false;
 					//segmentation = false;
-				} else if (minus == false && out != undefined) {
+				} else if (out != undefined && check != '.') {
 					out += input;
 					minus = true;
 				} else if (out == undefined) {
@@ -103,35 +115,41 @@ for (i = 0; i < btn.length; i++) {
 				} else {
 					console.log('Хватит с тебя минусочков');
 				}
+				point = false;
 				break;
 			case '*':
-				point = false;
-				if (plus == true || minus == true || segmentation == true) {
+				if (isNaN(check) == true/*plus == true || minus == true || segmentation == true*/) {
 					rewrite();
 					plus = false;
 					minus = false;
 					multiplication = true;
 					segmentation = false;
-				} else if (multiplication == false && out != undefined) {
+				} else if (out != undefined && check != '.'/*multiplication == false && out != undefined*/) {
 					out += input;
+					plus = false;
+					minus = false;
 					multiplication = true;
+					segmentation = false;
 				} else if (out == undefined) {
 					//out = input;
 					//multiplication = true;
 				} else {
 					console.log('Хватит с тебя *');
 				}
+				point = false;
 				break;
 			case '/':
-				point = false;
-				if (plus == true || minus == true || multiplication == true) {
+				if (isNaN(check) == true/*plus == true || minus == true || multiplication == true*/) {
 					rewrite();
 					plus = false;
 					minus = false;
 					multiplication = false;
 					segmentation = true;
-				} else if (segmentation == false && out != undefined) {
+				} else if (out != undefined && check != '.'/*segmentation == false && out != undefined*/) {
 					out += input;
+					plus = false;
+					minus = false;
+					multiplication = false;
 					segmentation = true;
 				} else if (out == undefined) {
 					//out = input;
@@ -139,6 +157,7 @@ for (i = 0; i < btn.length; i++) {
 				} else {
 					console.log('Хватит с тебя /');
 				}
+				point = false;
 				break;
 			default:
 				plus = false;
