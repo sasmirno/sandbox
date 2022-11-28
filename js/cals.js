@@ -47,13 +47,10 @@ for (i = 0; i < btn.length; i++) {
 				if (point == false) {
 					if (isNaN(check) == true && out != undefined) {
 						out += '0.';
-						//console.log('1.1');
 					} else if (out == undefined) {
 						out = '0.';
-						//console.log('2');
 					} else {
 						out += input;
-						//console.log('1.2');
 					}
 				} else {
 					console.log('Хватит с тебя точек');
@@ -65,37 +62,22 @@ for (i = 0; i < btn.length; i++) {
 				segmentation = false;
 				break;
 			case '+':
-				/*if (isNaN(check) == true && out != undefined) {
-					rewrite();
-					plus = true;
-					minus = false;
-					multiplication = false;
-					segmentation = false;
-				} else if (check != '.') {
-					out += input;
-					plus = true;
-					minus = false;
-					multiplication = false;
-					segmentation = false;
-				} else if (out == undefined) {
-					//
-				} else {
-					console.log('Хватит с тебя плюсиков');
-				}*/
 				if (out != undefined) {
 					if (isNaN(check) == true) {
-						rewrite();
+						if (check == '-' && out.length <= 1) {
+							out = undefined;
+						} else {
+							rewrite();
+							plus = true;
+							//minus = false;
+						}
+					} else {
+						out += input;
 						plus = true;
-						minus = false;
-						multiplication = false;
-						segmentation = false;
-					}/* else if () {
-						//
-					}*/ else {
-						console.log('Хватит с тебя плюсиков');
+						//minus = false;
 					}
 				} else {
-					//
+					//console.log('Хватит с тебя плюсиков');
 				}
 				point = false;
 				break;
@@ -118,44 +100,38 @@ for (i = 0; i < btn.length; i++) {
 				point = false;
 				break;
 			case '*':
-				if (isNaN(check) == true/*plus == true || minus == true || segmentation == true*/) {
-					rewrite();
-					plus = false;
-					minus = false;
-					multiplication = true;
-					segmentation = false;
-				} else if (out != undefined && check != '.'/*multiplication == false && out != undefined*/) {
-					out += input;
-					plus = false;
-					minus = false;
-					multiplication = true;
-					segmentation = false;
-				} else if (out == undefined) {
-					//out = input;
-					//multiplication = true;
-				} else {
-					console.log('Хватит с тебя *');
+				if (out != undefined) {
+					if (isNaN(check) == true) {
+						if (check == '-' && out.length <= 1) {
+							out = undefined;
+						} else {
+							rewrite();
+							multiplication = true;
+							//minus = false;
+						}
+					} else {
+						out += input;
+						multiplication = true;
+						//minus = false;
+					}
 				}
 				point = false;
 				break;
 			case '/':
-				if (isNaN(check) == true/*plus == true || minus == true || multiplication == true*/) {
-					rewrite();
-					plus = false;
-					minus = false;
-					multiplication = false;
-					segmentation = true;
-				} else if (out != undefined && check != '.'/*segmentation == false && out != undefined*/) {
-					out += input;
-					plus = false;
-					minus = false;
-					multiplication = false;
-					segmentation = true;
-				} else if (out == undefined) {
-					//out = input;
-					//segmentation = true;
-				} else {
-					console.log('Хватит с тебя /');
+				if (out != undefined) {
+					if (isNaN(check) == true) {
+						if (check == '-' && out.length <= 1) {
+							out = undefined;
+						} else {
+							rewrite();
+							segmentation = true;
+							//minus = false;
+						}
+					} else {
+						out += input;
+						segmentation = true;
+						//minus = false;
+					}
 				}
 				point = false;
 				break;
