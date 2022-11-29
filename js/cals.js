@@ -35,20 +35,21 @@ for (i = 0; i < btn.length; i++) {
 	var minus = false;
 	var multiplication = false;
 	var segmentation = false;
-	var double;
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
-		double += input; //
-		let check = double[double.length-2];
+		let double = '';
+		//double += input; //
+		double += out;
+		let check = double[double.length-1];
 		//console.log('> '+check+' <');
 		//console.log(double);
 		switch (input) {
 			case '.':
 				if (point == false) {
-					if (isNaN(check) == true && out != undefined) {
-						out += '0.';
-					} else if (out == undefined) {
+					if (out == undefined) {
 						out = '0.';
+					} else if (isNaN(check) == true) {
+						out += '0.';
 					} else {
 						out += input;
 					}
@@ -82,7 +83,7 @@ for (i = 0; i < btn.length; i++) {
 				point = false;
 				break;
 			case '-':
-				if (plus == true /*|| multiplication == true || segmentation == true*/) {
+				/*if (plus == true || multiplication == true || segmentation == true) {
 					rewrite();
 					plus = false;
 					minus = true;
@@ -96,6 +97,16 @@ for (i = 0; i < btn.length; i++) {
 					minus = true;
 				} else {
 					console.log('Хватит с тебя минусочков');
+				}*/
+				if (out == undefined) {
+					out = input;
+					minus = true;
+				} else if (isNaN(check) == true) {
+					rewrite();
+					minus = true;
+				} else {
+					out += input;
+					minus = true;
 				}
 				point = false;
 				break;
