@@ -1,6 +1,7 @@
 let btn = document.querySelectorAll(".keys");
 let zero = document.querySelector(".zeroing");
 let calc = document.querySelector(".calculation");
+let back = document.querySelector(".back");
 
 let out; // Конечный результат
 
@@ -16,7 +17,7 @@ function screen() {
 // Кнопка обнуления
 zero.addEventListener("click", function() {
 	out = undefined;
-	double = undefined;
+	//double = undefined;
 	point = false;
 	plus = false;
 	minus = false;
@@ -24,6 +25,42 @@ zero.addEventListener("click", function() {
 	segmentation = false;
 	screen();
 });
+
+// Кнопка удаления
+back.addEventListener("click", function() {
+	//out = undefined;
+	//double = undefined;
+	//point = false;
+	//plus = false;
+	//minus = false;
+	//multiplication = false;
+	//segmentation = false;
+	rewrite('');
+	screen();
+});
+
+
+function rewrite(n) {
+	let rewrite;
+	for (x=0; x<out.length-1; x++) {
+		if (rewrite == undefined) {
+			rewrite = out[x];
+		} else {
+			rewrite += out[x];
+		}
+	}
+	if (rewrite == undefined) {
+		rewrite = n;
+	} else if (n == '') {
+		/*if (out == '') {
+			rewrite = undefined;
+		}*/
+	} else {
+		rewrite += n;
+	}
+	//if (input == '-') {console.log('минус');}
+	out = rewrite;
+}
 
 /*let pr = 1+2/0+1;
 console.log(pr);*/
@@ -68,7 +105,7 @@ for (i = 0; i < btn.length; i++) {
 						if (check == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
-							rewrite();
+							rewrite(input);
 							plus = true;
 							//minus = false;
 						}
@@ -101,10 +138,10 @@ for (i = 0; i < btn.length; i++) {
 				if (out == undefined) {
 					out = input;
 					minus = true;
-				} else if (isNaN(check) == true) {
+				} /*else if (isNaN(check) == true) {
 					rewrite();
 					minus = true;
-				} else {
+				}*/ else {
 					out += input;
 					minus = true;
 				}
@@ -116,7 +153,7 @@ for (i = 0; i < btn.length; i++) {
 						if (check == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
-							rewrite();
+							rewrite(input);
 							multiplication = true;
 							//minus = false;
 						}
@@ -134,7 +171,7 @@ for (i = 0; i < btn.length; i++) {
 						if (check == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
-							rewrite();
+							rewrite(input);
 							segmentation = true;
 							//minus = false;
 						}
@@ -157,7 +194,7 @@ for (i = 0; i < btn.length; i++) {
 					out = input;
 				}
 		}
-		function rewrite() {
+		/*function rewrite() {
 			let rewrite;
 			for (x=0; x<out.length-1; x++) {
 				if (rewrite == undefined) {
@@ -171,9 +208,9 @@ for (i = 0; i < btn.length; i++) {
 			} else {
 				rewrite += input;
 			}
-			if (input == '-') {}
+			//if (input == '-') {console.log('минус');}
 			out = rewrite;
-		}
+		}*/
 		/*if (point == true && input == '.') {
 			console.log('Хватит с тебя точек');
 		} else if (point == false && input == '.') {
