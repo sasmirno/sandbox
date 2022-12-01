@@ -1,23 +1,24 @@
 let btn = document.querySelectorAll(".keys");
 let zero = document.querySelector(".zeroing");
 let calc = document.querySelector(".calculation");
-let back = document.querySelector(".back");
+let back = document.querySelector(".backspace");
 
 let out; // Конечный результат
 
-// Вывод вычисления на экран
+// Вывод строки на экран
 function screen() {
 	if (out == undefined) {
 		document.querySelector(".cals__screen").innerHTML = '';
 	} else {
 		document.querySelector(".cals__screen").innerHTML = out;
 	}
+	//console.log(out);
+	//console.log(check());
 }
 
-// Кнопка обнуления
+// Кнопка обнуления всего на свете
 zero.addEventListener("click", function() {
 	out = undefined;
-	//double = undefined;
 	point = false;
 	plus = false;
 	minus = false;
@@ -26,39 +27,49 @@ zero.addEventListener("click", function() {
 	screen();
 });
 
-// Кнопка удаления
+// Кнопка удаления последнего символа
 back.addEventListener("click", function() {
-	//out = undefined;
-	//double = undefined;
-	//point = false;
 	//plus = false;
 	//minus = false;
 	//multiplication = false;
 	//segmentation = false;
-	rewrite('');
+	if (check() == '.') {
+		point = false;
+	}
+	if (out != undefined) {
+		if (out.length <= 1) {
+			out = undefined;
+		} else {
+			rewrite('');
+		}
+	}
 	screen();
 });
 
+// Нахождение последнего символа
+function check() {
+	let check;
+	if (out != undefined) {
+		check = out[out.length-1];
+	}
+	return check;
+}
 
+// Перепись последнего символа
 function rewrite(n) {
 	let rewrite;
-	for (x=0; x<out.length-1; x++) {
+	for (i=0; i<out.length-1; i++) {
 		if (rewrite == undefined) {
-			rewrite = out[x];
+			rewrite = out[i];
 		} else {
-			rewrite += out[x];
+			rewrite += out[i];
 		}
 	}
 	if (rewrite == undefined) {
 		rewrite = n;
-	} else if (n == '') {
-		/*if (out == '') {
-			rewrite = undefined;
-		}*/
 	} else {
 		rewrite += n;
 	}
-	//if (input == '-') {console.log('минус');}
 	out = rewrite;
 }
 
@@ -74,18 +85,12 @@ for (i = 0; i < btn.length; i++) {
 	var segmentation = false;
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
-		let double = '';
-		//double += input; //
-		double += out;
-		let check = double[double.length-1];
-		//console.log('> '+check+' <');
-		//console.log(double);
 		switch (input) {
 			case '.':
 				if (point == false) {
 					if (out == undefined) {
 						out = '0.';
-					} else if (isNaN(check) == true) {
+					} else if (isNaN(check()) == true) {
 						out += '0.';
 					} else {
 						out += input;
@@ -101,8 +106,8 @@ for (i = 0; i < btn.length; i++) {
 				break;
 			case '+':
 				if (out != undefined) {
-					if (isNaN(check) == true) {
-						if (check == '-' && out.length <= 1) {
+					if (isNaN(check()) == true) {
+						if (check() == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
 							rewrite(input);
@@ -126,7 +131,7 @@ for (i = 0; i < btn.length; i++) {
 					minus = true;
 					//multiplication = false;
 					//segmentation = false;
-				} else if (out != undefined && check != '.') {
+				} else if (out != undefined && check() != '.') {
 					out += input;
 					minus = true;
 				} else if (out == undefined) {
@@ -138,7 +143,7 @@ for (i = 0; i < btn.length; i++) {
 				if (out == undefined) {
 					out = input;
 					minus = true;
-				} /*else if (isNaN(check) == true) {
+				} /*else if (isNaN(check()) == true) {
 					rewrite();
 					minus = true;
 				}*/ else {
@@ -149,8 +154,8 @@ for (i = 0; i < btn.length; i++) {
 				break;
 			case '*':
 				if (out != undefined) {
-					if (isNaN(check) == true) {
-						if (check == '-' && out.length <= 1) {
+					if (isNaN(check()) == true) {
+						if (check() == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
 							rewrite(input);
@@ -167,8 +172,8 @@ for (i = 0; i < btn.length; i++) {
 				break;
 			case '/':
 				if (out != undefined) {
-					if (isNaN(check) == true) {
-						if (check == '-' && out.length <= 1) {
+					if (isNaN(check()) == true) {
+						if (check() == '-' && out.length <= 1) {
 							out = undefined;
 						} else {
 							rewrite(input);
@@ -194,29 +199,12 @@ for (i = 0; i < btn.length; i++) {
 					out = input;
 				}
 		}
-		/*function rewrite() {
-			let rewrite;
-			for (x=0; x<out.length-1; x++) {
-				if (rewrite == undefined) {
-					rewrite = out[x];
-				} else {
-					rewrite += out[x];
-				}
-			}
-			if (rewrite == undefined) {
-				rewrite = input;
-			} else {
-				rewrite += input;
-			}
-			//if (input == '-') {console.log('минус');}
-			out = rewrite;
-		}*/
 		/*if (point == true && input == '.') {
 			console.log('Хватит с тебя точек');
 		} else if (point == false && input == '.') {
 			out += input;
 			point = true;
-		} else if (isNaN(check) == true && input != '.') {
+		} else if (isNaN(check()) == true && input != '.') {
 			out += input;
 			point = false;
 		} else if (out != undefined) {
@@ -228,7 +216,7 @@ for (i = 0; i < btn.length; i++) {
 	});
 }
 
-// Преобразование строки  в числа
+// Преобразование строки  в вычисляемое вырожение
 calc.addEventListener("click", function() {
 	let out2;
 	let out3;
