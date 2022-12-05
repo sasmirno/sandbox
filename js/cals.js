@@ -20,19 +20,11 @@ function screen() {
 zero.addEventListener("click", function() {
 	out = undefined;
 	point = false;
-	plus = false;
-	minus = false;
-	multiplication = false;
-	segmentation = false;
 	screen();
 });
 
 // Кнопка удаления последнего символа
 back.addEventListener("click", function() {
-	//plus = false;
-	//minus = false;
-	//multiplication = false;
-	//segmentation = false;
 	if (check() == '.') {
 		point = false;
 	}
@@ -79,12 +71,28 @@ console.log(pr);*/
 // Прочие кнопки
 for (i = 0; i < btn.length; i++) {
 	var point = false;
-	var plus = false;
-	var minus = false;
-	var multiplication = false;
-	var segmentation = false;
 	btn[i].addEventListener("click", function() {
 		let input = this.textContent;
+		function entry() {
+			if (out != undefined) {
+				if (isNaN(check()) == true) {
+					if (check() == '-') {
+						if (out.length <= 1) {
+							out = undefined;
+						} else {
+							rewrite('');
+							if (isNaN(check()) == false) {
+								out += input;
+							}
+						}
+					} else {
+						rewrite(input);
+					}
+				} else {
+					out += input;
+				}
+			}
+		}
 		switch (input) {
 			case '.':
 				if (point == false) {
@@ -95,128 +103,51 @@ for (i = 0; i < btn.length; i++) {
 					} else {
 						out += input;
 					}
-				} else {
-					console.log('Хватит с тебя точек');
 				}
 				point = true;
-				plus = false;
-				minus = false;
-				multiplication = false;
-				segmentation = false;
 				break;
 			case '+':
+				entry();
+				point = false;
+				break;
+			case '-':
 				if (out != undefined) {
 					if (isNaN(check()) == true) {
 						if (check() == '-' && out.length <= 1) {
 							out = undefined;
+						} else if (check() == '*' || check() == '/') {
+							out += input;
 						} else {
 							rewrite(input);
-							plus = true;
-							//minus = false;
 						}
 					} else {
 						out += input;
-						plus = true;
-						//minus = false;
 					}
 				} else {
-					//console.log('Хватит с тебя плюсиков');
-				}
-				point = false;
-				break;
-			case '-':
-				/*if (plus == true || multiplication == true || segmentation == true) {
-					rewrite();
-					plus = false;
-					minus = true;
-					//multiplication = false;
-					//segmentation = false;
-				} else if (out != undefined && check() != '.') {
-					out += input;
-					minus = true;
-				} else if (out == undefined) {
 					out = input;
-					minus = true;
-				} else {
-					console.log('Хватит с тебя минусочков');
-				}*/
-				if (out == undefined) {
-					out = input;
-					minus = true;
-				} /*else if (isNaN(check()) == true) {
-					rewrite();
-					minus = true;
-				}*/ else {
-					out += input;
-					minus = true;
 				}
 				point = false;
 				break;
 			case '*':
-				if (out != undefined) {
-					if (isNaN(check()) == true) {
-						if (check() == '-' && out.length <= 1) {
-							out = undefined;
-						} else {
-							rewrite(input);
-							multiplication = true;
-							//minus = false;
-						}
-					} else {
-						out += input;
-						multiplication = true;
-						//minus = false;
-					}
-				}
+				entry();
 				point = false;
 				break;
 			case '/':
-				if (out != undefined) {
-					if (isNaN(check()) == true) {
-						if (check() == '-' && out.length <= 1) {
-							out = undefined;
-						} else {
-							rewrite(input);
-							segmentation = true;
-							//minus = false;
-						}
-					} else {
-						out += input;
-						segmentation = true;
-						//minus = false;
-					}
-				}
+				entry();
 				point = false;
 				break;
 			default:
-				plus = false;
-				minus = false;
-				multiplication = false;
-				segmentation = false;
 				if (out != undefined) {
 					out += input;
 				} else {
 					out = input;
 				}
 		}
-		/*if (point == true && input == '.') {
-			console.log('Хватит с тебя точек');
-		} else if (point == false && input == '.') {
-			out += input;
-			point = true;
-		} else if (isNaN(check()) == true && input != '.') {
-			out += input;
-			point = false;
-		} else if (out != undefined) {
-			out += input;
-		} else {
-			out = input;
-		}*/
 		screen();
 	});
 }
 
-// Преобразование строки  в вычисляемое вырожение
+// Преобразование строки  в вычисляемое выражение
 calc.addEventListener("click", function() {
 	let out2;
 	let out3;
