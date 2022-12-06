@@ -149,34 +149,37 @@ for (i = 0; i < btn.length; i++) {
 
 // Преобразование строки  в вычисляемое выражение
 calc.addEventListener("click", function() {
-	let out2;
-	let out3;
-	let arr2 = [];
+	let number;
+	let notNumber;
+	let arr = [];
 	if (out != undefined) {
-		let arr = out.split('');
-		//console.log('arr2');
-		for (let item of arr) {
-			let digit = parseInt(item);
-			if (isNaN(digit) == false/* || digit == '.'*/) {
-				if (out2 !== undefined) {
-					out2 += item;
+		for (let item of out) {
+			if (isNaN(item) == false) {
+				if (number != undefined) {
+					number += item;
 				} else {
-					out2 = item;
+					number = item;
 				}
 			} else {
-				arr2.push(out2);
-				out3 = item;
-				arr2.push(out3);
-				out2 = undefined;
+				arr.push(number);
+				notNumber = item;
+				arr.push(notNumber);
+				number = undefined;
 			}
 		}
-	} else {}
-	arr2.push(out2);
-	console.log(arr2);
+	} else {
+		number = '0';
+	}
+	if (number != undefined) {}
+		arr.push(number);
+	
+	console.log(arr);
 	//console.log(out);
 	//console.log(parseInt(out));
 	//screen();
-	//const regex = /[0-9]+|[\+*/\-]/g;
-	//const found = out.match(regex);
-	//console.log(found);
+	//if (out != undefined) {
+	//	const regex = /[0-9]+|[\+*/.\-]/g;
+	//	const found = out.match(regex);
+	//	console.log(found);
+	//}
 });
