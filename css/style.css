@@ -126,6 +126,7 @@ h1, h2, h3, h4, h5, h6 {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat(4, 1fr);
+  user-select: none;
 }
 .cals__btn {
   display: grid;
