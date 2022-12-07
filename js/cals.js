@@ -161,7 +161,9 @@ calc.addEventListener("click", function() {
 					number = item;
 				}
 			} else {
-				arr.push(number);
+				if (number != undefined) {
+					arr.push(number);
+				}
 				notNumber = item;
 				arr.push(notNumber);
 				number = undefined;
@@ -170,16 +172,43 @@ calc.addEventListener("click", function() {
 	} else {
 		number = '0';
 	}
-	if (number != undefined) {}
-		arr.push(number);
-	
+	arr.push(number);
 	console.log(arr);
 	//console.log(out);
-	//console.log(parseInt(out));
 	//screen();
 	//if (out != undefined) {
 	//	const regex = /[0-9]+|[\+*/.\-]/g;
 	//	const found = out.match(regex);
 	//	console.log(found);
 	//}
+	let expression;
+	for (let key in arr) {
+		//console.log(item);
+		switch (arr[key]) {
+			case '.':
+				if (expression != undefined) {
+					expression = arr[key-1] + '.' + arr[key+1];
+				}
+				break;
+			case '*':
+				
+				break;
+			case '/':
+				
+				break;
+			case '+':
+				
+				break;
+			case '-':
+				
+				break;
+			default:
+				if (expression != undefined) {
+					expression += parseInt(arr[key]);
+				} else {
+					expression = parseInt(arr[key]);
+				}
+		}
+	}
+	console.log(expression);
 });
