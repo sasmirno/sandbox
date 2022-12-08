@@ -184,31 +184,39 @@ calc.addEventListener("click", function() {
 	let expression;
 	for (let key in arr) {
 		//console.log(item);
+		function rewrite2(n) {
+			arr[key-1] = n;
+		}
 		switch (arr[key]) {
-			case '.':
+			/*case '.':
 				if (expression != undefined) {
-					expression = arr[key-1] + '.' + arr[key+1];
+					//expression = arr[key-1]+'.'+arr[key+1];
+					expression = parseInt(arr[key-1])+'.'+parseInt(arr[parseInt(key)+1]);
 				}
-				break;
+				break;*/
 			case '*':
-				
+				expression = parseInt(arr[key-1])*parseInt(arr[parseInt(key)+1]);
+				rewrite2(expression);
 				break;
 			case '/':
-				
+				expression = parseInt(arr[key-1])/parseInt(arr[parseInt(key)+1]);
 				break;
 			case '+':
-				
+				//expression = arr[key-1]+arr[parseInt(key)+1];
+				expression = parseInt(arr[key-1])+parseInt(arr[parseInt(key)+1]);
+				rewrite2(expression);
 				break;
 			case '-':
-				
+				expression = parseInt(arr[key-1])-parseInt(arr[parseInt(key)+1]);
 				break;
 			default:
-				if (expression != undefined) {
+				/*if (expression != undefined) {
 					expression += parseInt(arr[key]);
 				} else {
 					expression = parseInt(arr[key]);
-				}
+				}*/
 		}
 	}
+	console.log(arr);
 	console.log(expression);
 });
