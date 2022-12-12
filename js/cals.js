@@ -182,10 +182,13 @@ calc.addEventListener("click", function() {
 	//	console.log(found);
 	//}
 	let expression;
+	let arr2 = [];
 	for (let key in arr) {
 		//console.log(item);
 		function rewrite2(n) {
-			arr[key-1] = n;
+			//arr[key] = n;
+			arr.splice(key-1, key+1, expression);
+			arr2 = arr;
 		}
 		switch (arr[key]) {
 			/*case '.':
@@ -218,5 +221,8 @@ calc.addEventListener("click", function() {
 		}
 	}
 	console.log(arr);
+	console.log(arr2);
 	console.log(expression);
+	out = expression;
+	screen();
 });
