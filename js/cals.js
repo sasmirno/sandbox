@@ -65,7 +65,7 @@ function rewrite(n) {
 	out = rewrite;
 }
 
-/*let pr = 1+2/0+1;
+/*let pr = 9+'0.9';
 console.log(pr);*/
 
 // Прочие кнопки
@@ -182,13 +182,13 @@ calc.addEventListener("click", function() {
 	//	console.log(found);
 	//}
 	let expression;
-	let arr2 = [];
+	//let arr2 = [];
 	for (let key in arr) {
 		//console.log(item);
 		function rewrite2(n) {
+			//console.log(parseInt(key)-1);
 			//arr[key] = n;
-			arr.splice(key-1, key+1, expression);
-			arr2 = arr;
+			arr.splice(parseInt(key)-1, 3, n);
 		}
 		switch (arr[key]) {
 			/*case '.':
@@ -198,7 +198,7 @@ calc.addEventListener("click", function() {
 				}
 				break;*/
 			case '*':
-				expression = parseInt(arr[key-1])*parseInt(arr[parseInt(key)+1]);
+				expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
 				rewrite2(expression);
 				break;
 			case '/':
@@ -206,7 +206,7 @@ calc.addEventListener("click", function() {
 				break;
 			case '+':
 				//expression = arr[key-1]+arr[parseInt(key)+1];
-				expression = parseInt(arr[key-1])+parseInt(arr[parseInt(key)+1]);
+				expression = parseInt(arr[parseInt(key)-1])+parseInt(arr[parseInt(key)+1]);
 				rewrite2(expression);
 				break;
 			case '-':
@@ -219,10 +219,11 @@ calc.addEventListener("click", function() {
 					expression = parseInt(arr[key]);
 				}*/
 		}
+		console.log(arr[key], key);
 	}
 	console.log(arr);
-	console.log(arr2);
-	console.log(expression);
-	out = expression;
-	screen();
+	//console.log(arr2);
+	//console.log(expression);
+	//out = arr;
+	//screen();
 });
