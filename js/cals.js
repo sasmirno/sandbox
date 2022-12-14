@@ -175,7 +175,6 @@ calc.addEventListener("click", function() {
 	arr.push(number);
 	console.log(arr);
 	//console.log(out);
-	//screen();
 	//if (out != undefined) {
 	//	const regex = /[0-9]+|[\+*/.\-]/g;
 	//	const found = out.match(regex);
@@ -183,43 +182,56 @@ calc.addEventListener("click", function() {
 	//}
 	let expression;
 	//let arr2 = [];
+	function rewrite2(m, n) {
+		arr.splice(m, 3, n);
+		//arr2.push(n);
+	}
+	for (let key in arr) {
+		if (arr[key] == '*') {
+			expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
+			let inx = parseInt(key)-1;
+			rewrite2(inx, expression);
+		} else if (arr[key] == '/') {
+			expression = parseInt(arr[parseInt(key)-1])/parseInt(arr[parseInt(key)+1]);
+			let inx = parseInt(key)-1;
+			rewrite2(inx, expression);
+		}
+		//console.log(arr[key], key);
+	}
 	for (let key in arr) {
 		//console.log(item);
-		function rewrite2(n) {
-			//console.log(parseInt(key)-1);
-			//arr[key] = n;
-			arr.splice(parseInt(key)-1, 3, n);
-		}
 		switch (arr[key]) {
 			/*case '.':
 				if (expression != undefined) {
 					//expression = arr[key-1]+'.'+arr[key+1];
 					expression = parseInt(arr[key-1])+'.'+parseInt(arr[parseInt(key)+1]);
 				}
-				break;*/
+				break;
 			case '*':
 				expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
-				rewrite2(expression);
+				let inx = parseInt(key)-1;
+				rewrite2(inx, expression);
 				break;
 			case '/':
 				expression = parseInt(arr[key-1])/parseInt(arr[parseInt(key)+1]);
-				break;
+				break;*/
 			case '+':
 				//expression = arr[key-1]+arr[parseInt(key)+1];
 				expression = parseInt(arr[parseInt(key)-1])+parseInt(arr[parseInt(key)+1]);
-				rewrite2(expression);
+				let inx = parseInt(key)-1;
+				rewrite2(inx, expression);
 				break;
-			case '-':
+			/*case '-':
 				expression = parseInt(arr[key-1])-parseInt(arr[parseInt(key)+1]);
 				break;
 			default:
-				/*if (expression != undefined) {
+				if (expression != undefined) {
 					expression += parseInt(arr[key]);
 				} else {
 					expression = parseInt(arr[key]);
 				}*/
 		}
-		console.log(arr[key], key);
+		//console.log(arr[key], key);
 	}
 	console.log(arr);
 	//console.log(arr2);
