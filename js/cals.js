@@ -65,9 +65,6 @@ function rewrite(n) {
 	out = rewrite;
 }
 
-/*let pr = 9+'0.9';
-console.log(pr);*/
-
 // Прочие кнопки
 for (i = 0; i < btn.length; i++) {
 	var point = false;
@@ -174,68 +171,53 @@ calc.addEventListener("click", function() {
 	}
 	arr.push(number);
 	console.log(arr);
-	//console.log(out);
 	//if (out != undefined) {
 	//	const regex = /[0-9]+|[\+*/.\-]/g;
 	//	const found = out.match(regex);
 	//	console.log(found);
 	//}
 	let expression;
-	//let arr2 = [];
-	function rewrite2(m, n) {
-		arr.splice(m, 3, n);
-		//arr2.push(n);
+	function calculation(i, e) {
+		arr.splice(i, 3, e);
 	}
-	for (let key in arr) {
-		if (arr[key] == '*') {
-			expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
-			let inx = parseInt(key)-1;
-			rewrite2(inx, expression);
-		} else if (arr[key] == '/') {
-			expression = parseInt(arr[parseInt(key)-1])/parseInt(arr[parseInt(key)+1]);
-			let inx = parseInt(key)-1;
-			rewrite2(inx, expression);
-		}
-		//console.log(arr[key], key);
-	}
-	for (let key in arr) {
-		//console.log(item);
-		switch (arr[key]) {
-			/*case '.':
-				if (expression != undefined) {
-					//expression = arr[key-1]+'.'+arr[key+1];
-					expression = parseInt(arr[key-1])+'.'+parseInt(arr[parseInt(key)+1]);
-				}
-				break;
-			case '*':
+	for (i=0;i<arr.length;i++) {
+		/*for (let key in arr) {
+			if (arr[key] == '.') {
+				expression = (parseInt(arr[parseInt(key)-1])+'.'+parseInt(arr[parseInt(key)+1]))*1;
+				let inx = parseInt(key)-1;
+				calculation(inx, expression);
+			}
+		}*/
+		for (let key in arr) {
+			if (arr[key] == '*') {
 				expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
 				let inx = parseInt(key)-1;
-				rewrite2(inx, expression);
-				break;
-			case '/':
-				expression = parseInt(arr[key-1])/parseInt(arr[parseInt(key)+1]);
-				break;*/
-			case '+':
-				//expression = arr[key-1]+arr[parseInt(key)+1];
+				calculation(inx, expression);
+			}
+			if (arr[key] == '/') {
+				expression = parseInt(arr[parseInt(key)-1])/parseInt(arr[parseInt(key)+1]);
+				let inx = parseInt(key)-1;
+				calculation(inx, expression);
+			}
+		}
+		for (let key in arr) {
+			if (arr[key] == '+') {
 				expression = parseInt(arr[parseInt(key)-1])+parseInt(arr[parseInt(key)+1]);
 				let inx = parseInt(key)-1;
-				rewrite2(inx, expression);
-				break;
-			/*case '-':
-				expression = parseInt(arr[key-1])-parseInt(arr[parseInt(key)+1]);
-				break;
-			default:
-				if (expression != undefined) {
-					expression += parseInt(arr[key]);
-				} else {
-					expression = parseInt(arr[key]);
-				}*/
+				calculation(inx, expression);
+			}
+			if (arr[key] == '-') {
+				expression = parseInt(arr[parseInt(key)-1])-parseInt(arr[parseInt(key)+1]);
+				let inx = parseInt(key)-1;
+				calculation(inx, expression);
+			}
 		}
-		//console.log(arr[key], key);
 	}
 	console.log(arr);
-	//console.log(arr2);
 	//console.log(expression);
-	//out = arr;
-	//screen();
+	out = arr;
+	screen();
 });
+
+/*let pr = 1+'0.1'*1;
+console.log(pr);*/
