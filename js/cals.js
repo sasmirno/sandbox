@@ -12,8 +12,6 @@ function screen() {
 	} else {
 		document.querySelector(".cals__screen").innerHTML = out;
 	}
-	//console.log(out);
-	//console.log(check());
 }
 
 // Кнопка обнуления всего на свете
@@ -144,8 +142,14 @@ for (i = 0; i < btn.length; i++) {
 	});
 }
 
-// Преобразование строки  в вычисляемое выражение
+// Кнопка равно
 calc.addEventListener("click", function() {
+// Преобразование строки в массив
+	//if (out != undefined) {
+	//	const regex = /[0-9]+|[\+*/.\-]/g;
+	//	const found = out.match(regex);
+	//	console.log(found);
+	//}
 	let number;
 	let notNumber;
 	let arr = [];
@@ -159,7 +163,7 @@ calc.addEventListener("click", function() {
 				}
 			} else {
 				if (number != undefined) {
-					arr.push(number);
+					arr.push(parseInt(number));
 				}
 				notNumber = item;
 				arr.push(notNumber);
@@ -169,55 +173,50 @@ calc.addEventListener("click", function() {
 	} else {
 		number = '0';
 	}
-	arr.push(number);
-	console.log(arr);
-	//if (out != undefined) {
-	//	const regex = /[0-9]+|[\+*/.\-]/g;
-	//	const found = out.match(regex);
-	//	console.log(found);
-	//}
+	arr.push(parseInt(number));
+	//console.log(arr);
+// Получение дробных чисел из массива и запись оных обратно
+	for (let key in arr) {
+		if (arr[key] == '.') {
+			let fraction = (arr[parseInt(key)-1]+'.'+arr[parseInt(key)+1])*1;
+			arr.splice(parseInt(key)-1, 3, fraction);
+		}
+	}
+	//console.log(arr);
+// Вычисление и вывод результата на экран
 	let expression;
 	function calculation(i, e) {
 		arr.splice(i, 3, e);
 	}
-	for (i=0;i<arr.length;i++) {
-		/*for (let key in arr) {
-			if (arr[key] == '.') {
-				expression = (parseInt(arr[parseInt(key)-1])+'.'+parseInt(arr[parseInt(key)+1]))*1;
-				let inx = parseInt(key)-1;
-				calculation(inx, expression);
+	if (isNaN(check()) == false) {
+		for (i=0;i<arr.length;i++) {
+			for (let key in arr) {
+				if (arr[key] == '*') {
+					expression = arr[parseInt(key)-1]*arr[parseInt(key)+1];
+					let inx = parseInt(key)-1;
+					calculation(inx, expression);
+				}
+				if (arr[key] == '/') {
+					expression = arr[parseInt(key)-1]/arr[parseInt(key)+1];
+					let inx = parseInt(key)-1;
+					calculation(inx, expression);
+				}
 			}
-		}*/
-		for (let key in arr) {
-			if (arr[key] == '*') {
-				expression = parseInt(arr[parseInt(key)-1])*parseInt(arr[parseInt(key)+1]);
-				let inx = parseInt(key)-1;
-				calculation(inx, expression);
-			}
-			if (arr[key] == '/') {
-				expression = parseInt(arr[parseInt(key)-1])/parseInt(arr[parseInt(key)+1]);
-				let inx = parseInt(key)-1;
-				calculation(inx, expression);
-			}
-		}
-		for (let key in arr) {
-			if (arr[key] == '+') {
-				expression = parseInt(arr[parseInt(key)-1])+parseInt(arr[parseInt(key)+1]);
-				let inx = parseInt(key)-1;
-				calculation(inx, expression);
-			}
-			if (arr[key] == '-') {
-				expression = parseInt(arr[parseInt(key)-1])-parseInt(arr[parseInt(key)+1]);
-				let inx = parseInt(key)-1;
-				calculation(inx, expression);
+			for (let key in arr) {
+				if (arr[key] == '+') {
+					expression = arr[parseInt(key)-1]+arr[parseInt(key)+1];
+					let inx = parseInt(key)-1;
+					calculation(inx, expression);
+				}
+				if (arr[key] == '-') {
+					expression = arr[parseInt(key)-1]-arr[parseInt(key)+1];
+					let inx = parseInt(key)-1;
+					calculation(inx, expression);
+				}
 			}
 		}
+		//console.log(arr);
+		out = String(arr);
+		screen();
 	}
-	console.log(arr);
-	//console.log(expression);
-	out = arr;
-	screen();
 });
-
-/*let pr = 1+'0.1'*1;
-console.log(pr);*/
