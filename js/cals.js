@@ -63,7 +63,7 @@ function rewrite(n) {
 	out = rewrite;
 }
 
-// Прочие кнопки
+// Прочие кнопки. Формирование правильного математического выражения
 for (i = 0; i < btn.length; i++) {
 	var point = false;
 	btn[i].addEventListener("click", function() {
@@ -218,5 +218,11 @@ calc.addEventListener("click", function() {
 		//console.log(arr);
 		out = String(arr);
 		screen();
+		point = false;
+		for (let item of out) {
+			if(item == '.') {
+				point = true;
+			}
+		}
 	}
 });
