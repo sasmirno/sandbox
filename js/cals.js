@@ -182,6 +182,13 @@ calc.addEventListener("click", function() {
 			arr.splice(parseInt(key)-1, 3, fraction);
 		}
 	}
+// Поиск и перезапись отрицательных чисел
+	for (let key in arr) {
+		if (arr[key] == '-' && isNaN(arr[key-1]) == true) {
+			let negative = ('-'+arr[parseInt(key)+1])*1;
+			arr.splice(parseInt(key), 2, negative);
+		}
+	}
 	//console.log(arr);
 // Вычисление и вывод результата на экран
 	let expression;
@@ -226,3 +233,5 @@ calc.addEventListener("click", function() {
 		}
 	}
 });
+/*let f = -0.2+0.3;
+console.log(f);*/
