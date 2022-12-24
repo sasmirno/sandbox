@@ -201,24 +201,24 @@ calc.addEventListener("click", function() {
 				if (arr[key] == '*') {
 					expression = arr[parseInt(key)-1]*arr[parseInt(key)+1];
 					let inx = parseInt(key)-1;
-					calculation(inx, expression);
+					calculation(inx, +expression.toFixed(9));
 				}
 				if (arr[key] == '/') {
 					expression = arr[parseInt(key)-1]/arr[parseInt(key)+1];
 					let inx = parseInt(key)-1;
-					calculation(inx, expression);
+					calculation(inx, +expression.toFixed(9));
 				}
 			}
 			for (let key in arr) {
 				if (arr[key] == '+') {
 					expression = arr[parseInt(key)-1]+arr[parseInt(key)+1];
 					let inx = parseInt(key)-1;
-					calculation(inx, expression);
+					calculation(inx, +expression.toFixed(9));
 				}
 				if (arr[key] == '-') {
 					expression = arr[parseInt(key)-1]-arr[parseInt(key)+1];
 					let inx = parseInt(key)-1;
-					calculation(inx, expression);
+					calculation(inx, +expression.toFixed(9));
 				}
 			}
 		}
@@ -233,5 +233,3 @@ calc.addEventListener("click", function() {
 		}
 	}
 });
-/*let f = -0.2+0.3;
-console.log(f);*/
