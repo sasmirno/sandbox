@@ -175,6 +175,35 @@ h1, h2, h3, h4, h5, h6 {
   background: #b0b0b0;
 }
 
+.tetris {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.tetris_field {
+  position: relative;
+  width: 277px;
+  height: 500px;
+  border: 1px solid grey;
+}
+.tetris_keyboard {
+  display: flex;
+  gap: 20px;
+  user-select: none;
+}
+.tetris_btn {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.tetris_btn:hover {
+  background: #b0b0b0;
+}
+
 .footer {
   color: #fff;
   background: #0d1e5c;
