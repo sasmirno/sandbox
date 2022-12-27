@@ -184,7 +184,7 @@ h1, h2, h3, h4, h5, h6 {
 .tetris_field {
   position: relative;
   width: 277px;
-  height: 500px;
+  height: 502px;
   border: 1px solid grey;
 }
 .tetris_keyboard {
