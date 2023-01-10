@@ -4,20 +4,14 @@ buttons = document.querySelectorAll(".tetris_btn");
 
 let x = 5;
 let y = 0;
-//let column = 5;
-//let row = 0;
 let сolumns = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
 
-/*function start() {
-	setInterval(move, 50);
-}*/
 
 function move() {
 	//console.log(y);
 	if (y<сolumns[x]) {
-		square.style.top = y*25+"px";
+		shape.style.top = y*25+"px";
 		y += 1;
-		//row += 1;
 	} else if (сolumns[x] == 0) {
 		console.log('stop');
 		clearInterval(timerId);
@@ -25,21 +19,30 @@ function move() {
 		сolumns[x] += -1
 		x = 5;
 		y = 0;
-		//row = 0;
-		//column = 5;
-		squareCreation();
-		//console.log(сolumns);
+		shapeCreation();
 	}
 }
 
-function squareCreation() {
-	square=document.createElement("div");
-	square.style.position = "absolute";
-	square.style.left = x*25+"px";
-	square.style.width = "25px";
-	square.style.height = "25px";
-	square.style.background = "red";
-	field.append(square);
+function zigzag() {
+	shape.style.position = "absolute";
+	shape.style.left = x*20+"px";
+	shape.style.width = "75px";
+	shape.style.height = "50px";
+	shape.innerHTML = '<div style="position: absolute; left: 0px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 25px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 25px; bottom: 0px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 50px; bottom: 0px; width: 25px; height: 25px; background: green;"></div>';
+}
+
+function square() {
+	shape.style.position = "absolute";
+	shape.style.left = x*25+"px";
+	shape.style.width = "25px";
+	shape.style.height = "25px";
+	shape.style.background = "red";
+}
+
+function shapeCreation() {
+	shape=document.createElement("div");
+	zigzag();
+	field.append(shape);
 }
 
 // Кнопки управления
@@ -47,24 +50,17 @@ for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
 		//console.log(input);
-		//if (сolumns[x] != 0) {}
-		/*if (сolumns[x-1] <= сolumns[x]) {
-			console.log(сolumns[x-1]);
-		}
-		if (сolumns[x+1] <= сolumns[x]) {
-			console.log(сolumns[x+1]);
-		}*/
 		if (input == 'left' && x>0) {
 			if (сolumns[x-1] > y) {
 				x += -1;
-				square.style.left = x*25+"px";
+				shape.style.left = x*25+"px";
 			}
 			//console.log(сolumns[x-1]);
 		}
 		if (input == 'right' && x<10) {
 			if (сolumns[x+1] > y) {
 				x += 1;
-				square.style.left = x*25+"px";
+				shape.style.left = x*25+"px";
 			}
 			//console.log(сolumns[x+1]);
 		}
@@ -73,6 +69,5 @@ for (i = 0; i < buttons.length; i++) {
 	});
 }
 
-squareCreation();
+shapeCreation();
 let timerId = setInterval(move, 50);
-//start();
