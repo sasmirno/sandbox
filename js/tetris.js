@@ -2,47 +2,70 @@ field = document.querySelector(".tetris_field");
 buttons = document.querySelectorAll(".tetris_btn");
 
 
+let matrix = [
+	[1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+];
+
+
 let x = 5;
 let y = 0;
 let сolumns = [20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20];
 
-
 function move() {
-	//console.log(y);
-	if (y<сolumns[x]) {
-		shape.style.top = y*25+"px";
-		y += 1;
-	} else if (сolumns[x] == 0) {
-		console.log('stop');
-		clearInterval(timerId);
-	} else {
-		сolumns[x] += -1
-		x = 5;
-		y = 0;
-		shapeCreation();
+	for (let key in matrix) {
+		for (i=0; i<11; i++) {
+			if (matrix[key][i] == 1) {
+				console.log(matrix[key][i]);
+				matrix[key][i] = 0;
+				//matrix[key+1][i] = 1;
+				visualization();
+				clearInterval(timerId);
+				console.log(matrix[key][i]);
+				//console.log(key);
+				//console.log(i);
+			}
+		}
 	}
 }
 
-function zigzag() {
-	shape.style.position = "absolute";
-	shape.style.left = x*20+"px";
-	shape.style.width = "75px";
-	shape.style.height = "50px";
-	shape.innerHTML = '<div style="position: absolute; left: 0px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 25px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 25px; bottom: 0px; width: 25px; height: 25px; background: green;"></div><div style="position: absolute; left: 50px; bottom: 0px; width: 25px; height: 25px; background: green;"></div>';
-}
+function visualization() {
+	for (let key in matrix) {
+		for (i=0; i<11; i++) {
+			if (matrix[key][i] == 1) {
+				shape=document.createElement("div");
+				shape.style.position = "absolute";
+				shape.style.left = i*25+"px";
+				shape.style.top = key*25+"px";
+				shape.style.width = "25px";
+				shape.style.height = "25px";
+				shape.style.background = "red";
+				field.append(shape);
 
-function square() {
-	shape.style.position = "absolute";
-	shape.style.left = x*25+"px";
-	shape.style.width = "25px";
-	shape.style.height = "25px";
-	shape.style.background = "red";
-}
-
-function shapeCreation() {
-	shape=document.createElement("div");
-	zigzag();
-	field.append(shape);
+				//console.log(matrix[key][i]);
+				//console.log(key);
+				//console.log(i);
+			}
+		}
+	}
 }
 
 // Кнопки управления
@@ -69,5 +92,6 @@ for (i = 0; i < buttons.length; i++) {
 	});
 }
 
-shapeCreation();
+visualization();
+//shapeCreation();
 let timerId = setInterval(move, 50);
