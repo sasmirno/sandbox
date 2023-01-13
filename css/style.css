@@ -259,10 +259,16 @@ h1, h2, h3, h4, h5, h6 {
   gap: 10px;
 }
 .tetris_field {
-  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   width: 277px;
   height: 502px;
   border: 1px solid grey;
+}
+.tetris_cell {
+  width: 25px;
+  height: 25px;
+  border: 1px solid yellow;
 }
 .tetris_keyboard {
   display: flex;

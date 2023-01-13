@@ -1,10 +1,12 @@
 field = document.querySelector(".tetris_field");
+cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
 
 
 let matrix = [
 	[0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -18,13 +20,11 @@ let matrix = [
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-	[0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0],
+	[0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
-
 
 let x = 5;
 let y = 0;
@@ -61,27 +61,34 @@ function move() {
 	//clearInterval(timerId);
 }
 console.log(matrix);
+//console.log(cells);
 
 function visualization() {
 	for (let key in matrix) {
 		for (i=0; i<11; i++) {
-			if (matrix[key][i] == 1) {
-				shape=document.createElement("div");
-				shape.style.position = "absolute";
-				shape.style.left = i*25+"px";
-				shape.style.top = key*25+"px";
-				shape.style.width = "25px";
-				shape.style.height = "25px";
-				shape.style.background = "red";
-				field.append(shape);
-
-				if (key < 19) {
-					setTimeout(move, 50);
-				}/**/
-				console.log(matrix[key][i]);
-				//console.log(key);
-				//console.log(i);
-			}
+			//if (matrix[key][i] == 1) {}
+			//let g = matrix[key][i];
+			//console.log(g);
+			switch (matrix[key][i]) {
+				case 0:
+					//console.log('0');
+				break;
+				case 1:
+					//console.log(matrix[key][i]);
+					console.log(key);
+					console.log(i);
+					//console.log(cells[i].length);
+					//console.log(matrix[key][i]);
+					cells[i].style.background="red";
+				break;
+				case 3:
+					//console.log(matrix[key][i]);
+					//console.log(key);
+					//console.log(i);
+					//console.log('3');
+				break;
+				default:
+			}/**/
 		}
 	}
 }
