@@ -26,26 +26,61 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
+function figureCreation() {
+	matrix[5] = 1;
+}
+
 function move() {
+	let arr = [];
+	arr = matrix;
 	for (let key in matrix) {
 		if (matrix[key] == 1) {
 			if (matrix[parseInt(key)+11] == 0) {
-				matrix[key] = 0;
-				matrix[parseInt(key)+11] = 2;
+				arr[parseInt(key)+11] = 2;
+				//arr[key] = 0;
 			} else if (matrix[parseInt(key)-11] == undefined) {
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
-				matrix[key] = 'purple';
-				matrix[5] = 1;
+				arr[key] = 'purple';
+				figureCreation();
 			}
 		}
-		if (matrix[key] == 2) {
-			matrix[key] = 1;
+		/*if (matrix[key] == 1) {
+			arr[key] = 0;
+		}*/
+		if (arr[key] == 2) {
+			if (arr[parseInt(key)-22] == 1) {
+				arr[parseInt(key)-11] = 1;
+			} else {
+				arr[parseInt(key)-11] = 0;
+			}
+			arr[key] = 1;
 		}
 	}
+	/*for (let key in arr) {
+		if (arr[key] == 1) {
+			arr[key] = 0;
+		} else  {
+			clearInterval(timerId);
+			console.log('stop2');
+		}
+		//console.log('111');
+	}
+	for (let key in matrix) {
+		if (matrix[parseInt(key)-11] == undefined) {
+			clearInterval(timerId);
+			console.log('stop');
+		}
+			if (arr[key] == 2) {
+				arr[key] = 1;
+			}
+		//console.log('222');
+	}*/
+	matrix = arr;
 	visualization();
 	//console.log('loop');
+	//console.log(arr);
 }
 
 //console.log(matrix);
@@ -102,5 +137,4 @@ function visualization() {
 
 //visualization();
 //move();
-//shapeCreation();
 let timerId = setInterval(move, 50);
