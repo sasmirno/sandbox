@@ -5,7 +5,7 @@ buttons = document.querySelectorAll(".tetris_btn");
 
 let matrix = [
 	0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -28,6 +28,8 @@ let matrix = [
 
 function figureCreation() {
 	matrix[5] = 1;
+	matrix[16] = 1;
+	//matrix[27] = 1;
 }
 
 function move() {
@@ -37,8 +39,20 @@ function move() {
 		if (matrix[key] == 1) {
 			if (matrix[parseInt(key)+11] == 0) {
 				arr[parseInt(key)+11] = 2;
-				//arr[key] = 0;
-			} else if (matrix[parseInt(key)-11] == undefined) {
+				arr[key] = 0;
+			} else if (matrix[parseInt(key)+22] == 0) {
+				arr[parseInt(key)+22] = 2;
+				arr[key] = 0;
+			} /*else if (matrix[parseInt(key)+33] == 0) {
+				arr[parseInt(key)+33] = 2;
+				arr[key] = 0;
+			} else if (matrix[parseInt(key)+44] == 0) {
+				arr[parseInt(key)+44] = 2;
+				arr[key] = 0;
+			} else if (matrix[parseInt(key)+55] == 0) {
+				arr[parseInt(key)+55] = 2;
+				arr[key] = 0;
+			}*/ else if (matrix[parseInt(key)-11] == undefined) {
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
@@ -46,37 +60,15 @@ function move() {
 				figureCreation();
 			}
 		}
-		/*if (matrix[key] == 1) {
-			arr[key] = 0;
-		}*/
 		if (arr[key] == 2) {
-			if (arr[parseInt(key)-22] == 1) {
+			/*if (arr[parseInt(key)-22] == 1) {
 				arr[parseInt(key)-11] = 1;
 			} else {
 				arr[parseInt(key)-11] = 0;
-			}
+			}*/
 			arr[key] = 1;
 		}
 	}
-	/*for (let key in arr) {
-		if (arr[key] == 1) {
-			arr[key] = 0;
-		} else  {
-			clearInterval(timerId);
-			console.log('stop2');
-		}
-		//console.log('111');
-	}
-	for (let key in matrix) {
-		if (matrix[parseInt(key)-11] == undefined) {
-			clearInterval(timerId);
-			console.log('stop');
-		}
-			if (arr[key] == 2) {
-				arr[key] = 1;
-			}
-		//console.log('222');
-	}*/
 	matrix = arr;
 	visualization();
 	//console.log('loop');
