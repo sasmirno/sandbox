@@ -4,8 +4,8 @@ buttons = document.querySelectorAll(".tetris_btn");
 
 
 let matrix = [
-	0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -26,53 +26,52 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
+let arr = Array.from(matrix);
+
 function figureCreation() {
-	matrix[5] = 1;
-	matrix[16] = 1;
-	//matrix[27] = 1;
+	arr[5] = 1;
+	arr[16] = 1;
+	//arr[27] = 1;
+	//arr[38] = 1;
 }
 
 function move() {
-	let arr = [];
-	arr = matrix;
 	for (let key in matrix) {
 		if (matrix[key] == 1) {
 			if (matrix[parseInt(key)+11] == 0) {
-				arr[parseInt(key)+11] = 2;
-				arr[key] = 0;
+				arr[parseInt(key)+11] = matrix[key];
+				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
+					arr[key] = 0;
+				}
 			} else if (matrix[parseInt(key)+22] == 0) {
-				arr[parseInt(key)+22] = 2;
-				arr[key] = 0;
-			} /*else if (matrix[parseInt(key)+33] == 0) {
-				arr[parseInt(key)+33] = 2;
-				arr[key] = 0;
+				//arr[parseInt(key)+22] = 1;
+				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
+					arr[key] = 0;
+				}
+			} else if (matrix[parseInt(key)+33] == 0) {
+				//arr[parseInt(key)+33] = 1;
+				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
+					arr[key] = 0;
+				}
 			} else if (matrix[parseInt(key)+44] == 0) {
-				arr[parseInt(key)+44] = 2;
-				arr[key] = 0;
-			} else if (matrix[parseInt(key)+55] == 0) {
-				arr[parseInt(key)+55] = 2;
-				arr[key] = 0;
-			}*/ else if (matrix[parseInt(key)-11] == undefined) {
+				//arr[parseInt(key)+44] = 1;
+				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
+					arr[key] = 0;
+				}
+			} else if (matrix[parseInt(key)-11] == undefined) {
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
-				arr[key] = 'purple';
+				arr[key] = 'grey';
 				figureCreation();
 			}
 		}
-		if (arr[key] == 2) {
-			/*if (arr[parseInt(key)-22] == 1) {
-				arr[parseInt(key)-11] = 1;
-			} else {
-				arr[parseInt(key)-11] = 0;
-			}*/
-			arr[key] = 1;
-		}
 	}
-	matrix = arr;
+	for (let key in arr) {
+		matrix[key] = arr[key];
+	}
 	visualization();
-	//console.log('loop');
-	//console.log(arr);
+	console.log('loop');
 }
 
 //console.log(matrix);
@@ -93,9 +92,21 @@ function visualization() {
 				//console.log(key*11+i);
 				cells[key].style.background="red";
 			break;
-			case 'purple':
-				//console.log(key*11+i);
+			case 2:
+				cells[key].style.background="green";
+			break;
+			case 3:
+				cells[key].style.background="blue";
+			break;
+			case 4:
+				cells[key].style.background="orange";
+			break;
+			case 5:
 				cells[key].style.background="purple";
+			break;
+			case 'grey':
+				//console.log(key*11+i);
+				cells[key].style.background="grey";
 			break;
 			default:
 		}/**/
@@ -129,4 +140,5 @@ function visualization() {
 
 //visualization();
 //move();
+figureCreation();
 let timerId = setInterval(move, 50);
