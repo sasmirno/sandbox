@@ -2,7 +2,7 @@ field = document.querySelector(".tetris_field");
 cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
 
-
+// Имитация игрового поля
 let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -26,21 +26,27 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
+// Копия игрового поля
 let arr = Array.from(matrix);
 
+// Создание фигуры
 function figureCreation() {
-	arr[5] = 1;
-	arr[16] = 1;
-	//arr[27] = 1;
-	//arr[38] = 1;
+	arr[5] = 4;
+	//arr[6] = 4;
+	//arr[16] = 4;
+	//arr[17] = 4;
 }
 
+// Движение фигуры вниз
 function move() {
 	for (let key in matrix) {
-		if (matrix[key] == 1) {
+		// Ищем все числа кроме нуля в массиве игрового поля
+		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (matrix[parseInt(key)+11] == 0) {
+				// Если нижняя ячейка свободна записываем в неё найденое значение
 				arr[parseInt(key)+11] = matrix[key];
 				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
+					// Если верхния ячейка свободна обнуляем текущую ячейку
 					arr[key] = 0;
 				}
 			} else if (matrix[parseInt(key)+22] == 0) {
@@ -58,24 +64,71 @@ function move() {
 				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
 					arr[key] = 0;
 				}
-			} else if (matrix[parseInt(key)-11] == undefined) {
+			}/**/ else if (matrix[parseInt(key)-11] == undefined) {
+				// Если верхния ячейка отсуствует останавливаем таймер
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
+				// Если внизу нет свободных ячеек записывает туда текст и создаем новую фигуру
 				arr[key] = 'grey';
+				x = 5;
 				figureCreation();
 			}
 		}
 	}
+	// Перезаписываем игровое поле
 	for (let key in arr) {
 		matrix[key] = arr[key];
 	}
+	// Визуализируем массив игрового поля на сайте
 	visualization();
 	console.log('loop');
 }
 
 //console.log(matrix);
 //console.log(cells);
+
+// Кнопки управления
+
+let x = 5;
+
+for (i = 0; i < buttons.length; i++) {
+	buttons[i].addEventListener("click", function() {
+		let input = this.id;
+		//console.log(input);
+		if (input == 'left' && x>0) {
+			for (let key in matrix) {
+				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+					if (matrix[parseInt(key)-1] == 0) {
+						x -= 1;
+						arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
+							arr[key] = 0;
+						}
+					}
+				}/**/
+			}
+		}
+		if (input == 'right' && x<10) {
+			for (let key in matrix) {
+				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+					if (matrix[parseInt(key)+1] == 0) {
+						x += 1;
+						arr[parseInt(key)+1] = matrix[key];
+						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
+							arr[key] = 0;
+						}
+					}
+				}/**/
+			}
+		}
+		for (let key in arr) {
+			matrix[key] = arr[key];
+		}
+		//visualization();
+		//console.log(x);
+		});
+}/**/
 
 function visualization() {
 	for (let key in matrix) {
@@ -85,11 +138,6 @@ function visualization() {
 				cells[key].style.background="white";
 			break;
 			case 1:
-				//console.log(matrix[key]);
-				//console.log(key);
-				//console.log(i);
-				//console.log(cells[i].length);
-				//console.log(key*11+i);
 				cells[key].style.background="red";
 			break;
 			case 2:
@@ -109,36 +157,12 @@ function visualization() {
 				cells[key].style.background="grey";
 			break;
 			default:
-		}/**/
+		}
 		//console.log(matrix[key]);
 	}
 }
 
-// Кнопки управления
-/*for (i = 0; i < buttons.length; i++) {
-	buttons[i].addEventListener("click", function() {
-		let input = this.id;
-		//console.log(input);
-		if (input == 'left' && x>0) {
-			if (сolumns[x-1] > y) {
-				x += -1;
-				shape.style.left = x*25+"px";
-			}
-			//console.log(сolumns[x-1]);
-		}
-		if (input == 'right' && x<10) {
-			if (сolumns[x+1] > y) {
-				x += 1;
-				shape.style.left = x*25+"px";
-			}
-			//console.log(сolumns[x+1]);
-		}
-		//console.log(x);
-		//console.log(сolumns[x]);
-	});
-}*/
-
 //visualization();
 //move();
 figureCreation();
-let timerId = setInterval(move, 50);
+let timerId = setInterval(move, 100);
