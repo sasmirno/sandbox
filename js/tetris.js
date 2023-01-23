@@ -32,47 +32,59 @@ let arr = Array.from(matrix);
 // Создание фигуры
 function figureCreation() {
 	arr[5] = 4;
-	//arr[6] = 4;
-	//arr[16] = 4;
-	//arr[17] = 4;
+	arr[4] = 4;
+	arr[6] = 4;
+	arr[16] = 4;
 }
 
 // Движение фигуры вниз
 function move() {
+	let free = true;
+	// Проверка если свободное место под фигурой
+	for (let key in matrix) {
+		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+			if (isNaN(matrix[parseInt(key)+11]) == true) {
+				free = false;
+			}
+		}
+	}
 	for (let key in matrix) {
 		// Ищем все числа кроме нуля в массиве игрового поля
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-			if (matrix[parseInt(key)+11] == 0) {
-				// Если нижняя ячейка свободна записываем в неё найденое значение
+			if (free == true) {
 				arr[parseInt(key)+11] = matrix[key];
 				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
 					// Если верхния ячейка свободна обнуляем текущую ячейку
 					arr[key] = 0;
 				}
-			} else if (matrix[parseInt(key)+22] == 0) {
-				//arr[parseInt(key)+22] = 1;
-				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
-					arr[key] = 0;
-				}
-			} else if (matrix[parseInt(key)+33] == 0) {
-				//arr[parseInt(key)+33] = 1;
-				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
-					arr[key] = 0;
-				}
-			} else if (matrix[parseInt(key)+44] == 0) {
-				//arr[parseInt(key)+44] = 1;
-				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
-					arr[key] = 0;
-				}
-			}/**/ else if (matrix[parseInt(key)-11] == undefined) {
+			} else if (matrix[parseInt(key)-11] == undefined) {
 				// Если верхния ячейка отсуствует останавливаем таймер
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
 				// Если внизу нет свободных ячеек записывает туда текст и создаем новую фигуру
-				arr[key] = 'grey';
+				switch (matrix[key]) {
+					case 1:
+						arr[key] = 'red';
+					break;
+					case 2:
+						arr[key] = 'green';
+					break;
+					case 3:
+						arr[key] = 'grey';
+					break;
+					case 4:
+						arr[key] = 'grey';
+					break;
+					case 5:
+						arr[key] = 'grey';
+					break;
+					default:
+				}
+				//arr[key] = 'grey';
 				x = 5;
 				figureCreation();
+				//console.log('true');
 			}
 		}
 	}
@@ -105,6 +117,24 @@ for (i = 0; i < buttons.length; i++) {
 						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
 							arr[key] = 0;
 						}
+					} else if (matrix[parseInt(key)-2] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
+							arr[key] = 0;
+						}
+					} else if (matrix[parseInt(key)-3] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
+							arr[key] = 0;
+						}
+					} else if (matrix[parseInt(key)-4] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
+							arr[key] = 0;
+						}
 					}
 				}/**/
 			}
@@ -115,6 +145,24 @@ for (i = 0; i < buttons.length; i++) {
 					if (matrix[parseInt(key)+1] == 0) {
 						x += 1;
 						arr[parseInt(key)+1] = matrix[key];
+						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
+							arr[key] = 0;
+						}
+					} else if (matrix[parseInt(key)+2] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
+							arr[key] = 0;
+						}
+					} else if (matrix[parseInt(key)+3] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
+							arr[key] = 0;
+						}
+					} else if (matrix[parseInt(key)+4] == 0) {
+						//x -= 1;
+						//arr[parseInt(key)-1] = matrix[key];
 						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
 							arr[key] = 0;
 						}
