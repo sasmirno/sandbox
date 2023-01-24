@@ -27,20 +27,20 @@ let matrix = [
 ];
 
 // Копия игрового поля
-let arr = Array.from(matrix);
+let buffer = Array.from(matrix);
 
 // Создание фигуры
 function figureCreation() {
-	arr[5] = 4;
-	arr[4] = 4;
-	arr[6] = 4;
-	arr[16] = 4;
+	buffer[5] = 4;
+	buffer[4] = 4;
+	buffer[27] = 4;
+	buffer[16] = 4;
 }
 
 // Движение фигуры вниз
 function move() {
-	let free = true;
 	// Проверка если свободное место под фигурой
+	let free = true;
 	for (let key in matrix) {
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (isNaN(matrix[parseInt(key)+11]) == true) {
@@ -52,36 +52,36 @@ function move() {
 		// Ищем все числа кроме нуля в массиве игрового поля
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (free == true) {
-				arr[parseInt(key)+11] = matrix[key];
+				// Если есть 
+				buffer[parseInt(key)+11] = matrix[key];
 				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
 					// Если верхния ячейка свободна обнуляем текущую ячейку
-					arr[key] = 0;
+					buffer[key] = 0;
 				}
 			} else if (matrix[parseInt(key)-11] == undefined) {
 				// Если верхния ячейка отсуствует останавливаем таймер
 				clearInterval(timerId);
 				console.log('stop');
 			} else {
-				// Если внизу нет свободных ячеек записывает туда текст и создаем новую фигуру
+				// Если внизу нет свободных ячеек записывает в текущую текст цвета и создаем новую фигуру
 				switch (matrix[key]) {
 					case 1:
-						arr[key] = 'red';
+						buffer[key] = 'red';
 					break;
 					case 2:
-						arr[key] = 'green';
+						buffer[key] = 'green';
 					break;
 					case 3:
-						arr[key] = 'grey';
+						buffer[key] = 'grey';
 					break;
 					case 4:
-						arr[key] = 'grey';
+						buffer[key] = 'grey';
 					break;
 					case 5:
-						arr[key] = 'grey';
+						buffer[key] = 'grey';
 					break;
 					default:
 				}
-				//arr[key] = 'grey';
 				x = 5;
 				figureCreation();
 				//console.log('true');
@@ -89,8 +89,8 @@ function move() {
 		}
 	}
 	// Перезаписываем игровое поле
-	for (let key in arr) {
-		matrix[key] = arr[key];
+	for (let key in buffer) {
+		matrix[key] = buffer[key];
 	}
 	// Визуализируем массив игрового поля на сайте
 	visualization();
@@ -109,73 +109,55 @@ for (i = 0; i < buttons.length; i++) {
 		let input = this.id;
 		//console.log(input);
 		if (input == 'left' && x>0) {
+			// Проверка если свободное место слева от фигуры
+			let free = true;
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (matrix[parseInt(key)-1] == 0) {
+					if (isNaN(matrix[parseInt(key)-1]) == true) {
+						free = false;
+					}
+				}
+			}
+			for (let key in matrix) {
+				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+					if (free == true) {
 						x -= 1;
-						arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)-2] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)-3] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)-4] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined) {
-							arr[key] = 0;
+						buffer[parseInt(key)-1] = matrix[key];
+						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined || isNaN(matrix[parseInt(key)+1]) == true) {
+							buffer[key] = 0;
 						}
 					}
 				}/**/
 			}
 		}
 		if (input == 'right' && x<10) {
+			// Проверка если свободное место слева от фигуры
+			let free = true;
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (matrix[parseInt(key)+1] == 0) {
+					if (isNaN(matrix[parseInt(key)+1]) == true) {
+						free = false;
+					}
+				}
+			}
+			for (let key in matrix) {
+				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+					if (free == true) {
 						x += 1;
-						arr[parseInt(key)+1] = matrix[key];
-						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)+2] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)+3] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
-							arr[key] = 0;
-						}
-					} else if (matrix[parseInt(key)+4] == 0) {
-						//x -= 1;
-						//arr[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined) {
-							arr[key] = 0;
+						buffer[parseInt(key)+1] = matrix[key];
+						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined || isNaN(matrix[parseInt(key)-1]) == true) {
+							buffer[key] = 0;
 						}
 					}
 				}/**/
 			}
 		}
-		for (let key in arr) {
-			matrix[key] = arr[key];
+		for (let key in buffer) {
+			matrix[key] = buffer[key];
 		}
 		//visualization();
 		//console.log(x);
-		});
+	});
 }/**/
 
 function visualization() {
