@@ -31,10 +31,55 @@ let buffer = Array.from(matrix);
 
 // Создание фигуры
 function figureCreation() {
+	/*buffer[3] = 1;
+	buffer[4] = 1;
+	buffer[5] = 1;
+	buffer[6] = 1;
+	left = -10;
+	right = 15;*/
+
+	buffer[4] = 2;
+	buffer[5] = 2;
+	buffer[6] = 2;
+	buffer[16] = 2;
+	left = -15;
+	right = 15;/**/
+
+	/*buffer[4] = 3;
+	buffer[5] = 3;
+	buffer[15] = 3;
+	buffer[16] = 3;
+	left = -15;
+	right = 20;*/
+
+	/*buffer[4] = 4;
 	buffer[5] = 4;
-	buffer[4] = 4;
-	buffer[27] = 4;
-	buffer[16] = 4;
+	buffer[15] = 4;
+	buffer[26] = 4;
+	left = -15;
+	right = 20;*/
+
+	/*buffer[4] = 5;
+	buffer[5] = 5;
+	buffer[16] = 5;
+	buffer[17] = 5;
+	left = -15;
+	right = 15;*/
+}
+
+// Экран конца игры
+function gameOver() {
+	buffer[177] = 1;
+	buffer[187] = 1;
+	buffer[198] = 1;
+	buffer[202] = 1;
+	buffer[191] = 1;
+	buffer[190] = 1;
+	buffer[179] = 1;
+	buffer[210] = 1;
+	buffer[211] = 1;
+	buffer[212] = 1;
+	visualization();
 }
 
 // Движение фигуры вниз
@@ -52,7 +97,6 @@ function move() {
 		// Ищем все числа кроме нуля в массиве игрового поля
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (free == true) {
-				// Если есть 
 				buffer[parseInt(key)+11] = matrix[key];
 				if (matrix[parseInt(key)-11] == 0 || matrix[parseInt(key)-11] == undefined) {
 					// Если верхния ячейка свободна обнуляем текущую ячейку
@@ -61,28 +105,12 @@ function move() {
 			} else if (matrix[parseInt(key)-11] == undefined) {
 				// Если верхния ячейка отсуствует останавливаем таймер
 				clearInterval(timerId);
+				//gameOver();
 				console.log('stop');
 			} else {
-				// Если внизу нет свободных ячеек записывает в текущую текст цвета и создаем новую фигуру
-				switch (matrix[key]) {
-					case 1:
-						buffer[key] = 'red';
-					break;
-					case 2:
-						buffer[key] = 'green';
-					break;
-					case 3:
-						buffer[key] = 'grey';
-					break;
-					case 4:
-						buffer[key] = 'grey';
-					break;
-					case 5:
-						buffer[key] = 'grey';
-					break;
-					default:
-				}
-				x = 5;
+				// Если внизу нет свободных ячеек записывает в текущую ячейку текст и создаем новую фигуру
+				buffer[key] = 'stop';
+				center = 0;
 				figureCreation();
 				//console.log('true');
 			}
@@ -101,14 +129,14 @@ function move() {
 //console.log(cells);
 
 // Кнопки управления
-
-let x = 5;
-
+let center = 0;
+let left;
+let right;
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
 		//console.log(input);
-		if (input == 'left' && x>0) {
+		if (input == 'left' && center>left) {
 			// Проверка если свободное место слева от фигуры
 			let free = true;
 			for (let key in matrix) {
@@ -121,7 +149,7 @@ for (i = 0; i < buttons.length; i++) {
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (free == true) {
-						x -= 1;
+						center -= 1;
 						buffer[parseInt(key)-1] = matrix[key];
 						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined || isNaN(matrix[parseInt(key)+1]) == true) {
 							buffer[key] = 0;
@@ -130,7 +158,7 @@ for (i = 0; i < buttons.length; i++) {
 				}/**/
 			}
 		}
-		if (input == 'right' && x<10) {
+		if (input == 'right' && center<right) {
 			// Проверка если свободное место слева от фигуры
 			let free = true;
 			for (let key in matrix) {
@@ -143,7 +171,7 @@ for (i = 0; i < buttons.length; i++) {
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (free == true) {
-						x += 1;
+						center += 1;
 						buffer[parseInt(key)+1] = matrix[key];
 						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined || isNaN(matrix[parseInt(key)-1]) == true) {
 							buffer[key] = 0;
@@ -155,8 +183,7 @@ for (i = 0; i < buttons.length; i++) {
 		for (let key in buffer) {
 			matrix[key] = buffer[key];
 		}
-		//visualization();
-		//console.log(x);
+		visualization();
 	});
 }/**/
 
@@ -164,7 +191,7 @@ function visualization() {
 	for (let key in matrix) {
 		switch (matrix[key]) {
 			case 0:
-				//console.log(key);
+				//console.log(key*11+i);
 				cells[key].style.background="white";
 			break;
 			case 1:
@@ -182,17 +209,13 @@ function visualization() {
 			case 5:
 				cells[key].style.background="purple";
 			break;
-			case 'grey':
-				//console.log(key*11+i);
-				cells[key].style.background="grey";
-			break;
 			default:
+				cells[key].style.background="grey";
 		}
-		//console.log(matrix[key]);
 	}
 }
 
 //visualization();
 //move();
 figureCreation();
-let timerId = setInterval(move, 100);
+let timerId = setInterval(move, 500);
