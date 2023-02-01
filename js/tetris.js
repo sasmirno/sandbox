@@ -49,6 +49,15 @@ function figureCreation() {
 
 }
 
+// Функция обнуления ячеек
+function zeroing() {
+	for (let key in matrix) {
+		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+			buffer[key] = 0;
+		}
+	}
+}
+
 // Движение фигуры вниз
 function move() {
 	// Проверка если свободное место под фигурой
@@ -57,30 +66,35 @@ function move() {
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (isNaN(matrix[parseInt(key)+10]) == true) {
 				free = false;
+			} else {
+				zeroing();
 			}
 		}
 	}
-	for (let key in matrix) {
-		// Ищем все числа кроме нуля в массиве игрового поля
-		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-			if (free == true) {
+	if (free == true) {
+		for (let key in matrix) {
+			// Ищем все числа кроме нуля в массиве игрового поля
+			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 				buffer[parseInt(key)+10] = matrix[key];
-				if (matrix[parseInt(key)-10] == 0 || matrix[parseInt(key)-10] == undefined) {
-					// Если верхния ячейка свободна обнуляем текущую ячейку
-					buffer[key] = 0;
+			}
+		}
+	} else {
+		for (let key in matrix) {
+			// Ищем все числа кроме нуля в массиве игрового поля
+			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+				if (matrix[parseInt(key)-10] == undefined) {
+					// Если верхния ячейка отсуствует останавливаем таймер
+					clearInterval(timerId);
+					gameOver();
+					console.log('stop');
+				} else {
+					// Если внизу нет свободных ячеек записывает в текущую ячейку текст и создаем новую фигуру
+					buffer[key] = 'stop';
+					center = 0;
+					orientation = 0;
+					iteration = -1;
+					figureCreation();
 				}
-			} else if (matrix[parseInt(key)-10] == undefined) {
-				// Если верхния ячейка отсуствует останавливаем таймер
-				clearInterval(timerId);
-				gameOver();
-				console.log('stop');
-			} else {
-				// Если внизу нет свободных ячеек записывает в текущую ячейку текст и создаем новую фигуру
-				buffer[key] = 'stop';
-				center = 0;
-				orientation = 0;
-				iteration = -1;
-				figureCreation();
 			}
 		}
 	}
@@ -96,7 +110,6 @@ function move() {
 }
 
 //console.log(matrix);
-//console.log(cells);
 
 // Кнопки управления
 let orientation = 0;
@@ -123,13 +136,11 @@ for (i = 0; i < buttons.length; i++) {
 			}
 			// Если свободное место есть двигаем фигуру влево
 			if (free == true) {
+				zeroing();
 				center -= 1;
 				for (let key in matrix) {
 					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 						buffer[parseInt(key)-1] = matrix[key];
-						if (matrix[parseInt(key)+1] == 0 || matrix[parseInt(key)+1] == undefined || isNaN(matrix[parseInt(key)+1]) == true) {
-							buffer[key] = 0;
-						}
 					}
 				}
 			}
@@ -146,13 +157,11 @@ for (i = 0; i < buttons.length; i++) {
 			}
 			// Если свободное место есть двигаем фигуру вправо
 			if (free == true) {
+				zeroing();
 				center += 1;
 				for (let key in matrix) {
 					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 						buffer[parseInt(key)+1] = matrix[key];
-						if (matrix[parseInt(key)-1] == 0 || matrix[parseInt(key)-1] == undefined || isNaN(matrix[parseInt(key)-1]) == true) {
-							buffer[key] = 0;
-						}
 					}
 				}
 			}
@@ -161,13 +170,6 @@ for (i = 0; i < buttons.length; i++) {
 			let free = true;
 			let position = 10*iteration+center;
 			//console.log(position);
-			/*for (let key in matrix) {
-				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (isNaN(matrix[parseInt(key)+1]) == true) {
-						free = false;
-					}
-				}
-			}*/
 			// Функция проверки свободных ячеек
 			function check(a, b, c, d) {
 				let arr = [a, b, c, d];
@@ -175,16 +177,6 @@ for (i = 0; i < buttons.length; i++) {
 					if (isNaN(matrix[parseInt(key)]) == true) {
 						//console.log(matrix[parseInt(key)]);
 						free = false;
-					}
-				}
-			}
-			// Функция обнуления ячеек
-			function zeroing() {
-				for (let key in matrix) {
-					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-						if (free == true) {
-							buffer[key] = 0;
-						}
 					}
 				}
 			}
@@ -263,7 +255,7 @@ for (i = 0; i < buttons.length; i++) {
 			//console.log(orientation);
 			//console.log('turn');
 		}
-		console.log(center);
+		//console.log(center);
 		for (let key in buffer) {
 			matrix[key] = buffer[key];
 		}
