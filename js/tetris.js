@@ -36,18 +36,68 @@ function figure(a, b, c, d, l, r, clr) {
 	buffer[c] = clr;
 	buffer[d] = clr;
 	left = l;
-	right = r;/**/
+	right = r;
 }
 
 function figureCreation() {
-
-	//return figure(3, 4, 5, 6, -3, 3, 1);
-	return figure(4, 5, 6, 15, -4, 3, 2);
-	//return figure(4, 5, 14, 15, -4, 4, 3);
-	//return figure(4, 5, 6, 16, -4, 3, 4);
-	//return figure(4, 5, 15, 16, -4, 3, 5);
-
+	let random = Math.round(Math.random() * (5 - 1) + 1);
+	switch (random) {
+		case 1:
+			copyFigure = Array.from(figure1);
+		break;
+		case 2:
+			copyFigure = Array.from(figure2);
+		break;
+		case 3:
+			copyFigure = Array.from(figure3);
+		break;
+		case 4:
+			copyFigure = Array.from(figure4);
+		break;
+		case 5:
+			copyFigure = Array.from(figure5);
+		break;
+		default:
+	}
+	//let copyFigure = Array.from(figure2);
+	return figure(copyFigure[0][0], copyFigure[0][1], copyFigure[0][2], copyFigure[0][3], copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
 }
+// Фигура ''''
+let figure1 = [
+	[3, 4, 5, 6, -3, 3, 1],
+	[-6, 4, 14, 24, -4, 5, 1],
+	[3, 4, 5, 6, -3, 3, 1],
+	[-5, 5, 15, 25, -5, 4, 1]
+];
+// Фигура '|'
+let figure2 = [
+	[4, 5, 6, 15, -4, 3, 2],
+	[-5, 4, 5, 15, -4, 4, 2],
+	[-5, 4, 5, 6, -4, 3, 2],
+	[-5, 6, 5, 15, -5, 3, 2]
+];
+// Фигура ||
+let figure3 = [
+	[4, 5, 14, 15, -4, 4, 3],
+	[4, 5, 14, 15, -4, 4, 3],
+	[4, 5, 14, 15, -4, 4, 3],
+	[4, 5, 14, 15, -4, 4, 3]
+];
+// Фигура |''
+let figure4 = [
+	[4, 5, 6, 16, -4, 3, 4],
+	[-5, 5, 14, 15, -4, 4, 4],
+	[-6, 4, 5, 6, -4, 3, 4],
+	[-5, -4, 5, 15, -5, 3, 4]
+];
+// Фигура .|'
+let figure5 = [
+	[4, 5, 15, 16, -4, 3, 5],
+	[-5, 4, 5, 14, -4, 4, 5],
+	[4, 5, 15, 16, -4, 3, 5],
+	[-5, 4, 5, 14, -4, 4, 5]
+];
+//console.log(figure1[0][0]);
 
 // Функция обнуления ячеек
 function zeroing() {
@@ -79,6 +129,7 @@ function move() {
 			}
 		}
 	} else {
+		let raz = 0;
 		for (let key in matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
 			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
@@ -90,20 +141,23 @@ function move() {
 				} else {
 					// Если внизу нет свободных ячеек записывает в текущую ячейку текст и создаем новую фигуру
 					buffer[key] = 'stop';
-					center = 0;
+					osX = 0;
+					osY = -1;
 					orientation = 0;
-					iteration = -1;
-					figureCreation();
+					// Костыль чтобы срабатывала только один раз, а  не четыре
+					raz += 1;
+					if (raz == 3){
+						figureCreation();
+						//console.log('raz');
+					}
 				}
 			}
 		}
 	}
-	iteration += 1;
-	//console.log(iteration);
+	osY += 1;
+	//console.log(osY);
 	// Перезаписываем игровое поле
-	for (let key in buffer) {
-		matrix[key] = buffer[key];
-	}
+	matrix = Array.from(buffer);
 	// Визуализируем массив игрового поля на сайте
 	visualization();
 	//console.log('move');
@@ -113,10 +167,10 @@ function move() {
 
 // Кнопки управления
 let orientation = 0;
-let center = 0;
+let osX = 0;
+let osY = -1;
 let left;
 let right;
-let iteration = -1;
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
@@ -124,7 +178,7 @@ for (i = 0; i < buttons.length; i++) {
 		if (input == 'down') {
 			move();
 		}
-		if (input == 'left' && center>left) {
+		if (input == 'left' && osX>left) {
 			// Проверка если свободное место слева от фигуры
 			let free = true;
 			for (let key in matrix) {
@@ -137,7 +191,7 @@ for (i = 0; i < buttons.length; i++) {
 			// Если свободное место есть двигаем фигуру влево
 			if (free == true) {
 				zeroing();
-				center -= 1;
+				osX -= 1;
 				for (let key in matrix) {
 					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 						buffer[parseInt(key)-1] = matrix[key];
@@ -145,7 +199,7 @@ for (i = 0; i < buttons.length; i++) {
 				}
 			}
 		}
-		if (input == 'right' && center<right) {
+		if (input == 'right' && osX<right) {
 			// Проверка если свободное место слева от фигуры
 			let free = true;
 			for (let key in matrix) {
@@ -158,7 +212,7 @@ for (i = 0; i < buttons.length; i++) {
 			// Если свободное место есть двигаем фигуру вправо
 			if (free == true) {
 				zeroing();
-				center += 1;
+				osX += 1;
 				for (let key in matrix) {
 					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 						buffer[parseInt(key)+1] = matrix[key];
@@ -168,47 +222,23 @@ for (i = 0; i < buttons.length; i++) {
 		}
 		if (input == 'turn') {
 			let free = true;
-			let position = 10*iteration+center;
+			let position = 10*osY+osX;
 			//console.log(position);
 			// Функция проверки свободных ячеек
 			function check(a, b, c, d) {
 				let arr = [a, b, c, d];
 				for (let key of arr) {
 					if (isNaN(matrix[parseInt(key)]) == true) {
-						//console.log(matrix[parseInt(key)]);
 						free = false;
 					}
 				}
 			}
-			// Фигура ''''
-			/*let figure0 = [3, 4, 5, 6, -3, 3, 1];
-			let figure90 = [-6, 4, 14, 24, -4, 5, 1];
-			let figure180 = [3, 4, 5, 6, -3, 3, 1];
-			let figure270 = [-5, 5, 15, 25, -5, 4, 1];*/
 
 			// Фигура '|'
 			let figure0 = [4, 5, 6, 15, -4, 3, 2];
 			let figure90 = [-5, 4, 5, 15, -4, 4, 2];
 			let figure180 = [-5, 4, 5, 6, -4, 3, 2];
 			let figure270 = [-5, 6, 5, 15, -5, 3, 2];/**/
-
-			// Фигура ||
-			/*let figure0 = [4, 5, 14, 15, -4, 4, 3];
-			let figure90 = [4, 5, 14, 15, -4, 4, 3];
-			let figure180 = [4, 5, 14, 15, -4, 4, 3];
-			let figure270 = [4, 5, 14, 15, -4, 4, 3];*/
-
-			// Фигура |''
-			/*let figure0 = [4, 5, 6, 16, -4, 3, 4];
-			let figure90 = [-5, 5, 14, 15, -4, 4, 4];
-			let figure180 = [-6, 4, 5, 6, -4, 3, 4];
-			let figure270 = [-5, -4, 5, 15, -5, 3, 4];*/
-
-			// Фигура .|'
-			/*let figure0 = [4, 5, 15, 16, -4, 3, 5];
-			let figure90 = [-5, 4, 5, 14, -4, 4, 5];
-			let figure180 = [4, 5, 15, 16, -4, 3, 5];
-			let figure270 = [-5, 4, 5, 14, -4, 4, 5];*/
 
 			switch(orientation) {
 				case 0:
@@ -220,9 +250,9 @@ for (i = 0; i < buttons.length; i++) {
 					}
 				break;
 				case 90:
-					if (center == 4) {
+					if (osX == 4) {
 						position -= 1;
-						center -= 1;
+						osX -= 1;
 					}
 					check(figure180[0]+position, figure180[1]+position, figure180[2]+position, figure180[3]+position);
 					if (free == true) {
@@ -240,9 +270,9 @@ for (i = 0; i < buttons.length; i++) {
 					}
 				break;
 				case 270:
-					if (center == -5) {
+					if (osX == -5) {
 						position += 1;
-						center += 1;
+						osX += 1;
 					}
 					check(figure0[0]+position, figure0[1]+position, figure0[2]+position, figure0[3]+position);
 					if (free == true) {
@@ -255,13 +285,11 @@ for (i = 0; i < buttons.length; i++) {
 			//console.log(orientation);
 			//console.log('turn');
 		}
-		//console.log(center);
-		for (let key in buffer) {
-			matrix[key] = buffer[key];
-		}
+		//console.log(osX);
+		matrix = Array.from(buffer);
 		visualization();
 	});
-}/**/
+}
 
 function visualization() {
 	for (let key in matrix) {
@@ -297,7 +325,6 @@ function visualization() {
 //move();
 figureCreation();
 let timerId = setInterval(move, 500);
-
 
 // Экран конца игры
 function gameOver() {
