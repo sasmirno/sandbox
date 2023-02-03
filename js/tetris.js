@@ -83,21 +83,20 @@ let figure3 = [
 	[4, 5, 14, 15, -4, 4, 3],
 	[4, 5, 14, 15, -4, 4, 3]
 ];
-// Фигура |''
+// Фигура ''|
 let figure4 = [
 	[4, 5, 6, 16, -4, 3, 4],
 	[-5, 5, 14, 15, -4, 4, 4],
 	[-6, 4, 5, 6, -4, 3, 4],
 	[-5, -4, 5, 15, -5, 3, 4]
 ];
-// Фигура .|'
+// Фигура '|.
 let figure5 = [
 	[4, 5, 15, 16, -4, 3, 5],
 	[-5, 4, 5, 14, -4, 4, 5],
 	[4, 5, 15, 16, -4, 3, 5],
 	[-5, 4, 5, 14, -4, 4, 5]
 ];
-//console.log(figure1[0][0]);
 
 // Функция обнуления ячеек
 function zeroing() {
@@ -162,8 +161,6 @@ function move() {
 	visualization();
 	//console.log('move');
 }
-
-//console.log(matrix);
 
 // Кнопки управления
 let orientation = 0;
@@ -234,18 +231,12 @@ for (i = 0; i < buttons.length; i++) {
 				}
 			}
 
-			// Фигура '|'
-			let figure0 = [4, 5, 6, 15, -4, 3, 2];
-			let figure90 = [-5, 4, 5, 15, -4, 4, 2];
-			let figure180 = [-5, 4, 5, 6, -4, 3, 2];
-			let figure270 = [-5, 6, 5, 15, -5, 3, 2];/**/
-
 			switch(orientation) {
 				case 0:
-					check(figure90[0]+position, figure90[1]+position, figure90[2]+position, figure90[3]+position);
+					check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position);
 					if (free == true) {
 						zeroing();
-						figure(figure90[0]+position, figure90[1]+position, figure90[2]+position, figure90[3]+position, figure90[4], figure90[5], figure90[6]);
+						figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 						orientation = 90;
 					}
 				break;
@@ -254,18 +245,18 @@ for (i = 0; i < buttons.length; i++) {
 						position -= 1;
 						osX -= 1;
 					}
-					check(figure180[0]+position, figure180[1]+position, figure180[2]+position, figure180[3]+position);
+					check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position);
 					if (free == true) {
 						zeroing();
-						figure(figure180[0]+position, figure180[1]+position, figure180[2]+position, figure180[3]+position, figure180[4], figure180[5], figure180[6]);
+						figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 						orientation = 180;
 					}
 				break;
 				case 180:
-					check(figure270[0]+position, figure270[1]+position, figure270[2]+position, figure270[3]+position);
+					check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position);
 					if (free == true) {
 						zeroing();
-						figure(figure270[0]+position, figure270[1]+position, figure270[2]+position, figure270[3]+position, figure270[4], figure270[5], figure270[6]);
+						figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
 						orientation = 270;
 					}
 				break;
@@ -274,15 +265,15 @@ for (i = 0; i < buttons.length; i++) {
 						position += 1;
 						osX += 1;
 					}
-					check(figure0[0]+position, figure0[1]+position, figure0[2]+position, figure0[3]+position);
+					check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position);
 					if (free == true) {
 						zeroing();
-						figure(figure0[0]+position, figure0[1]+position, figure0[2]+position, figure0[3]+position, figure0[4], figure0[5], figure0[6]);
+						figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
 						orientation = 0;
 					}
 				break;
 			}
-			//console.log(orientation);
+			//console.log(copyFigure);
 			//console.log('turn');
 		}
 		//console.log(osX);
