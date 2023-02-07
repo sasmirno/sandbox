@@ -40,7 +40,7 @@ function figure(a, b, c, d, l, r, clr) {
 }
 
 function figureCreation() {
-	//let random = 1;
+	//let random = 2;
 	let random = Math.round(Math.random() * (5 - 1) + 1);
 	switch (random) {
 		case 1:
@@ -273,6 +273,18 @@ for (i = 0; i < buttons.length; i++) {
 									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
 									orientation = 0;
 								}
+							} else if (osX == left+1) {
+								if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
+									zeroing();
+									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									orientation = 0;
+								}
+							} else if (osX == left+2) {
+								if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
+									zeroing();
+									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									orientation = 0;
+								}
 							} else if (osX == right) {
 								if (check(copyFigure[0][0]+position-2, copyFigure[0][1]+position-2, copyFigure[0][2]+position-2, copyFigure[0][3]+position-2) != false) {
 									zeroing();
@@ -352,11 +364,13 @@ for (i = 0; i < buttons.length; i++) {
 								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 180;
 							} else if (check(copyFigure[2][0]+position-1, copyFigure[2][1]+position-1, copyFigure[2][2]+position-1, copyFigure[2][3]+position-1) != false) {
-								zeroing();
-								position -= 1;
-								osX -= 1;
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 180;
+								if (osX != left) {
+									zeroing();
+									position -= 1;
+									osX -= 1;
+									figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+									orientation = 180;
+								}
 							}
 						break;
 						case 180:
@@ -422,7 +436,7 @@ for (i = 0; i < buttons.length; i++) {
 				break;
 			}
 			//console.log(position);
-			//console.log(orientation);
+			console.log(orientation);
 			//console.log('turn');
 		}
 		//console.log(osX);
