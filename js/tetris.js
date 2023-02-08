@@ -40,8 +40,8 @@ function figure(a, b, c, d, l, r, clr) {
 }
 
 function figureCreation() {
-	//let random = 2;
-	let random = Math.round(Math.random() * (5 - 1) + 1);
+	//let random = 6;
+	let random = Math.round(Math.random() * (7 - 1) + 1);
 	switch (random) {
 		case 1:
 			copyFigure = Array.from(figure1);
@@ -58,49 +58,66 @@ function figureCreation() {
 		case 5:
 			copyFigure = Array.from(figure5);
 		break;
+		case 6:
+			copyFigure = Array.from(figure6);
+		break;
+		case 7:
+			copyFigure = Array.from(figure7);
+		break;
 		default:
 	}
-	return figure(copyFigure[0][0], copyFigure[0][1], copyFigure[0][2], copyFigure[0][3], copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+	return figure(copyFigure[1][0], copyFigure[1][1], copyFigure[1][2], copyFigure[1][3], copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 }
 // Фигура ''''
 let figure1 = [
-	[3, 4, 5, 6, -3, 3, 1], // --
-	[-6, 4, 14, 24, -4, 5, 1], // |
-	[],
-	[],
-	['figure1']
+	['figure1'],
+	[3, 4, 5, 6, -3, 3, 1],
+	[-6, 4, 14, 24, -4, 5, 1]
 ];
 // Фигура '|'
 let figure2 = [
+	['figure2'],
 	[4, 5, 6, 15, -4, 3, 2],
 	[-5, 4, 5, 15, -4, 4, 2],
 	[-5, 4, 5, 6, -4, 3, 2],
-	[-5, 6, 5, 15, -5, 3, 2],
-	['figure2']
+	[-5, 6, 5, 15, -5, 3, 2]
 ];
 // Фигура ||
 let figure3 = [
-	[4, 5, 14, 15, -4, 4, 3],
-	[],
-	[],
-	[],
-	['figure3']
+	['figure3'],
+	[4, 5, 14, 15, -4, 4, 3]
 ];
 // Фигура ''|
 let figure4 = [
+	['figure2'],
 	[4, 5, 6, 16, -4, 3, 4],
 	[-5, 5, 14, 15, -4, 4, 4],
 	[-6, 4, 5, 6, -4, 3, 4],
-	[-5, -4, 5, 15, -5, 3, 4],
-	['figure2']
+	[-5, -4, 5, 15, -5, 3, 4]
 ];
 // Фигура '|.
 let figure5 = [
+	['figure2'],
 	[4, 5, 15, 16, -4, 3, 5],
 	[-5, 4, 5, 14, -4, 4, 5],
-	[],
-	[],
-	['figure5']
+	[-6, -5, 5, 6, -4, 3, 5],
+	[-4, 5, 6, 15, -5, 3, 5]
+];
+// Фигура ..|
+let figure6 = [
+	['figure2'],
+	[4, 5, 6, 14, -4, 3, 6],
+	[-6, -5, 5, 15, -4, 4, 6],
+	[-4, 4, 5, 6, -4, 3, 6],
+	[-5, 5, 15, 16, -5, 3, 6]
+];
+// Фигура .|'
+let figure7 = [
+	['figure2'],
+	[5, 6, 14, 15, -4, 3, 7],
+	[-6, 4, 5, 15, -4, 4, 7],
+	[-5, -4, 4, 5, -4, 3, 7],
+	[-5, 5, 6, 16, -5, 3, 7]
 ];
 
 // Функция обнуления ячеек
@@ -152,14 +169,12 @@ function move() {
 					raz += 1;
 					if (raz == 3){
 						figureCreation();
-						//console.log('raz');
 					}
 				}
 			}
 		}
 	}
 	osY += 1;
-	//console.log(osY);
 	// Перезаписываем игровое поле
 	matrix = Array.from(buffer);
 	// Визуализируем массив игрового поля на сайте
@@ -177,13 +192,11 @@ for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
 		let free = true;
-		//console.log(input);
 		if (input == 'down') {
 			move();
 		}
 		if (input == 'left' && osX>left) {
 			// Проверка если свободное место слева от фигуры
-			//let free = true;
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (isNaN(matrix[parseInt(key)-1]) == true) {
@@ -204,7 +217,6 @@ for (i = 0; i < buttons.length; i++) {
 		}
 		if (input == 'right' && osX<right) {
 			// Проверка если свободное место слева от фигуры
-			//let free = true;
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (isNaN(matrix[parseInt(key)+1]) == true) {
@@ -224,9 +236,7 @@ for (i = 0; i < buttons.length; i++) {
 			}
 		}
 		if (input == 'turn') {
-			//let free = true;
 			let position = 10*osY+osX;
-			//console.log(position);
 			// Функция проверки свободных ячеек
 			function check(a, b, c, d) {
 				let arr = [a, b, c, d];
@@ -237,107 +247,91 @@ for (i = 0; i < buttons.length; i++) {
 					}
 				}
 			}
-			switch(copyFigure[4][0]) {
+			switch(copyFigure[0][0]) {
 				case 'figure1':
 					switch(orientation) {
 						case 0:
-							if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
+							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
 								zeroing();
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 90;
-							} else if (check(copyFigure[1][0]+position-10, copyFigure[1][1]+position-10, copyFigure[1][2]+position-10, copyFigure[1][3]+position-10) != false) {
+							} else if (check(copyFigure[2][0]+position-10, copyFigure[2][1]+position-10, copyFigure[2][2]+position-10, copyFigure[2][3]+position-10) != false) {
 								zeroing();
 								position -= 10;
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 90;
-							} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
+							} else if (check(copyFigure[2][0]+position+1, copyFigure[2][1]+position+1, copyFigure[2][2]+position+1, copyFigure[2][3]+position+1) != false) {
 								zeroing();
 								position += 1;
-								//osX -= 1;
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 90;
-							} else if (check(copyFigure[1][0]+position-9, copyFigure[1][1]+position-9, copyFigure[1][2]+position-9, copyFigure[1][3]+position-9) != false) {
+							} else if (check(copyFigure[2][0]+position-9, copyFigure[2][1]+position-9, copyFigure[2][2]+position-9, copyFigure[2][3]+position-9) != false) {
 								zeroing();
 								position -= 9;
-								//osX -= 1;
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 90;
 							}
 						break;
 						case 90:
 							if (osX == left) {
-								if (check(copyFigure[0][0]+position+1, copyFigure[0][1]+position+1, copyFigure[0][2]+position+1, copyFigure[0][3]+position+1) != false) {
+								if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
 									zeroing();
 									position += 1;
 									osX += 1;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
-								}
-							} else if (osX == left+1) {
-								if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
-									zeroing();
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
-								}
-							} else if (osX == left+2) {
-								if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
-									zeroing();
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 									orientation = 0;
 								}
 							} else if (osX == right) {
-								if (check(copyFigure[0][0]+position-2, copyFigure[0][1]+position-2, copyFigure[0][2]+position-2, copyFigure[0][3]+position-2) != false) {
+								if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
 									zeroing();
 									position -= 2;
 									osX -= 2;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 									orientation = 0;
 								}
 							} else if (osX == right-1) {
-								if (check(copyFigure[0][0]+position-1, copyFigure[0][1]+position-1, copyFigure[0][2]+position-1, copyFigure[0][3]+position-1) != false) {
+								if (check(copyFigure[1][0]+position-1, copyFigure[1][1]+position-1, copyFigure[1][2]+position-1, copyFigure[1][3]+position-1) != false) {
 									zeroing();
 									position -= 1;
 									osX -= 1;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 									orientation = 0;
-								} else if (check(copyFigure[0][0]+position-2, copyFigure[0][1]+position-2, copyFigure[0][2]+position-2, copyFigure[0][3]+position-2) != false) {
+								} else if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
 									zeroing();
 									position -= 2;
 									osX -= 2;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
-								}
-							} else if (osX == right-2) {
-								if (check(copyFigure[0][0]+position-3, copyFigure[0][1]+position-3, copyFigure[0][2]+position-3, copyFigure[0][3]+position-3) != false) {
-									zeroing();
-									position -= 3;
-									osX -= 3;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 									orientation = 0;
 								}
 							} else {
-								if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
+								if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
 									zeroing();
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 									orientation = 0;
-								} else if (check(copyFigure[0][0]+position+1, copyFigure[0][1]+position+1, copyFigure[0][2]+position+1, copyFigure[0][3]+position+1) != false) {
-									zeroing();
-									position += 1;
-									osX += 1;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
-								} else if (check(copyFigure[0][0]+position-1, copyFigure[0][1]+position-1, copyFigure[0][2]+position-1, copyFigure[0][3]+position-1) != false) {
-									zeroing();
-									position -= 1;
-									osX -= 1;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
-								} else if (check(copyFigure[0][0]+position-2, copyFigure[0][1]+position-2, copyFigure[0][2]+position-2, copyFigure[0][3]+position-2) != false) {
-									zeroing();
-									position -= 2;
-									osX -= 2;
-									figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-									orientation = 0;
+								} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
+									if (osX != right-2) {
+										zeroing();
+										position += 1;
+										osX += 1;
+										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+										orientation = 0;
+									}
+								} else if (check(copyFigure[1][0]+position-1, copyFigure[1][1]+position-1, copyFigure[1][2]+position-1, copyFigure[1][3]+position-1) != false) {
+									if (osX != left+1) {
+										zeroing();
+										position -= 1;
+										osX -= 1;
+										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+										orientation = 0;
+									}
+								} else if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
+									if (osX != left+2) {
+										zeroing();
+										position -= 2;
+										osX -= 2;
+										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+										orientation = 0;
+									}
 								}
 							}
 						break;
@@ -347,10 +341,9 @@ for (i = 0; i < buttons.length; i++) {
 				case 'figure2':
 					switch(orientation) {
 						case 0:
-							check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position);
-							if (free == true) {
+							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
 								zeroing();
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 								orientation = 90;
 							}
 						break;
@@ -359,25 +352,24 @@ for (i = 0; i < buttons.length; i++) {
 								position -= 1;
 								osX -= 1;
 							}
-							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
+							if (check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position) != false) {
 								zeroing();
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+								figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
 								orientation = 180;
-							} else if (check(copyFigure[2][0]+position-1, copyFigure[2][1]+position-1, copyFigure[2][2]+position-1, copyFigure[2][3]+position-1) != false) {
+							} else if (check(copyFigure[3][0]+position-1, copyFigure[3][1]+position-1, copyFigure[3][2]+position-1, copyFigure[3][3]+position-1) != false) {
 								if (osX != left) {
 									zeroing();
 									position -= 1;
 									osX -= 1;
-									figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+									figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
 									orientation = 180;
 								}
 							}
 						break;
 						case 180:
-							check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position);
-							if (free == true) {
+							if (check(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position) != false) {
 								zeroing();
-								figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
+								figure(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position, copyFigure[4][4], copyFigure[4][5], copyFigure[4][6]);
 								orientation = 270;
 							}
 						break;
@@ -386,16 +378,18 @@ for (i = 0; i < buttons.length; i++) {
 								position += 1;
 								osX += 1;
 							}
-							if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
+							if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
 								zeroing();
-								figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
+								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 								orientation = 0;
-							} else if (check(copyFigure[0][0]+position+1, copyFigure[0][1]+position+1, copyFigure[0][2]+position+1, copyFigure[0][3]+position+1) != false) {
-								zeroing();
-								position += 1;
-								osX += 1;
-								figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-								orientation = 0;
+							} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
+								if (osX != right) {
+									zeroing();
+									position += 1;
+									osX += 1;
+									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+									orientation = 0;
+								}
 							}
 						break;
 					}
@@ -404,43 +398,9 @@ for (i = 0; i < buttons.length; i++) {
 				case 'figure3':
 					//console.log('figure3');
 				break;
-				case 'figure5':
-					switch(orientation) {
-						case 0:
-							check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position);
-							if (free == true) {
-								zeroing();
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-								orientation = 90;
-							}
-						break;
-						case 90:
-							if (osX == right) {
-								position -= 1;
-								osX -= 1;
-							}
-							if (check(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-								orientation = 0;
-							} else if (check(copyFigure[0][0]+position-1, copyFigure[0][1]+position-1, copyFigure[0][2]+position-1, copyFigure[0][3]+position-1) != false) {
-								zeroing();
-								position -= 1;
-								osX -= 1;
-								figure(copyFigure[0][0]+position, copyFigure[0][1]+position, copyFigure[0][2]+position, copyFigure[0][3]+position, copyFigure[0][4], copyFigure[0][5], copyFigure[0][6]);
-								orientation = 0;
-							}
-						break;
-					}
-					//console.log('figure5');
-				break;
 			}
-			//console.log(position);
-			console.log(orientation);
 			//console.log('turn');
 		}
-		//console.log(osX);
-		//console.log(osY);
 		matrix = Array.from(buffer);
 		visualization();
 	});
@@ -450,7 +410,6 @@ function visualization() {
 	for (let key in matrix) {
 		switch (matrix[key]) {
 			case 0:
-				//console.log(key*11+i);
 				cells[key].style.background="white";
 			break;
 			case 1:
@@ -460,19 +419,25 @@ function visualization() {
 				cells[key].style.background="green";
 			break;
 			case 3:
-				cells[key].style.background="blue";
+				cells[key].style.background="purple";
 			break;
 			case 4:
 				cells[key].style.background="orange";
 			break;
 			case 5:
-				cells[key].style.background="purple";
+				cells[key].style.background="blue";
+			break;
+			case 6:
+				cells[key].style.background="gold";
+			break;
+			case 7:
+				cells[key].style.background="dodgerblue";
 			break;
 			case 'gg':
 				cells[key].style.background="black";
 			break;
 			default:
-				cells[key].style.background="grey";
+				//cells[key].style.background="grey";
 		}
 	}
 }
