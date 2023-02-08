@@ -38,7 +38,7 @@ function figure(a, b, c, d, l, r, clr) {
 	left = l;
 	right = r;
 }
-
+// Создание случайной фигуры
 function figureCreation() {
 	//let random = 6;
 	let random = Math.round(Math.random() * (7 - 1) + 1);
@@ -120,7 +120,7 @@ let figure7 = [
 	[-5, 5, 6, 16, -5, 3, 7]
 ];
 
-// Функция обнуления ячеек
+// Функция обнуления ячеек пормежуточного поля
 function zeroing() {
 	for (let key in matrix) {
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
@@ -146,6 +146,7 @@ function move() {
 		for (let key in matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
 			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+				// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
 				buffer[parseInt(key)+10] = matrix[key];
 			}
 		}
@@ -165,7 +166,7 @@ function move() {
 					osX = 0;
 					osY = -1;
 					orientation = 0;
-					// Костыль чтобы срабатывала только один раз, а  не четыре
+					// Костыль чтобы срабатывало только один раз, а  не четыре
 					raz += 1;
 					if (raz == 3){
 						figureCreation();
@@ -175,26 +176,28 @@ function move() {
 		}
 	}
 	osY += 1;
-	// Перезаписываем игровое поле
+	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
-	// Визуализируем массив игрового поля на сайте
+	// Визуализируем массив игрового поля на странице
 	visualization();
 	//console.log('move');
 }
 
 // Кнопки управления
-let orientation = 0;
-let osX = 0;
-let osY = -1;
-let left;
-let right;
+let orientation = 0; // Угол поворота фигуры
+let osX = 0; // Отслеживание фигуры по горизонтали
+let osY = -1; // По вертикали
+let left; // Граница слево, для разных фигур своя
+let right; // Грраница справа
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
 		let free = true;
+		// Кнопка вниз
 		if (input == 'down') {
 			move();
 		}
+		// Кнопка влево
 		if (input == 'left' && osX>left) {
 			// Проверка если свободное место слева от фигуры
 			for (let key in matrix) {
@@ -215,6 +218,7 @@ for (i = 0; i < buttons.length; i++) {
 				}
 			}
 		}
+		// Кнопка вправо
 		if (input == 'right' && osX<right) {
 			// Проверка если свободное место слева от фигуры
 			for (let key in matrix) {
@@ -235,8 +239,9 @@ for (i = 0; i < buttons.length; i++) {
 				}
 			}
 		}
+		// Кнопка поворота фигуры
 		if (input == 'turn') {
-			let position = 10*osY+osX;
+			let position = 10*osY+osX; // Поправка положения фигуры на игровом поле
 			// Функция проверки свободных ячеек
 			function check(a, b, c, d) {
 				let arr = [a, b, c, d];
@@ -401,6 +406,7 @@ for (i = 0; i < buttons.length; i++) {
 			}
 			//console.log('turn');
 		}
+		// Перезаписываем игровое поле и визуализируем на странице
 		matrix = Array.from(buffer);
 		visualization();
 	});
