@@ -166,6 +166,7 @@ function move() {
 					osX = 0;
 					osY = -1;
 					orientation = 0;
+					//destroy();
 					// Костыль чтобы срабатывало только один раз, а  не четыре
 					raz += 1;
 					if (raz == 3){
@@ -178,6 +179,8 @@ function move() {
 	osY += 1;
 	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
+	// Убираем целые линии
+	destroy();
 	// Визуализируем массив игрового поля на странице
 	visualization();
 	//console.log('move');
@@ -410,6 +413,43 @@ for (i = 0; i < buttons.length; i++) {
 		matrix = Array.from(buffer);
 		visualization();
 	});
+}
+
+function destroy() {
+	//let vertical;
+	let fire = true;
+	for (a=19; a>0; a--) {
+		for (i=0; i<10; i++) {
+			if (isNaN(matrix[i+a*10]) != true) {
+				fire = false;
+			}
+		}
+		if (fire == true) {
+			for (i=0; i<10; i++) {
+				buffer[i+a*10] = 0;
+			}
+			//drop();
+			matrix = Array.from(buffer);
+		}
+		fire = true;
+	}
+	function drop() {
+		for (let key in matrix) {
+			if (isNaN(matrix[key]) == true) {
+				buffer[key] = 0;
+			}
+		}
+		for (let key in matrix) {
+			if (isNaN(matrix[key]) == true) {
+				buffer[parseInt(key)+10] = matrix[key];
+			}
+		}
+		console.log('drop');
+		//matrix = Array.from(buffer);
+	}
+	//console.log(fire);
+	//matrix = Array.from(buffer);
+	visualization();
 }
 
 function visualization() {
