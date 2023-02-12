@@ -94,6 +94,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 20px;
   color: #fff;
   transition: 0.5s;
+  white-space: nowrap;
 }
 .header__container a:hover {
   color: #999;
@@ -285,6 +286,30 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tetris_btn:hover {
   background: #b0b0b0;
+}
+
+.about_img {
+  width: 100%;
+}
+.about__contacts {
+  padding: 10px 20px;
+}
+.about__contacts li {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+.about__contacts img {
+  width: 25px;
+}
+.about__contacts a {
+  font-size: 20px;
+  color: black;
+  transition: 0.5s;
+}
+.about__contacts a:hover {
+  text-decoration: underline;
 }
 
 .footer {

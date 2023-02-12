@@ -120,7 +120,7 @@ let figure7 = [
 	[-5, 5, 6, 16, -5, 3, 7]
 ];
 
-// Функция обнуления ячеек пормежуточного поля
+// Функция обнуления ячеек промежуточного поля
 function zeroing() {
 	for (let key in matrix) {
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
@@ -131,9 +131,10 @@ function zeroing() {
 
 // Движение фигуры вниз
 function move() {
-	// Проверка если свободное место под фигурой
+	// Проверка есть ли свободное место под фигурой
 	let free = true;
 	for (let key in matrix) {
+		// Ищем все числа кроме нуля в массиве игрового поля
 		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 			if (isNaN(matrix[parseInt(key)+10]) == true) {
 				free = false;
@@ -161,7 +162,7 @@ function move() {
 					gameOver();
 					console.log('stop');
 				} else {
-					// Если внизу нет свободных ячеек записывает в текущую ячейку текст и создаем новую фигуру
+					// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
 					buffer[key] = 'stop';
 					osX = 0;
 					osY = -1;
@@ -189,9 +190,9 @@ function move() {
 // Кнопки управления
 let orientation = 0; // Угол поворота фигуры
 let osX = 0; // Отслеживание фигуры по горизонтали
-let osY = -1; // По вертикали
-let left; // Граница слево, для разных фигур своя
-let right; // Грраница справа
+let osY = -1; // Отслеживание фигуры по вертикали
+let left; // Левая граница, для разных фигур своя
+let right; // Правая граница, для разных фигур своя
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
@@ -202,7 +203,7 @@ for (i = 0; i < buttons.length; i++) {
 		}
 		// Кнопка влево
 		if (input == 'left' && osX>left) {
-			// Проверка если свободное место слева от фигуры
+			// Проверка есть ли свободное место слева от фигуры
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (isNaN(matrix[parseInt(key)-1]) == true) {
@@ -223,7 +224,7 @@ for (i = 0; i < buttons.length; i++) {
 		}
 		// Кнопка вправо
 		if (input == 'right' && osX<right) {
-			// Проверка если свободное место слева от фигуры
+			// Проверка есть ли свободное место слева от фигуры
 			for (let key in matrix) {
 				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 					if (isNaN(matrix[parseInt(key)+1]) == true) {
@@ -255,6 +256,7 @@ for (i = 0; i < buttons.length; i++) {
 					}
 				}
 			}
+			// Пошла моча по трубам
 			switch(copyFigure[0][0]) {
 				case 'figure1':
 					switch(orientation) {
@@ -415,6 +417,7 @@ for (i = 0; i < buttons.length; i++) {
 	});
 }
 
+// Функция удаления целых линий
 function destroy() {
 	//let vertical;
 	let fire = true;
@@ -452,6 +455,7 @@ function destroy() {
 	visualization();
 }
 
+// Функция визуализации
 function visualization() {
 	for (let key in matrix) {
 		switch (matrix[key]) {
