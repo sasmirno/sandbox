@@ -163,7 +163,7 @@ function move() {
 					console.log('stop');
 				} else {
 					// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
-					buffer[key] = 'stop';
+					buffer[key] = matrix[key]+'s';
 					osX = 0;
 					osY = -1;
 					orientation = 0;
@@ -419,7 +419,6 @@ for (i = 0; i < buttons.length; i++) {
 
 // Функция удаления целых линий
 function destroy() {
-	//let vertical;
 	let fire = true;
 	for (a=19; a>0; a--) {
 		for (i=0; i<10; i++) {
@@ -431,8 +430,8 @@ function destroy() {
 			for (i=0; i<10; i++) {
 				buffer[i+a*10] = 0;
 			}
-			//drop();
 			matrix = Array.from(buffer);
+			drop();
 		}
 		fire = true;
 	}
@@ -444,14 +443,17 @@ function destroy() {
 		}
 		for (let key in matrix) {
 			if (isNaN(matrix[key]) == true) {
-				buffer[parseInt(key)+10] = matrix[key];
+				if (key <= a*10) {
+					buffer[parseInt(key)+10] = matrix[key];
+				}
+				if (key > a*10) {
+					buffer[parseInt(key)] = matrix[key];
+				}
 			}
 		}
-		console.log('drop');
-		//matrix = Array.from(buffer);
+		matrix = Array.from(buffer);
+		//console.log(a);
 	}
-	//console.log(fire);
-	//matrix = Array.from(buffer);
 	visualization();
 }
 
@@ -459,27 +461,35 @@ function destroy() {
 function visualization() {
 	for (let key in matrix) {
 		switch (matrix[key]) {
+			case '0s':
 			case 0:
 				cells[key].style.background="white";
 			break;
+			case '1s':
 			case 1:
 				cells[key].style.background="red";
 			break;
+			case '2s':
 			case 2:
 				cells[key].style.background="green";
 			break;
+			case '3s':
 			case 3:
 				cells[key].style.background="purple";
 			break;
+			case '4s':
 			case 4:
 				cells[key].style.background="orange";
 			break;
+			case '5s':
 			case 5:
 				cells[key].style.background="blue";
 			break;
+			case '6s':
 			case 6:
 				cells[key].style.background="gold";
 			break;
+			case '7s':
 			case 7:
 				cells[key].style.background="dodgerblue";
 			break;
@@ -488,6 +498,7 @@ function visualization() {
 			break;
 			default:
 				//cells[key].style.background="grey";
+				//console.log(matrix[key]);
 		}
 	}
 }
