@@ -39,10 +39,12 @@ function figure(a, b, c, d, l, r, clr) {
 	right = r;
 }
 // Создание случайной фигуры
+let randomFigure;
 function figureCreation() {
 	//let random = 6;
 	let random = Math.round(Math.random() * (7 - 1) + 1);
-	switch (random) {
+	randomFigure = random;
+	switch (randomFigure) {
 		case 1:
 			copyFigure = Array.from(figure1);
 		break;
@@ -159,7 +161,7 @@ function move() {
 				if (matrix[parseInt(key)-10] == undefined) {
 					// Если верхния ячейка отсуствует останавливаем таймер
 					clearInterval(timerId);
-					gameOver();
+					//gameOver();
 					console.log('stop');
 				} else {
 					// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
@@ -180,7 +182,7 @@ function move() {
 	osY += 1;
 	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
-	// Убираем целые линии
+	// Убираем целые линии}
 	destroy();
 	// Визуализируем массив игрового поля на странице
 	visualization();
@@ -258,7 +260,7 @@ for (i = 0; i < buttons.length; i++) {
 			}
 			// Пошла моча по трубам
 			switch(copyFigure[0][0]) {
-				case 'figure1':
+				case 'figure1': // Поворот палки
 					switch(orientation) {
 						case 0:
 							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
@@ -348,7 +350,7 @@ for (i = 0; i < buttons.length; i++) {
 					}
 					//console.log('figure1');
 				break;
-				case 'figure2':
+				case 'figure2': // Поворот фигур кроме палки и квадрата
 					switch(orientation) {
 						case 0:
 							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
@@ -405,7 +407,7 @@ for (i = 0; i < buttons.length; i++) {
 					}
 					//console.log('figure2');
 				break;
-				case 'figure3':
+				case 'figure3': // "Поворот" квадрата
 					//console.log('figure3');
 				break;
 			}
@@ -420,41 +422,50 @@ for (i = 0; i < buttons.length; i++) {
 // Функция удаления целых линий
 function destroy() {
 	let fire = true;
-	for (a=19; a>0; a--) {
+	// Перебираеи ряды поля
+	for (line=0; line<20; line++) {
+		// Ищем заполнненый ряд и если не находим таковой, запрещаем дальнейшее действие
 		for (i=0; i<10; i++) {
-			if (isNaN(matrix[i+a*10]) != true) {
+			if (isNaN(matrix[i+line*10]) != true) {
 				fire = false;
 			}
 		}
+		// Если разрешение есть, то стираем текущий ряд, переписываем игровое поле и обращаемся к функции сдвига тектонических плит
 		if (fire == true) {
 			for (i=0; i<10; i++) {
-				buffer[i+a*10] = 0;
+				buffer[i+line*10] = 0;
 			}
 			matrix = Array.from(buffer);
-			drop();
+			//setTimeout(drop, 1);
+			drop(); 
 		}
 		fire = true;
 	}
 	function drop() {
+		// Обнуляем промежуточное поле
 		for (let key in matrix) {
 			if (isNaN(matrix[key]) == true) {
 				buffer[key] = 0;
 			}
 		}
+		// И создаем свой новый, дивный поле
 		for (let key in matrix) {
 			if (isNaN(matrix[key]) == true) {
-				if (key <= a*10) {
+				// Всё что выше удаленного ряда сдвигаем на один ряд ниже
+				if (key <= line*10) {
 					buffer[parseInt(key)+10] = matrix[key];
 				}
-				if (key > a*10) {
+				// Всё что ниже, оставляем на своих местах
+				if (key > line*10) {
 					buffer[parseInt(key)] = matrix[key];
 				}
 			}
 		}
 		matrix = Array.from(buffer);
-		//console.log(a);
+		//console.log(line);
 	}
 	visualization();
+	//console.log('destroy');
 }
 
 // Функция визуализации
