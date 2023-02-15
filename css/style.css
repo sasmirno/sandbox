@@ -253,6 +253,10 @@ h1, h2, h3, h4, h5, h6 {
   background: #b0b0b0;
 }
 
+.playing_field {
+  display: flex;
+}
+
 .tetris {
   display: flex;
   flex-direction: column;
@@ -266,10 +270,22 @@ h1, h2, h3, h4, h5, h6 {
   height: 502px;
   border: 1px solid grey;
 }
+@media (max-width: 400px) {
+  .tetris_field {
+    width: 202px;
+    height: 402px;
+  }
+}
 .tetris_cell {
   width: 25px;
   height: 25px;
   border: 1px solid yellow;
+}
+@media (max-width: 400px) {
+  .tetris_cell {
+    width: 20px;
+    height: 20px;
+  }
 }
 .tetris_keyboard {
   display: flex;
@@ -286,6 +302,32 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tetris_btn:hover {
   background: #b0b0b0;
+}
+
+.info_next {
+  display: flex;
+  flex-wrap: wrap;
+  width: 102px;
+  border: 1px solid grey;
+}
+@media (max-width: 400px) {
+  .info_next {
+    width: 82px;
+  }
+}
+.info_cell {
+  width: 25px;
+  height: 25px;
+  border: 1px solid yellow;
+}
+@media (max-width: 400px) {
+  .info_cell {
+    width: 20px;
+    height: 20px;
+  }
+}
+.info_score {
+  border: 1px solid grey;
 }
 
 .about_img {

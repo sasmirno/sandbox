@@ -1,6 +1,8 @@
 field = document.querySelector(".tetris_field");
 cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
+scoreboard = document.querySelector(".info_score");
+infoCells = document.querySelectorAll(".info_cell");
 
 // Имитация игрового поля
 let matrix = [
@@ -25,6 +27,47 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
+
+// Экран следующей фигуры
+let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+//let randomFigure;
+function nextFigure() {
+	//let random = Math.round(Math.random() * (7 - 1) + 1);
+	//randomFigure = random;
+	for (let key in screenNextFigure) {
+		screenNextFigure[key] = 0;
+	}
+	switch (randomFigure) {
+		case 1:
+			figureNext(4, 5, 6, 7, 1); // Фигура ''''
+		break;
+		case 2:
+			figureNext(0, 1, 2, 5, 2); // Фигура '|'
+		break;
+		case 3:
+			figureNext(0, 1, 4, 5, 3); // Фигура ||
+		break;
+		case 4:
+			figureNext(0, 1, 2, 6, 4); // Фигура ''|
+		break;
+		case 5:
+			figureNext(0, 1, 5, 6, 5); // Фигура '|.
+		break;
+		case 6:
+			figureNext(0, 1, 2, 4, 6); // Фигура |''
+		break;
+		case 7:
+			figureNext(1, 2, 4, 5, 7); // Фигура .|'
+		break;
+	}
+	function figureNext(a, b, c, d, clr) {
+		screenNextFigure[a] = clr;
+		screenNextFigure[b] = clr;
+		screenNextFigure[c] = clr;
+		screenNextFigure[d] = clr;
+	}
+}
 
 // Копия игрового поля
 let buffer = Array.from(matrix);
@@ -66,7 +109,6 @@ function figureCreation() {
 		case 7:
 			copyFigure = Array.from(figure7);
 		break;
-		default:
 	}
 	return figure(copyFigure[1][0], copyFigure[1][1], copyFigure[1][2], copyFigure[1][3], copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 }
@@ -174,6 +216,7 @@ function move() {
 					raz += 1;
 					if (raz == 3){
 						figureCreation();
+						nextFigure();
 					}
 				}
 			}
@@ -510,6 +553,37 @@ function visualization() {
 			default:
 				//cells[key].style.background="grey";
 				//console.log(matrix[key]);
+		}
+	}
+	for (let key in screenNextFigure) {
+		switch (screenNextFigure[key]) {
+			case 0:
+				infoCells[key].style.background="white";
+			break;
+			case 1:
+				infoCells[key].style.background="red";
+			break;
+			case 2:
+				infoCells[key].style.background="green";
+			break;
+			case 3:
+				infoCells[key].style.background="purple";
+			break;
+			case 4:
+				infoCells[key].style.background="orange";
+			break;
+			case 5:
+				infoCells[key].style.background="blue";
+			break;
+			case 6:
+				infoCells[key].style.background="gold";
+			break;
+			case 7:
+				infoCells[key].style.background="dodgerblue";
+			break;
+			default:
+				//infoCells[key].style.background="grey";
+				//console.log(screenNextFigure[key]);
 		}
 	}
 }
