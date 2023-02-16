@@ -28,49 +28,11 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-// Экран следующей фигуры
-let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-//let randomFigure;
-function nextFigure() {
-	//let random = Math.round(Math.random() * (7 - 1) + 1);
-	//randomFigure = random;
-	for (let key in screenNextFigure) {
-		screenNextFigure[key] = 0;
-	}
-	switch (randomFigure) {
-		case 1:
-			figureNext(4, 5, 6, 7, 1); // Фигура ''''
-		break;
-		case 2:
-			figureNext(0, 1, 2, 5, 2); // Фигура '|'
-		break;
-		case 3:
-			figureNext(0, 1, 4, 5, 3); // Фигура ||
-		break;
-		case 4:
-			figureNext(0, 1, 2, 6, 4); // Фигура ''|
-		break;
-		case 5:
-			figureNext(0, 1, 5, 6, 5); // Фигура '|.
-		break;
-		case 6:
-			figureNext(0, 1, 2, 4, 6); // Фигура |''
-		break;
-		case 7:
-			figureNext(1, 2, 4, 5, 7); // Фигура .|'
-		break;
-	}
-	function figureNext(a, b, c, d, clr) {
-		screenNextFigure[a] = clr;
-		screenNextFigure[b] = clr;
-		screenNextFigure[c] = clr;
-		screenNextFigure[d] = clr;
-	}
-}
-
 // Копия игрового поля
 let buffer = Array.from(matrix);
+
+// Экран следующей фигуры
+let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0]
 
 // Создание фигуры
 function figure(a, b, c, d, l, r, clr) {
@@ -81,13 +43,53 @@ function figure(a, b, c, d, l, r, clr) {
 	left = l;
 	right = r;
 }
+
 // Создание случайной фигуры
-let randomFigure;
 function figureCreation() {
 	//let random = 6;
+	let figureNext;
+	let currentFigure;
+	for (i=0; i<2; i++) {}
 	let random = Math.round(Math.random() * (7 - 1) + 1);
-	randomFigure = random;
-	switch (randomFigure) {
+	currentFigure = random;
+	figureNext = random;
+
+	// Создание фигуры в экране следующей фигуры
+	for (let key in screenNextFigure) {
+		screenNextFigure[key] = 0;
+	}
+	switch (figureNext) {
+		case 1:
+			nextFigure(4, 5, 6, 7, 1); // Фигура ''''
+		break;
+		case 2:
+			nextFigure(1, 2, 3, 6, 2); // Фигура '|'
+		break;
+		case 3:
+			nextFigure(1, 2, 5, 6, 3); // Фигура ||
+		break;
+		case 4:
+			nextFigure(1, 2, 3, 7, 4); // Фигура ''|
+		break;
+		case 5:
+			nextFigure(1, 2, 6, 7, 5); // Фигура '|.
+		break;
+		case 6:
+			nextFigure(1, 2, 3, 5, 6); // Фигура |''
+		break;
+		case 7:
+			nextFigure(2, 3, 5, 6, 7); // Фигура .|'
+		break;
+	}
+	function nextFigure(a, b, c, d, clr) {
+		screenNextFigure[a] = clr;
+		screenNextFigure[b] = clr;
+		screenNextFigure[c] = clr;
+		screenNextFigure[d] = clr;
+	}
+
+	// Создание фигуры в игровом поле
+	switch (currentFigure) {
 		case 1:
 			copyFigure = Array.from(figure1);
 		break;
@@ -216,7 +218,6 @@ function move() {
 					raz += 1;
 					if (raz == 3){
 						figureCreation();
-						nextFigure();
 					}
 				}
 			}
@@ -593,100 +594,4 @@ figureCreation();
 let timerId = setInterval(move, 500);
 
 // Экран конца игры
-function gameOver() {
-	// Буква G
-	buffer[161] = 'gg';
-	buffer[163] = 'gg';
-	buffer[170] = 'gg';
-	buffer[180] = 'gg';
-	buffer[173] = 'gg';
-	buffer[174] = 'gg';
-	buffer[184] = 'gg';
-	buffer[191] = 'gg';
-	buffer[192] = 'gg';
-	buffer[193] = 'gg';
-	// Буква A
-	buffer[111] = 'gg';
-	buffer[112] = 'gg';
-	buffer[113] = 'gg';
-	buffer[114] = 'gg';
-	buffer[120] = 'gg';
-	buffer[130] = 'gg';
-	buffer[141] = 'gg';
-	buffer[142] = 'gg';
-	buffer[143] = 'gg';
-	buffer[144] = 'gg';
-	buffer[123] = 'gg';
-	buffer[133] = 'gg';
-	// Буква M
-	buffer[50] = 'gg';
-	buffer[51] = 'gg';
-	buffer[52] = 'gg';
-	buffer[53] = 'gg';
-	buffer[54] = 'gg';
-	buffer[61] = 'gg';
-	buffer[72] = 'gg';
-	buffer[81] = 'gg';
-	buffer[90] = 'gg';
-	buffer[91] = 'gg';
-	buffer[92] = 'gg';
-	buffer[93] = 'gg';
-	buffer[94] = 'gg';
-	// Буква E
-	buffer[10] = 'gg';
-	buffer[20] = 'gg';
-	buffer[30] = 'gg';
-	buffer[31] = 'gg';
-	buffer[32] = 'gg';
-	buffer[33] = 'gg';
-	buffer[34] = 'gg';
-	buffer[24] = 'gg';
-	buffer[14] = 'gg';
-	buffer[22] = 'gg';
-	// Буква O
-	buffer[156] = 'gg';
-	buffer[157] = 'gg';
-	buffer[158] = 'gg';
-	buffer[165] = 'gg';
-	buffer[175] = 'gg';
-	buffer[169] = 'gg';
-	buffer[179] = 'gg';
-	buffer[186] = 'gg';
-	buffer[187] = 'gg';
-	buffer[188] = 'gg';
-	// Буква V
-	buffer[95] = 'gg';
-	buffer[96] = 'gg';
-	buffer[97] = 'gg';
-	buffer[108] = 'gg';
-	buffer[119] = 'gg';
-	buffer[128] = 'gg';
-	buffer[137] = 'gg';
-	buffer[136] = 'gg';
-	buffer[135] = 'gg';
-	// Буква E
-	buffer[55] = 'gg';
-	buffer[65] = 'gg';
-	buffer[75] = 'gg';
-	buffer[76] = 'gg';
-	buffer[77] = 'gg';
-	buffer[78] = 'gg';
-	buffer[79] = 'gg';
-	buffer[67] = 'gg';
-	buffer[69] = 'gg';
-	buffer[59] = 'gg';
-	// Буква R
-	buffer[6] = 'gg';
-	buffer[9] = 'gg';
-	buffer[18] = 'gg';
-	buffer[17] = 'gg';
-	buffer[15] = 'gg';
-	buffer[27] = 'gg';
-	buffer[25] = 'gg';
-	buffer[35] = 'gg';
-	buffer[36] = 'gg';
-	buffer[37] = 'gg';
-	buffer[38] = 'gg';
-	buffer[39] = 'gg';
-	visualization();
-}
+function gameOver() {}

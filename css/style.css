@@ -263,6 +263,10 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 10px;
 }
+.tetris_block {
+  display: flex;
+  gap: 10px;
+}
 .tetris_field {
   display: flex;
   flex-wrap: wrap;
@@ -279,7 +283,6 @@ h1, h2, h3, h4, h5, h6 {
 .tetris_cell {
   width: 25px;
   height: 25px;
-  border: 1px solid yellow;
 }
 @media (max-width: 400px) {
   .tetris_cell {
@@ -289,26 +292,45 @@ h1, h2, h3, h4, h5, h6 {
 }
 .tetris_keyboard {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  width: 300px;
   user-select: none;
 }
 .tetris_btn {
-  width: 40px;
-  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 40px;
-  text-align: center;
   cursor: pointer;
   transition: 0.5s;
+  width: 50px;
+  height: 50px;
+  margin: 0 12px;
+  border: 1px solid #fff;
+  border-radius: 3px;
 }
 .tetris_btn:hover {
+  border: 1px solid grey;
+}
+.tetris_btn:active {
   background: #b0b0b0;
 }
 
+#down {
+  margin-top: 40px;
+}
+
+#turn {
+  margin-top: 25px;
+}
+
+.info {
+  padding-top: 50px;
+}
 .info_next {
   display: flex;
   flex-wrap: wrap;
   width: 102px;
-  border: 1px solid grey;
 }
 @media (max-width: 400px) {
   .info_next {
@@ -318,7 +340,6 @@ h1, h2, h3, h4, h5, h6 {
 .info_cell {
   width: 25px;
   height: 25px;
-  border: 1px solid yellow;
 }
 @media (max-width: 400px) {
   .info_cell {
@@ -327,7 +348,9 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 .info_score {
-  border: 1px solid grey;
+  font-size: 24px;
+  text-align: right;
+  margin-top: 40px;
 }
 
 .about_img {
