@@ -45,13 +45,17 @@ function figure(a, b, c, d, l, r, clr) {
 }
 
 // Создание случайной фигуры
+let figureNext;
+let currentFigure;
 function figureCreation() {
 	//let random = 6;
-	let figureNext;
-	let currentFigure;
-	for (i=0; i<2; i++) {}
 	let random = Math.round(Math.random() * (7 - 1) + 1);
-	currentFigure = random;
+	if (currentFigure == undefined) {
+		//currentFigure = random;
+		currentFigure = Math.round(Math.random() * (7 - 1) + 1);
+	} else {
+		currentFigure = figureNext;
+	}
 	figureNext = random;
 
 	// Создание фигуры в экране следующей фигуры
