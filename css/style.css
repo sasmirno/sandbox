@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&display=swap");
 * {
   padding: 0;
   margin: 0;
@@ -262,6 +263,7 @@ h1, h2, h3, h4, h5, h6 {
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  user-select: none;
 }
 .tetris_block {
   display: flex;
@@ -294,7 +296,6 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-wrap: wrap;
   width: 300px;
-  user-select: none;
 }
 .tetris_btn {
   display: flex;
@@ -307,7 +308,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 50px;
   margin: 0 12px;
   border: 1px solid #fff;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 .tetris_btn:hover {
   border: 1px solid grey;
@@ -331,6 +332,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   flex-wrap: wrap;
   width: 102px;
+  margin-bottom: 40px;
 }
 @media (max-width: 400px) {
   .info_next {
@@ -348,9 +350,47 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 .info_score {
+  font-family: "Orbitron", sans-serif;
   font-size: 24px;
   text-align: right;
-  margin-top: 40px;
+}
+
+.gameOver {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.gameOver_content {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  max-width: 300px;
+}
+.gameOver_content p {
+  font-size: 24px;
+  padding: 20px;
+}
+.gameOver_score {
+  font-family: "Orbitron", sans-serif;
+  font-size: 24px;
+}
+.gameOver_newGame {
+  font-size: 24px;
+  padding: 20px;
+  margin-top: 30px;
+  border: 1px solid grey;
+  transition: 0.5s;
+}
+.gameOver_newGame:hover {
+  color: white;
+  background: grey;
+  cursor: pointer;
 }
 
 .about_img {

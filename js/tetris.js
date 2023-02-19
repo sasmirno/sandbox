@@ -1,8 +1,9 @@
 field = document.querySelector(".tetris_field");
 cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
-scoreboard = document.querySelector(".info_score");
 infoCells = document.querySelectorAll(".info_cell");
+
+let score = 0; // Счёт
 
 // Имитация игрового поля
 let matrix = [
@@ -48,10 +49,8 @@ function figure(a, b, c, d, l, r, clr) {
 let figureNext;
 let currentFigure;
 function figureCreation() {
-	//let random = 6;
 	let random = Math.round(Math.random() * (7 - 1) + 1);
 	if (currentFigure == undefined) {
-		//currentFigure = random;
 		currentFigure = Math.round(Math.random() * (7 - 1) + 1);
 	} else {
 		currentFigure = figureNext;
@@ -209,7 +208,7 @@ function move() {
 				if (matrix[parseInt(key)-10] == undefined) {
 					// Если верхния ячейка отсуствует останавливаем таймер
 					clearInterval(timerId);
-					//gameOver();
+					gameOver();
 					console.log('stop');
 				} else {
 					// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
@@ -217,7 +216,6 @@ function move() {
 					osX = 0;
 					osY = -1;
 					orientation = 0;
-					//destroy();
 					// Костыль чтобы срабатывало только один раз, а  не четыре
 					raz += 1;
 					if (raz == 3){
@@ -230,11 +228,10 @@ function move() {
 	osY += 1;
 	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
-	// Убираем целые линии}
+	// Убираем целые линии
 	destroy();
 	// Визуализируем массив игрового поля на странице
 	visualization();
-	//console.log('move');
 }
 
 // Кнопки управления
@@ -396,7 +393,6 @@ for (i = 0; i < buttons.length; i++) {
 							}
 						break;
 					}
-					//console.log('figure1');
 				break;
 				case 'figure2': // Поворот фигур кроме палки и квадрата
 					switch(orientation) {
@@ -453,13 +449,10 @@ for (i = 0; i < buttons.length; i++) {
 							}
 						break;
 					}
-					//console.log('figure2');
 				break;
 				case 'figure3': // "Поворот" квадрата
-					//console.log('figure3');
 				break;
 			}
-			//console.log('turn');
 		}
 		// Перезаписываем игровое поле и визуализируем на странице
 		matrix = Array.from(buffer);
@@ -509,11 +502,10 @@ function destroy() {
 				}
 			}
 		}
+		score += 1;
 		matrix = Array.from(buffer);
-		//console.log(line);
 	}
 	visualization();
-	//console.log('destroy');
 }
 
 // Функция визуализации
@@ -555,9 +547,6 @@ function visualization() {
 			case 'gg':
 				cells[key].style.background="black";
 			break;
-			default:
-				//cells[key].style.background="grey";
-				//console.log(matrix[key]);
 		}
 	}
 	for (let key in screenNextFigure) {
@@ -586,16 +575,53 @@ function visualization() {
 			case 7:
 				infoCells[key].style.background="dodgerblue";
 			break;
-			default:
-				//infoCells[key].style.background="grey";
-				//console.log(screenNextFigure[key]);
 		}
 	}
+	// Табло счёта
+	document.querySelector(".info_score").innerHTML = score;
 }
 //visualization();
 //move();
 figureCreation();
-let timerId = setInterval(move, 500);
+let time = 1000;
+//let speedUp = setInterval(time-100, 500);
+let timerId = setInterval(move, time);
 
 // Экран конца игры
-function gameOver() {}
+function gameOver() {
+	let gameOver = document.querySelector('.gameOver');
+	let newGame = document.querySelector(".gameOver_newGame");
+
+	document.querySelector(".gameOver_score").innerHTML = score;
+
+	gameOver.style.display = "flex";
+
+	newGame.onclick = function() {
+		score = 0;
+		figureNext = undefined;
+		currentFigure = undefined;
+		orientation = 0;
+		osX = 0;
+		osY = -1;
+		left = undefined;
+		right = undefined;
+		time = 1000;
+		for (let key in screenNextFigure) {
+			screenNextFigure[key] = 0;
+		}
+		for (let key in matrix) {
+			buffer[key] = 0;
+		}
+		matrix = Array.from(buffer);
+		gameOver.style.display = "none";
+		visualization();
+		figureCreation();
+		timerId = setInterval(move, time);
+	}
+
+	window.onclick = function(event) {
+		if (event.target == gameOver) {
+			gameOver.style.display = "none";
+		}
+	}
+}
