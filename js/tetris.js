@@ -207,7 +207,8 @@ function move() {
 			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
 				if (matrix[parseInt(key)-10] == undefined) {
 					// Если верхния ячейка отсуствует останавливаем таймер
-					clearInterval(timerId);
+					clearInterval(downMove);
+					clearInterval(speed);
 					gameOver();
 					console.log('stop');
 				} else {
@@ -225,6 +226,10 @@ function move() {
 			}
 		}
 	}
+	/*if (time > 100) {
+		clearInterval(speedUp);
+		console.log(time);
+	}*/
 	osY += 1;
 	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
@@ -232,6 +237,7 @@ function move() {
 	destroy();
 	// Визуализируем массив игрового поля на странице
 	visualization();
+	//console.log('move');
 }
 
 // Кнопки управления
@@ -580,12 +586,23 @@ function visualization() {
 	// Табло счёта
 	document.querySelector(".info_score").innerHTML = score;
 }
-//visualization();
-//move();
 figureCreation();
+move();
+visualization();
+
+// Таймер
 let time = 1000;
-//let speedUp = setInterval(time-100, 500);
-let timerId = setInterval(move, time);
+let downMove = setInterval(move, time);
+let speed = setInterval(speedUp, 60000);
+function speedUp() {
+	if (time > 200) {
+		clearInterval(downMove);
+		time -= 100;
+		downMove = setInterval(move, time);
+		document.querySelector(".info_speed").innerHTML = 11-time/100;
+		//console.log(time);
+	}
+}
 
 // Экран конца игры
 function gameOver() {
@@ -606,6 +623,7 @@ function gameOver() {
 		left = undefined;
 		right = undefined;
 		time = 1000;
+		document.querySelector(".info_speed").innerHTML = 11-time/100;
 		for (let key in screenNextFigure) {
 			screenNextFigure[key] = 0;
 		}
@@ -614,9 +632,11 @@ function gameOver() {
 		}
 		matrix = Array.from(buffer);
 		gameOver.style.display = "none";
-		visualization();
 		figureCreation();
-		timerId = setInterval(move, time);
+		move();
+		visualization();
+		downMove = setInterval(move, time);
+		speed = setInterval(speedUp, 60000);
 	}
 
 	window.onclick = function(event) {
