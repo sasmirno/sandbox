@@ -63,7 +63,7 @@ function figureCreation() {
 	}
 	switch (figureNext) {
 		case 1:
-			nextFigure(4, 5, 6, 7, 1); // Фигура ''''
+			nextFigure(0, 1, 2, 3, 1); // Фигура ''''
 		break;
 		case 2:
 			nextFigure(1, 2, 3, 6, 2); // Фигура '|'
@@ -226,10 +226,6 @@ function move() {
 			}
 		}
 	}
-	/*if (time > 100) {
-		clearInterval(speedUp);
-		console.log(time);
-	}*/
 	osY += 1;
 	// Перезаписываем игровое поле из промежуточного поля
 	matrix = Array.from(buffer);
@@ -400,7 +396,7 @@ for (i = 0; i < buttons.length; i++) {
 						break;
 					}
 				break;
-				case 'figure2': // Поворот фигур кроме палки и квадрата
+				case 'figure2': // Поворот других фигур кроме палки и квадрата
 					switch(orientation) {
 						case 0:
 							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
@@ -469,6 +465,7 @@ for (i = 0; i < buttons.length; i++) {
 // Функция удаления целых линий
 function destroy() {
 	let fire = true;
+	let multiplier = 0; // Множитель за комбо
 	// Перебираеи ряды поля
 	for (line=0; line<20; line++) {
 		// Ищем заполнненый ряд и если не находим таковой, запрещаем дальнейшее действие
@@ -484,7 +481,7 @@ function destroy() {
 			}
 			matrix = Array.from(buffer);
 			//setTimeout(drop, 1);
-			drop(); 
+			drop();
 		}
 		fire = true;
 	}
@@ -508,7 +505,8 @@ function destroy() {
 				}
 			}
 		}
-		score += 1;
+		multiplier += 1;
+		score += 1*multiplier;
 		matrix = Array.from(buffer);
 	}
 	visualization();
@@ -583,7 +581,7 @@ function visualization() {
 			break;
 		}
 	}
-	// Табло счёта
+	// Вывод счёта на табло
 	document.querySelector(".info_score").innerHTML = score;
 }
 figureCreation();
@@ -593,6 +591,7 @@ visualization();
 // Таймер
 let time = 1000;
 let downMove = setInterval(move, time);
+// Ускорятор таймера
 let speed = setInterval(speedUp, 60000);
 function speedUp() {
 	if (time > 200) {
@@ -600,7 +599,6 @@ function speedUp() {
 		time -= 100;
 		downMove = setInterval(move, time);
 		document.querySelector(".info_speed").innerHTML = 11-time/100;
-		//console.log(time);
 	}
 }
 
@@ -608,11 +606,11 @@ function speedUp() {
 function gameOver() {
 	let gameOver = document.querySelector('.gameOver');
 	let newGame = document.querySelector(".gameOver_newGame");
-
+	// Запись счета в окно конца игры
 	document.querySelector(".gameOver_score").innerHTML = score;
-
+	// Вызов окна конца игры
 	gameOver.style.display = "flex";
-
+	// Начало новой игры
 	newGame.onclick = function() {
 		score = 0;
 		figureNext = undefined;
@@ -638,7 +636,7 @@ function gameOver() {
 		downMove = setInterval(move, time);
 		speed = setInterval(speedUp, 60000);
 	}
-
+	// Закрытие окна конца игры
 	window.onclick = function(event) {
 		if (event.target == gameOver) {
 			gameOver.style.display = "none";
