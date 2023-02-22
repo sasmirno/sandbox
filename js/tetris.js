@@ -121,7 +121,6 @@ function figureCreation() {
 let figure1 = [
 	['figure1'],
 	[3, 4, 5, 6, -3, 3, 1],
-	[-6, 4, 14, 24, -4, 5, 1]
 ];
 // Фигура '|'
 let figure2 = [
@@ -242,225 +241,253 @@ let osX = 0; // Отслеживание фигуры по горизонтал�
 let osY = -1; // Отслеживание фигуры по вертикали
 let left; // Левая граница, для разных фигур своя
 let right; // Правая граница, для разных фигур своя
+function leftMove() {
+	let free = true;
+	// Проверка есть ли свободное место слева от фигуры
+	for (let key in matrix) {
+		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+			if (isNaN(matrix[parseInt(key)-1]) == true) {
+				free = false;
+			}
+		}
+	}
+	// Если свободное место есть двигаем фигуру влево
+	if (free == true) {
+		zeroing();
+		osX -= 1;
+		for (let key in matrix) {
+			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+				buffer[parseInt(key)-1] = matrix[key];
+			}
+		}
+	}
+}
+function rightMove() {
+	let free = true;
+	// Проверка есть ли свободное место слева от фигуры
+	for (let key in matrix) {
+		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+			if (isNaN(matrix[parseInt(key)+1]) == true) {
+				free = false;
+			}
+		}
+	}
+	// Если свободное место есть двигаем фигуру вправо
+	if (free == true) {
+		zeroing();
+		osX += 1;
+		for (let key in matrix) {
+			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+				buffer[parseInt(key)+1] = matrix[key];
+			}
+		}
+	}
+}
+function turn() {
+	let position = 10*osY+osX; // Поправка положения фигуры на игровом поле
+	// Функция проверки свободных ячеек
+	function check(a, b, c, d) {
+		let arr = [a, b, c, d];
+		for (let key of arr) {
+			if (isNaN(matrix[parseInt(key)]) == true) {
+				return false;
+			}
+		}
+	}
+	// Пошла моча по трубам
+	switch(copyFigure[0][0]) {
+		case 'figure1': // Поворот палки
+			switch(orientation) {
+				case 0:
+					if (check(-6+position, 4+position, 14+position, 24+position) != false) {
+						zeroing();
+						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+						orientation = 90;
+					} else if (check(-6+position-10, 4+position-10, 14+position-10, 24+position-10) != false) {
+						zeroing();
+						position -= 10;
+						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+						orientation = 90;
+					} else if (check(-6+position+1, 4+position+1, 14+position+1, 24+position+1) != false) {
+						zeroing();
+						position += 1;
+						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+						orientation = 90;
+					} else if (check(-6+position-9, 4+position-9, 14+position-9, 24+position-9) != false) {
+						zeroing();
+						position -= 9;
+						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+						orientation = 90;
+					}
+				break;
+				case 90:
+					if (osX == left) {
+						if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
+							zeroing();
+							position += 1;
+							osX += 1;
+							figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+							orientation = 0;
+						}
+					} else if (osX == right) {
+						if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+							zeroing();
+							position -= 2;
+							osX -= 2;
+							figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+							orientation = 0;
+						}
+					} else if (osX == right-1) {
+						if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
+							zeroing();
+							position -= 1;
+							osX -= 1;
+							figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+							orientation = 0;
+						} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+							zeroing();
+							position -= 2;
+							osX -= 2;
+							figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+							orientation = 0;
+						}
+					} else {
+						if (check(3+position, 4+position, 5+position, 6+position) != false) {
+							zeroing();
+							figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+							orientation = 0;
+						} else if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
+							if (osX != right-2) {
+								zeroing();
+								position += 1;
+								osX += 1;
+								figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								orientation = 0;
+							}
+						} else if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
+							if (osX != left+1) {
+								zeroing();
+								position -= 1;
+								osX -= 1;
+								figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								orientation = 0;
+							}
+						} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+							if (osX != left+2) {
+								zeroing();
+								position -= 2;
+								osX -= 2;
+								figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								orientation = 0;
+							}
+						}
+					}
+				break;
+			}
+		break;
+		case 'figure2': // Поворот других фигур кроме палки и квадрата
+			switch(orientation) {
+				case 0:
+					if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
+						zeroing();
+						figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+						orientation = 90;
+					}
+				break;
+				case 90:
+					if (osX == right) {
+						position -= 1;
+						osX -= 1;
+					}
+					if (check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position) != false) {
+						zeroing();
+						figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
+						orientation = 180;
+					} else if (check(copyFigure[3][0]+position-1, copyFigure[3][1]+position-1, copyFigure[3][2]+position-1, copyFigure[3][3]+position-1) != false) {
+						if (osX != left) {
+							zeroing();
+							position -= 1;
+							osX -= 1;
+							figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
+							orientation = 180;
+						}
+					}
+				break;
+				case 180:
+					if (check(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position) != false) {
+						zeroing();
+						figure(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position, copyFigure[4][4], copyFigure[4][5], copyFigure[4][6]);
+						orientation = 270;
+					}
+				break;
+				case 270:
+					if (osX == left) {
+						position += 1;
+						osX += 1;
+					}
+					if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
+						zeroing();
+						figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+						orientation = 0;
+					} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
+						if (osX != right) {
+							zeroing();
+							position += 1;
+							osX += 1;
+							figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+							orientation = 0;
+						}
+					}
+				break;
+			}
+		break;
+		case 'figure3': // "Поворот" квадрата
+		break;
+	}
+}
+// Управление с экрана
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
 		let input = this.id;
-		let free = true;
 		// Кнопка вниз
 		if (input == 'down') {
 			move();
 		}
 		// Кнопка влево
 		if (input == 'left' && osX>left) {
-			// Проверка есть ли свободное место слева от фигуры
-			for (let key in matrix) {
-				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (isNaN(matrix[parseInt(key)-1]) == true) {
-						free = false;
-					}
-				}
-			}
-			// Если свободное место есть двигаем фигуру влево
-			if (free == true) {
-				zeroing();
-				osX -= 1;
-				for (let key in matrix) {
-					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-						buffer[parseInt(key)-1] = matrix[key];
-					}
-				}
-			}
+			leftMove();
 		}
 		// Кнопка вправо
 		if (input == 'right' && osX<right) {
-			// Проверка есть ли свободное место слева от фигуры
-			for (let key in matrix) {
-				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (isNaN(matrix[parseInt(key)+1]) == true) {
-						free = false;
-					}
-				}
-			}
-			// Если свободное место есть двигаем фигуру вправо
-			if (free == true) {
-				zeroing();
-				osX += 1;
-				for (let key in matrix) {
-					if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-						buffer[parseInt(key)+1] = matrix[key];
-					}
-				}
-			}
+			rightMove();
 		}
 		// Кнопка поворота фигуры
 		if (input == 'turn') {
-			let position = 10*osY+osX; // Поправка положения фигуры на игровом поле
-			// Функция проверки свободных ячеек
-			function check(a, b, c, d) {
-				let arr = [a, b, c, d];
-				for (let key of arr) {
-					if (isNaN(matrix[parseInt(key)]) == true) {
-						free = false;
-						return false;
-					}
-				}
-			}
-			// Пошла моча по трубам
-			switch(copyFigure[0][0]) {
-				case 'figure1': // Поворот палки
-					switch(orientation) {
-						case 0:
-							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 90;
-							} else if (check(copyFigure[2][0]+position-10, copyFigure[2][1]+position-10, copyFigure[2][2]+position-10, copyFigure[2][3]+position-10) != false) {
-								zeroing();
-								position -= 10;
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 90;
-							} else if (check(copyFigure[2][0]+position+1, copyFigure[2][1]+position+1, copyFigure[2][2]+position+1, copyFigure[2][3]+position+1) != false) {
-								zeroing();
-								position += 1;
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 90;
-							} else if (check(copyFigure[2][0]+position-9, copyFigure[2][1]+position-9, copyFigure[2][2]+position-9, copyFigure[2][3]+position-9) != false) {
-								zeroing();
-								position -= 9;
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 90;
-							}
-						break;
-						case 90:
-							if (osX == left) {
-								if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
-									zeroing();
-									position += 1;
-									osX += 1;
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								}
-							} else if (osX == right) {
-								if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
-									zeroing();
-									position -= 2;
-									osX -= 2;
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								}
-							} else if (osX == right-1) {
-								if (check(copyFigure[1][0]+position-1, copyFigure[1][1]+position-1, copyFigure[1][2]+position-1, copyFigure[1][3]+position-1) != false) {
-									zeroing();
-									position -= 1;
-									osX -= 1;
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								} else if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
-									zeroing();
-									position -= 2;
-									osX -= 2;
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								}
-							} else {
-								if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
-									zeroing();
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
-									if (osX != right-2) {
-										zeroing();
-										position += 1;
-										osX += 1;
-										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-										orientation = 0;
-									}
-								} else if (check(copyFigure[1][0]+position-1, copyFigure[1][1]+position-1, copyFigure[1][2]+position-1, copyFigure[1][3]+position-1) != false) {
-									if (osX != left+1) {
-										zeroing();
-										position -= 1;
-										osX -= 1;
-										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-										orientation = 0;
-									}
-								} else if (check(copyFigure[1][0]+position-2, copyFigure[1][1]+position-2, copyFigure[1][2]+position-2, copyFigure[1][3]+position-2) != false) {
-									if (osX != left+2) {
-										zeroing();
-										position -= 2;
-										osX -= 2;
-										figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-										orientation = 0;
-									}
-								}
-							}
-						break;
-					}
-				break;
-				case 'figure2': // Поворот других фигур кроме палки и квадрата
-					switch(orientation) {
-						case 0:
-							if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-								orientation = 90;
-							}
-						break;
-						case 90:
-							if (osX == right) {
-								position -= 1;
-								osX -= 1;
-							}
-							if (check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
-								orientation = 180;
-							} else if (check(copyFigure[3][0]+position-1, copyFigure[3][1]+position-1, copyFigure[3][2]+position-1, copyFigure[3][3]+position-1) != false) {
-								if (osX != left) {
-									zeroing();
-									position -= 1;
-									osX -= 1;
-									figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
-									orientation = 180;
-								}
-							}
-						break;
-						case 180:
-							if (check(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position, copyFigure[4][4], copyFigure[4][5], copyFigure[4][6]);
-								orientation = 270;
-							}
-						break;
-						case 270:
-							if (osX == left) {
-								position += 1;
-								osX += 1;
-							}
-							if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
-								zeroing();
-								figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-								orientation = 0;
-							} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
-								if (osX != right) {
-									zeroing();
-									position += 1;
-									osX += 1;
-									figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-									orientation = 0;
-								}
-							}
-						break;
-					}
-				break;
-				case 'figure3': // "Поворот" квадрата
-				break;
-			}
+			turn();
 		}
 		// Перезаписываем игровое поле и визуализируем на странице
 		matrix = Array.from(buffer);
 		visualization();
 	});
 }
+// Управление с клавиатуры
+document.addEventListener('keydown', function(event) {
+	if (event.code === 'ArrowLeft' && osX>left) {
+		leftMove();
+	}
+	if (event.code === 'ArrowRight' && osX<right) {
+		rightMove();
+	}
+	if (event.code === 'ArrowDown') {
+		move();
+	}
+	if (event.code === 'ArrowUp' || event.code === 'Space') {
+		turn();
+	}
+	// Перезаписываем игровое поле и визуализируем на странице
+	matrix = Array.from(buffer);
+	visualization();
+});
 
 // Функция удаления целых линий
 function destroy() {
