@@ -29,11 +29,11 @@ let matrix = [
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 ];
 
-// Копия игрового поля
-let buffer = Array.from(matrix);
-
 // Экран следующей фигуры
 let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0]
+
+// Копия игрового поля
+let buffer = Array.from(matrix);
 
 // Создание фигуры
 function figure(a, b, c, d, l, r, clr) {
@@ -46,45 +46,45 @@ function figure(a, b, c, d, l, r, clr) {
 }
 
 // Создание случайной фигуры
-let figureNext;
+let nextFigure;
 let currentFigure;
 function figureCreation() {
 	let random = Math.round(Math.random() * (7 - 1) + 1);
-	if (currentFigure == undefined) {
+	if (currentFigure == null) {
 		currentFigure = Math.round(Math.random() * (7 - 1) + 1);
 	} else {
-		currentFigure = figureNext;
+		currentFigure = nextFigure;
 	}
-	figureNext = random;
+	nextFigure = random;
 
 	// Создание фигуры в экране следующей фигуры
 	for (let key in screenNextFigure) {
 		screenNextFigure[key] = 0;
 	}
-	switch (figureNext) {
+	switch (nextFigure) {
 		case 1:
-			nextFigure(0, 1, 2, 3, 1); // Фигура ''''
+			figureNext(0, 1, 2, 3, 1); // Фигура ''''
 		break;
 		case 2:
-			nextFigure(1, 2, 3, 6, 2); // Фигура '|'
+			figureNext(1, 2, 3, 6, 2); // Фигура '|'
 		break;
 		case 3:
-			nextFigure(1, 2, 5, 6, 3); // Фигура ||
+			figureNext(1, 2, 5, 6, 3); // Фигура ||
 		break;
 		case 4:
-			nextFigure(1, 2, 3, 7, 4); // Фигура ''|
+			figureNext(1, 2, 3, 7, 4); // Фигура ''|
 		break;
 		case 5:
-			nextFigure(1, 2, 6, 7, 5); // Фигура '|.
+			figureNext(1, 2, 6, 7, 5); // Фигура '|.
 		break;
 		case 6:
-			nextFigure(1, 2, 3, 5, 6); // Фигура |''
+			figureNext(1, 2, 3, 5, 6); // Фигура |''
 		break;
 		case 7:
-			nextFigure(2, 3, 5, 6, 7); // Фигура .|'
+			figureNext(2, 3, 5, 6, 7); // Фигура .|'
 		break;
 	}
-	function nextFigure(a, b, c, d, clr) {
+	function figureNext(a, b, c, d, clr) {
 		screenNextFigure[a] = clr;
 		screenNextFigure[b] = clr;
 		screenNextFigure[c] = clr;
@@ -94,79 +94,82 @@ function figureCreation() {
 	// Создание фигуры в игровом поле
 	switch (currentFigure) {
 		case 1:
-			copyFigure = Array.from(figure1);
+			copyFigure = Array.from(figures.figure1);
 		break;
 		case 2:
-			copyFigure = Array.from(figure2);
+			copyFigure = Array.from(figures.figure2);
 		break;
 		case 3:
-			copyFigure = Array.from(figure3);
+			copyFigure = Array.from(figures.figure3);
 		break;
 		case 4:
-			copyFigure = Array.from(figure4);
+			copyFigure = Array.from(figures.figure4);
 		break;
 		case 5:
-			copyFigure = Array.from(figure5);
+			copyFigure = Array.from(figures.figure5);
 		break;
 		case 6:
-			copyFigure = Array.from(figure6);
+			copyFigure = Array.from(figures.figure6);
 		break;
 		case 7:
-			copyFigure = Array.from(figure7);
+			copyFigure = Array.from(figures.figure7);
 		break;
 	}
 	return figure(copyFigure[1][0], copyFigure[1][1], copyFigure[1][2], copyFigure[1][3], copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 }
-// Фигура ''''
-let figure1 = [
-	['figure1'],
-	[3, 4, 5, 6, -3, 3, 1],
-];
-// Фигура '|'
-let figure2 = [
-	['figure2'],
-	[4, 5, 6, 15, -4, 3, 2],
-	[-5, 4, 5, 15, -4, 4, 2],
-	[-5, 4, 5, 6, -4, 3, 2],
-	[-5, 6, 5, 15, -5, 3, 2]
-];
-// Фигура ||
-let figure3 = [
-	['figure3'],
-	[4, 5, 14, 15, -4, 4, 3]
-];
-// Фигура ''|
-let figure4 = [
-	['figure2'],
-	[4, 5, 6, 16, -4, 3, 4],
-	[-5, 5, 14, 15, -4, 4, 4],
-	[-6, 4, 5, 6, -4, 3, 4],
-	[-5, -4, 5, 15, -5, 3, 4]
-];
-// Фигура '|.
-let figure5 = [
-	['figure2'],
-	[4, 5, 15, 16, -4, 3, 5],
-	[-5, 4, 5, 14, -4, 4, 5],
-	[-6, -5, 5, 6, -4, 3, 5],
-	[-4, 5, 6, 15, -5, 3, 5]
-];
-// Фигура ..|
-let figure6 = [
-	['figure2'],
-	[4, 5, 6, 14, -4, 3, 6],
-	[-6, -5, 5, 15, -4, 4, 6],
-	[-4, 4, 5, 6, -4, 3, 6],
-	[-5, 5, 15, 16, -5, 3, 6]
-];
-// Фигура .|'
-let figure7 = [
-	['figure2'],
-	[5, 6, 14, 15, -4, 3, 7],
-	[-6, 4, 5, 15, -4, 4, 7],
-	[-5, -4, 4, 5, -4, 3, 7],
-	[-5, 5, 6, 16, -5, 3, 7]
-];
+// Корбочка с фигурами
+let figures = {
+	// Фигура ''''
+	figure1 : [
+		['figure1'],
+		[3, 4, 5, 6, -3, 3, 1],
+	],
+	// Фигура '|'
+	figure2 : [
+		['figure2'],
+		[4, 5, 6, 15, -4, 3, 2],
+		[-5, 4, 5, 15, -4, 4, 2],
+		[-5, 4, 5, 6, -4, 3, 2],
+		[-5, 6, 5, 15, -5, 3, 2]
+	],
+	// Фигура ||
+	figure3 : [
+		['figure3'],
+		[4, 5, 14, 15, -4, 4, 3]
+	],
+	// Фигура ''|
+	figure4 : [
+		['figure2'],
+		[4, 5, 6, 16, -4, 3, 4],
+		[-5, 5, 14, 15, -4, 4, 4],
+		[-6, 4, 5, 6, -4, 3, 4],
+		[-5, -4, 5, 15, -5, 3, 4]
+	],
+	// Фигура '|.
+	figure5 : [
+		['figure2'],
+		[4, 5, 15, 16, -4, 3, 5],
+		[-5, 4, 5, 14, -4, 4, 5],
+		[-6, -5, 5, 6, -4, 3, 5],
+		[-4, 5, 6, 15, -5, 3, 5]
+	],
+	// Фигура ..|
+	figure6 : [
+		['figure2'],
+		[4, 5, 6, 14, -4, 3, 6],
+		[-6, -5, 5, 15, -4, 4, 6],
+		[-4, 4, 5, 6, -4, 3, 6],
+		[-5, 5, 15, 16, -5, 3, 6]
+	],
+	// Фигура .|'
+	figure7 : [
+		['figure2'],
+		[5, 6, 14, 15, -4, 3, 7],
+		[-6, 4, 5, 15, -4, 4, 7],
+		[-5, -4, 4, 5, -4, 3, 7],
+		[-5, 5, 6, 16, -5, 3, 7]
+	],
+};
 
 // Функция обнуления ячеек промежуточного поля
 function zeroing() {
@@ -204,12 +207,11 @@ function move() {
 		for (let key in matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
 			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-				if (matrix[parseInt(key)-10] == undefined) {
+				if (matrix[parseInt(key)-10] == null) {
 					// Если верхния ячейка отсуствует останавливаем таймер
 					clearInterval(downMove);
 					clearInterval(speed);
 					gameOver();
-					console.log('stop');
 				} else {
 					// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
 					buffer[key] = matrix[key]+'s';
@@ -303,6 +305,11 @@ function turn() {
 						zeroing();
 						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
 						orientation = 90;
+					} else if (check(-6+position+10, 4+position+10, 14+position+10, 24+position+10) != false) {
+						zeroing();
+						position += 10;
+						figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+						orientation = 90;
 					} else if (check(-6+position-10, 4+position-10, 14+position-10, 24+position-10) != false) {
 						zeroing();
 						position -= 10;
@@ -390,6 +397,12 @@ function turn() {
 				case 0:
 					if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
 						zeroing();
+						figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+						orientation = 90;
+					} else if (check(copyFigure[2][0]+position+10, copyFigure[2][1]+position+10, copyFigure[2][2]+position+10, copyFigure[2][3]+position+10) != false) {
+						zeroing();
+						position += 10;
+						osY += 1;
 						figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
 						orientation = 90;
 					}
@@ -507,7 +520,6 @@ function destroy() {
 				buffer[i+line*10] = 0;
 			}
 			matrix = Array.from(buffer);
-			//setTimeout(drop, 1);
 			drop();
 		}
 		fire = true;
@@ -640,13 +652,13 @@ function gameOver() {
 	// Начало новой игры
 	newGame.onclick = function() {
 		score = 0;
-		figureNext = undefined;
-		currentFigure = undefined;
+		figureNext = null;
+		currentFigure = null;
 		orientation = 0;
 		osX = 0;
 		osY = -1;
-		left = undefined;
-		right = undefined;
+		left = null;
+		right = null;
 		time = 1000;
 		document.querySelector(".info_speed").innerHTML = 11-time/100;
 		for (let key in screenNextFigure) {
