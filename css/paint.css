@@ -1,0 +1,39 @@
+.paint {
+  display: grid;
+  max-width: 1000px;
+  max-height: 500px;
+}
+
+.keyboard {
+  display: flex;
+}
+
+.btn {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.black {
+  background: black;
+}
+
+.red {
+  background: red;
+}
+
+.green {
+  background: green;
+}
+
+.canvas {
+  /*position: relative;*/
+  width: 50vw;
+  height: 50vh;
+  border: 1px solid #467fab;
+}
+.canvas div {
+  position: absolute;
+  border-radius: 100%;
+}
