@@ -1,15 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron&display=swap");
-.playing_field {
-  display: flex;
-  font-family: "Orbitron", sans-serif;
-}
-
 .tetris {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
   user-select: none;
+  font-family: "Orbitron", sans-serif;
 }
 .tetris_block {
   display: flex;
@@ -62,51 +58,42 @@
 .tetris_btn:active {
   background: #b0b0b0;
 }
-
-#down {
-  margin-top: 40px;
-}
-
-#turn {
-  margin-top: 25px;
-}
-
-.info_title {
+.tetris__info_title {
   font-size: 18px;
   text-align: center;
   margin: 20px 0 10px 0;
 }
-.info_next {
+.tetris__info_next {
   display: flex;
   flex-wrap: wrap;
   width: 102px;
   margin-bottom: 40px;
 }
 @media (max-width: 400px) {
-  .info_next {
+  .tetris__info_next {
     width: 82px;
   }
 }
-.info_cell {
+.tetris__info_cell {
   width: 25px;
   height: 25px;
 }
 @media (max-width: 400px) {
-  .info_cell {
+  .tetris__info_cell {
     width: 20px;
     height: 20px;
   }
 }
-.info_score {
+.tetris__info_score {
   font-size: 24px;
   text-align: center;
 }
-.info_speed {
+.tetris__info_speed {
   font-size: 24px;
   text-align: center;
 }
-
-.gameOver {
+.tetris__gameOver {
+  font-family: "Orbitron", sans-serif;
   display: none;
   justify-content: center;
   align-items: center;
@@ -117,28 +104,36 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
 }
-.gameOver_content {
+.tetris__gameOver_content {
   text-align: center;
   background-color: white;
   padding: 20px;
   max-width: 300px;
 }
-.gameOver_content p {
+.tetris__gameOver_content p {
   font-size: 20px;
   padding: 20px;
 }
-.gameOver_score {
+.tetris__gameOver_score {
   font-size: 24px;
 }
-.gameOver_newGame {
+.tetris__gameOver_newGame {
   font-size: 20px;
   padding: 20px;
   margin-top: 30px;
   border: 1px solid grey;
   transition: 0.5s;
 }
-.gameOver_newGame:hover {
+.tetris__gameOver_newGame:hover {
   color: white;
   background: grey;
   cursor: pointer;
+}
+
+#down {
+  margin-top: 40px;
+}
+
+#turn {
+  margin-top: 25px;
 }

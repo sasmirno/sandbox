@@ -80,3 +80,23 @@
   width: 25px;
   height: 25px;
 }
+.link__tic-tac-toe {
+  display: grid;
+  align-items: center;
+  padding: 15px;
+}
+.link__tic-tac-toe_field {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: black;
+}
+.link__tic-tac-toe_field div {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: 38px;
+  background: white;
+  width: 40px;
+  height: 40px;
+}

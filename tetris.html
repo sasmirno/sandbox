@@ -33,6 +33,7 @@
 			<a href="paint.html">Рисовалка</a>
 			<a href="calc.html">Калькулятор</a>
 			<a href="tetris.html">Тетрис</a>
+			<a href="tic-tac-toe.html">Крестики-нолики</a>
 			<a href="aboutMe.html">О себе</a>
 		</nav>
 		<div class="burger">
@@ -47,13 +48,14 @@
 					<a href="paint.html">Рисовалка</a>
 					<a href="calc.html">Калькулятор</a>
 					<a href="tetris.html">Тетрис</a>
+					<a href="tic-tac-toe.html">Крестики-нолики</a>
 					<a href="aboutMe.html">О себе</a>
 				</nav>
 			</div>
 		</div>
 	</div>
 </header>
-	<main class="container playing_field">
+	<main class="container">
 		<div class="tetris">
 			<div class="tetris_block">
 				<div class="tetris_field">
@@ -258,22 +260,22 @@
 					<div class="tetris_cell"></div>
 					<div class="tetris_cell"></div>
 				</div>
-				<div class="info">
-					<div class="info_title">Next</div>
-					<div class="info_next">
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
-						<div class="info_cell"></div>
+				<div class="tetris__info">
+					<div class="tetris__info_title">Next</div>
+					<div class="tetris__info_next">
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
+						<div class="tetris__info_cell"></div>
 					</div>
-					<div class="info_title">Score</div>
-					<div class="info_score">0</div>
-					<div class="info_title">Speed</div>
-					<div class="info_speed">1</div>
+					<div class="tetris__info_title">Score</div>
+					<div class="tetris__info_score">0</div>
+					<div class="tetris__info_title">Speed</div>
+					<div class="tetris__info_speed">1</div>
 				</div>
 			</div>
 			<div class="tetris_keyboard">
@@ -283,12 +285,12 @@
 				<div class="tetris_btn" id="turn">&#8635;</div>
 			</div>
 		</div>
-		<div class="gameOver">
-			<div class="gameOver_content">
+		<div class="tetris__gameOver">
+			<div class="tetris__gameOver_content">
 				<p>Game over</p>
 				<p>Score</p>
-				<div class="gameOver_score">0</div>
-				<div class="gameOver_newGame">New game</div>
+				<div class="tetris__gameOver_score">0</div>
+				<div class="tetris__gameOver_newGame">New game</div>
 			</div>
 		</div>
 	</main>

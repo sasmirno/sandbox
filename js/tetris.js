@@ -1,7 +1,7 @@
 field = document.querySelector(".tetris_field");
 cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
-infoCells = document.querySelectorAll(".info_cell");
+infoCells = document.querySelectorAll(".tetris__info_cell");
 
 let score = 0; // Счёт
 
@@ -621,7 +621,7 @@ function visualization() {
 		}
 	}
 	// Вывод счёта на табло
-	document.querySelector(".info_score").innerHTML = score;
+	document.querySelector(".tetris__info_score").innerHTML = score;
 }
 figureCreation();
 move();
@@ -637,16 +637,16 @@ function speedUp() {
 		clearInterval(downMove);
 		time -= 100;
 		downMove = setInterval(move, time);
-		document.querySelector(".info_speed").innerHTML = 11-time/100;
+		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
 	}
 }
 
 // Экран конца игры
 function gameOver() {
-	let gameOver = document.querySelector('.gameOver');
-	let newGame = document.querySelector(".gameOver_newGame");
+	let gameOver = document.querySelector('.tetris__gameOver');
+	let newGame = document.querySelector(".tetris__gameOver_newGame");
 	// Запись счета в окно конца игры
-	document.querySelector(".gameOver_score").innerHTML = score;
+	document.querySelector(".tetris__gameOver_score").innerHTML = score;
 	// Вызов окна конца игры
 	gameOver.style.display = "flex";
 	// Начало новой игры
@@ -660,7 +660,7 @@ function gameOver() {
 		left = null;
 		right = null;
 		time = 1000;
-		document.querySelector(".info_speed").innerHTML = 11-time/100;
+		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
 		for (let key in screenNextFigure) {
 			screenNextFigure[key] = 0;
 		}

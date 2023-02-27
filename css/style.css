@@ -3,6 +3,7 @@
 @import url(cals.css);
 @import url(tetris.css);
 @import url(aboutMe.css);
+@import url(tic-tac-toe.css);
 * {
   padding: 0;
   margin: 0;
