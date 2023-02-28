@@ -57,9 +57,14 @@
 </header>
 	<main class="container">
 		<div class="tic-tac-toe">
-			<div class="tic-tac-toe__newGame">
-				<div class="tic-tac-toe__newGame_content">
-					<p>New game</p>
+			<div class="tic-tac-toe__popUp" id="play">
+				<div class="tic-tac-toe__popUp_content">
+					<p>Выбор</p>
+					<div class="tic-tac-toe__popUp_block">
+						<div class="tic-tac-toe__popUp_btn" id="cross">&#215;</div>
+						<div class="tic-tac-toe__popUp_btn" id="zero">&#9675;</div>
+					</div>
+					<div class="tic-tac-toe__popUp_btn" id="play_btn">Играть</div>
 				</div>
 			</div>
 			<div class="tic-tac-toe__field">
@@ -73,10 +78,10 @@
 				<div>&#9675;</div>
 				<div>&#215;</div>
 			</div>
-			<div class="tic-tac-toe__gameOver">
-				<div class="tic-tac-toe__gameOver_content">
-					<p>Game over</p>
-					<div class="tic-tac-toe__gameOver_newGame">New game</div>
+			<div class="tic-tac-toe__popUp" id="gameOver">
+				<div class="tic-tac-toe__popUp_content">
+					<p>Проиграл/Ничья/Выиграл</p>
+					<div class="tic-tac-toe__popUp_btn" id="newGame_btn">Новая игра</div>
 				</div>
 			</div>
 		</div>

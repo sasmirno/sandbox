@@ -9,6 +9,8 @@
   flex-wrap: wrap;
 }
 .link a {
+  display: grid;
+  align-content: space-between;
   border: 1px solid black;
   color: black;
   max-width: 300px;
@@ -18,20 +20,17 @@
 .link a:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+.link p {
+  padding-top: 15px;
+}
 .link img {
   width: 100%;
 }
 .link__paint {
-  display: grid;
-  align-items: center;
   padding: 15px;
-  gap: 20px;
 }
 .link__cals {
-  display: grid;
-  align-items: center;
   padding: 15px;
-  gap: 20px;
 }
 .link__cals_icon {
   display: grid;
@@ -64,10 +63,7 @@
   background: #b0b0b0;
 }
 .link__tetris {
-  display: grid;
-  align-items: center;
   padding: 15px;
-  gap: 20px;
 }
 .link__tetris_field {
   display: grid;
@@ -81,8 +77,6 @@
   height: 25px;
 }
 .link__tic-tac-toe {
-  display: grid;
-  align-items: center;
   padding: 15px;
 }
 .link__tic-tac-toe_field {
