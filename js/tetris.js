@@ -30,7 +30,7 @@ let matrix = [
 ];
 
 // Экран следующей фигуры
-let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0]
+let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0];
 
 // Копия игрового поля
 let buffer = Array.from(matrix);
