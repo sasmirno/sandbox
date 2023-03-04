@@ -234,7 +234,6 @@ function move() {
 	destroy();
 	// Визуализируем массив игрового поля на странице
 	visualization();
-	//console.log('move');
 }
 
 // Кнопки управления

@@ -30,11 +30,46 @@ for  (i = 0; i < cells.length; i++) {
 		field[this.id] = player;
 		cells[this.id].style.color="black";
 		visualization();
+		doYouWin();
 	});
 }
 //console.log(field);
 
 // Проверка на выигрышные линии или ничью
+// Выигрышные комбинации
+let winLine = [
+	[0, 1, 2],
+	[3, 4, 5],
+	[6, 7, 8],
+	[0, 3, 6],
+	[1, 4, 7],
+	[2, 5, 8],
+	[0, 4, 8],
+	[2, 4, 6]
+]
+function doYouWin() {
+	for (let key in winLine) {
+		let line = '';
+		let draw = true;
+		for (i=0; i<3; i++) {
+			line += field[winLine[key][i]];
+		}
+		//console.log(line);
+		if (line === 'xxx') {
+			console.log('winX');
+		} else if (line === 'ooo') {
+			console.log('winO');
+		}
+		for (let key in field) {
+			if (field[key] === 0) {
+				draw = false;
+			}
+		}
+		if (draw === true) {
+			console.log('draw');
+		}
+	}
+}
 
 // Написать мега-супер-искусственный интеллект для игры
 
