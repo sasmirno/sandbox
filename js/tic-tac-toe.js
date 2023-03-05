@@ -56,9 +56,11 @@ function doYouWin() {
 		}
 		//console.log(line);
 		if (line === 'xxx') {
-			console.log('winX');
+			gameOver('x');
 		} else if (line === 'ooo') {
-			console.log('winO');
+			gameOver('o');
+		} else {
+			// Функция хода ИИ
 		}
 		for (let key in field) {
 			if (field[key] === 0) {
@@ -71,12 +73,15 @@ function doYouWin() {
 	}
 }
 
-// Написать мега-супер-искусственный интеллект для игры
+// Написать мега-супер-пупер-искусственный интеллект для игры
 
 // Функция визуализации на сайт
 function visualization() {
 	for (let key in field) {
 		switch (field[key]) {
+			case 0:
+				cells[key].innerHTML="";
+			break;
 			case 'x':
 				cells[key].innerHTML="&#215;";
 			break;
@@ -116,14 +121,24 @@ function play() {
 	}
 }
 // Экран конца игры
-function gameOver() {
+function gameOver(p) {
 	let gameOver = document.querySelector('#gameOver');
 	let newGame = document.querySelector('#newGame_btn');
 	// Вызов окна конца игры
+	if (player === p) {
+		document.querySelector('#result').innerHTML = "Кожаный мешок";
+	} else {
+		document.querySelector('#result').innerHTML = "Слава роботам";
+	}
 	gameOver.style.display = "flex";
 	// Начало новой игры
 	newGame.onclick = function() {
-		
+		for (let key in field) {
+			field[key] = 0;
+			gameOver.style.display = "none";
+			visualization();
+			play();
+		}
 	}
 	// Закрытие окна конца игры
 	window.onclick = function(event) {
