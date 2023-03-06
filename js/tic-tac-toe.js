@@ -25,15 +25,19 @@ for  (i = 0; i < cells.length; i++) {
 }
 
 // Установка знака в игровую ячейку
+let playing = true;
 for  (i = 0; i < cells.length; i++) {
 	cells[i].addEventListener("click", function() {
-		field[this.id] = player;
-		cells[this.id].style.color="black";
-		visualization();
-		doYouWin();
+		if (playing === true) {
+			if (field[this.id] === 0) {
+				field[this.id] = player;
+				visualization();
+				doYouWin();
+				artificialIdiot();
+			}
+		}
 	});
 }
-//console.log(field);
 
 // Проверка на выигрышные линии или ничью
 // Выигрышные комбинации
@@ -48,32 +52,49 @@ let winLine = [
 	[2, 4, 6]
 ]
 function doYouWin() {
+	let deadHeat = true;
 	for (let key in winLine) {
 		let line = '';
-		let draw = true;
 		for (i=0; i<3; i++) {
 			line += field[winLine[key][i]];
 		}
-		//console.log(line);
 		if (line === 'xxx') {
 			gameOver('x');
 		} else if (line === 'ooo') {
 			gameOver('o');
-		} else {
-			// Функция хода ИИ
 		}
-		for (let key in field) {
-			if (field[key] === 0) {
-				draw = false;
-			}
+	}
+	for (let key in field) {
+		if (field[key] === 0) {
+			deadHeat = false;
 		}
-		if (draw === true) {
-			console.log('draw');
-		}
+	}
+	if (deadHeat === true && playing === true) {
+		gameOver('=');
 	}
 }
 
 // Написать мега-супер-пупер-искусственный интеллект для игры
+function artificialIdiot() {
+	if (playing === true) {
+		if (field[4] === 0) {
+			field[4] = ai;
+		} else {
+			let random = Math.round(Math.random() * (8 - 1));
+			console.log(random);
+			if (field[random] === 0) {
+				//let options = [0, 2, 6, 8];
+				field[random] = ai;
+			} else {
+				artificialIdiot();
+			}
+		}
+		console.log(field);
+		doYouWin();
+		visualization();
+	}
+}
+
 
 // Функция визуализации на сайт
 function visualization() {
@@ -84,9 +105,11 @@ function visualization() {
 			break;
 			case 'x':
 				cells[key].innerHTML="&#215;";
+				cells[key].style.color="black";
 			break;
 			case 'o':
 				cells[key].innerHTML="&#9675;";
+				cells[key].style.color="black";
 			break;
 		}
 	}
@@ -120,25 +143,31 @@ function play() {
 		}
 	}
 }
+
 // Экран конца игры
 function gameOver(p) {
 	let gameOver = document.querySelector('#gameOver');
 	let newGame = document.querySelector('#newGame_btn');
+	playing = false;
 	// Вызов окна конца игры
 	if (player === p) {
-		document.querySelector('#result').innerHTML = "Кожаный мешок";
+		document.querySelector('#result').innerHTML = "Смерть челавекам!";
 	} else {
-		document.querySelector('#result').innerHTML = "Слава роботам";
+		document.querySelector('#result').innerHTML = "Слава роботам!";
+	}
+	if (p === '=') {
+		document.querySelector('#result').innerHTML = "Ничья";
 	}
 	gameOver.style.display = "flex";
 	// Начало новой игры
 	newGame.onclick = function() {
 		for (let key in field) {
 			field[key] = 0;
-			gameOver.style.display = "none";
-			visualization();
-			play();
 		}
+		playing = true;
+		gameOver.style.display = "none";
+		visualization();
+		play();
 	}
 	// Закрытие окна конца игры
 	window.onclick = function(event) {
@@ -149,4 +178,3 @@ function gameOver(p) {
 }
 
 play();
-//gameOver();
