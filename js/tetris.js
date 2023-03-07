@@ -49,9 +49,9 @@ function figure(a, b, c, d, l, r, clr) {
 let nextFigure;
 let currentFigure;
 function figureCreation() {
-	let random = Math.round(Math.random() * (7 - 1) + 1);
+	let random = Math.round(Math.random() * 6);
 	if (currentFigure == null) {
-		currentFigure = Math.round(Math.random() * (7 - 1) + 1);
+		currentFigure = Math.round(Math.random() * 6);
 	} else {
 		currentFigure = nextFigure;
 	}
@@ -62,25 +62,25 @@ function figureCreation() {
 		screenNextFigure[key] = 0;
 	}
 	switch (nextFigure) {
-		case 1:
+		case 0:
 			figureNext(0, 1, 2, 3, 1); // Фигура ''''
 		break;
-		case 2:
+		case 1:
 			figureNext(1, 2, 3, 6, 2); // Фигура '|'
 		break;
-		case 3:
+		case 2:
 			figureNext(1, 2, 5, 6, 3); // Фигура ||
 		break;
-		case 4:
+		case 3:
 			figureNext(1, 2, 3, 7, 4); // Фигура ''|
 		break;
-		case 5:
+		case 4:
 			figureNext(1, 2, 6, 7, 5); // Фигура '|.
 		break;
-		case 6:
+		case 5:
 			figureNext(1, 2, 3, 5, 6); // Фигура |''
 		break;
-		case 7:
+		case 6:
 			figureNext(2, 3, 5, 6, 7); // Фигура .|'
 		break;
 	}
@@ -93,25 +93,25 @@ function figureCreation() {
 
 	// Создание фигуры в игровом поле
 	switch (currentFigure) {
-		case 1:
+		case 0:
 			copyFigure = Array.from(figures.figure1);
 		break;
-		case 2:
+		case 1:
 			copyFigure = Array.from(figures.figure2);
 		break;
-		case 3:
+		case 2:
 			copyFigure = Array.from(figures.figure3);
 		break;
-		case 4:
+		case 3:
 			copyFigure = Array.from(figures.figure4);
 		break;
-		case 5:
+		case 4:
 			copyFigure = Array.from(figures.figure5);
 		break;
-		case 6:
+		case 5:
 			copyFigure = Array.from(figures.figure6);
 		break;
-		case 7:
+		case 6:
 			copyFigure = Array.from(figures.figure7);
 		break;
 	}

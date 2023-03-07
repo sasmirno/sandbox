@@ -76,14 +76,14 @@ function doYouWin() {
 
 // Написать мега-супер-пупер-искусственный интеллект для игры
 function artificialIdiot() {
-	if (playing === true) {
+	/*if (playing === true) {
 		if (field[4] === 0) {
 			field[4] = ai;
 		} else {
-			let random = Math.round(Math.random() * (8 - 1));
+			let random = Math.round(Math.random() * 8);
 			console.log(random);
 			if (field[random] === 0) {
-				//let options = [0, 2, 6, 8];
+				let options = [0, 2, 6, 8];
 				field[random] = ai;
 			} else {
 				artificialIdiot();
@@ -92,9 +92,19 @@ function artificialIdiot() {
 		console.log(field);
 		doYouWin();
 		visualization();
+	}*/
+	// Искусственный идиот
+	if (playing === true) {
+		let random = Math.round(Math.random() * 8);
+		if (field[random] === 0) {
+			field[random] = ai;
+		} else {
+			artificialIdiot();
+		}
+		doYouWin();
+		visualization();
 	}
 }
-
 
 // Функция визуализации на сайт
 function visualization() {
