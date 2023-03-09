@@ -79,12 +79,14 @@ function artificialIdiot() {
 	/*if (playing === true) {
 		if (field[4] === 0) {
 			field[4] = ai;
+		} else if (twoIdenticalCharacters() === true) {
+			twoIdenticalCharacters();
 		} else {
-			let random = Math.round(Math.random() * 8);
-			console.log(random);
-			if (field[random] === 0) {
-				let options = [0, 2, 6, 8];
-				field[random] = ai;
+			let random = Math.round(Math.random() * 3);
+			let options = [0, 2, 6, 8];
+			//console.log(random);
+			if (field[options[random]] === 0) {
+				field[options[random]] = ai;
 			} else {
 				artificialIdiot();
 			}
@@ -92,6 +94,29 @@ function artificialIdiot() {
 		console.log(field);
 		doYouWin();
 		visualization();
+	}
+	function twoIdenticalCharacters() {
+		for (let key in winLine) {
+			let line = '';
+			let number;
+			for (i=0; i<3; i++) {
+				if (field[winLine[key][i]] != 0) {
+					line += field[winLine[key][i]];
+				} else {
+					number = winLine[key][i];
+				}
+			}
+			if (line === player + player) {
+				//console.log('xx');
+				//console.log(number+' number');
+				field[number] = ai;
+				return true
+			} else if (line === ai + ai) {
+				//console.log('oo');
+				//field[number] = ai;
+				return true
+			}
+		}
 	}*/
 	// Искусственный идиот
 	if (playing === true) {
