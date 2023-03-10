@@ -1,11 +1,11 @@
 cells = document.querySelectorAll(".tic-tac-toe__field_cell");
 
 let player;
-let ai;
+let robot;
 
 let field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-// Рисование знака в ячейке при наведенее на неё
+// Появление знака в ячейке при наведенее на ячейку
 for  (i = 0; i < cells.length; i++) {
 	cells[i].addEventListener("mouseover", function() {
 		if (field[this.id] === 0) {
@@ -33,7 +33,7 @@ for  (i = 0; i < cells.length; i++) {
 				field[this.id] = player;
 				visualization();
 				doYouWin();
-				artificialIdiot();
+				artificialIntelligence();
 			}
 		}
 	});
@@ -53,6 +53,7 @@ let winLine = [
 ]
 function doYouWin() {
 	let deadHeat = true;
+	// Поиск выигрышных линий
 	for (let key in winLine) {
 		let line = '';
 		for (i=0; i<3; i++) {
@@ -64,6 +65,7 @@ function doYouWin() {
 			gameOver('o');
 		}
 	}
+	// Проверка на ничью
 	for (let key in field) {
 		if (field[key] === 0) {
 			deadHeat = false;
@@ -74,60 +76,80 @@ function doYouWin() {
 	}
 }
 
-// Написать мега-супер-пупер-искусственный интеллект для игры
-function artificialIdiot() {
-	/*if (playing === true) {
-		if (field[4] === 0) {
-			field[4] = ai;
-		} else if (twoIdenticalCharacters() === true) {
-			twoIdenticalCharacters();
-		} else {
-			let random = Math.round(Math.random() * 3);
-			let options = [0, 2, 6, 8];
-			//console.log(random);
-			if (field[options[random]] === 0) {
-				field[options[random]] = ai;
+// Мега-супер-пупер-искусственный интеллект
+let artificialIdiot = false;
+function artificialIntelligence() {
+	if (artificialIdiot === false) {
+		if (playing === true) {
+			if (field[4] === 0) {
+				field[4] = robot;
+			} else if (twoIdenticalCharacters() === true) {
+				twoIdenticalCharacters();
 			} else {
-				artificialIdiot();
-			}
-		}
-		console.log(field);
-		doYouWin();
-		visualization();
-	}
-	function twoIdenticalCharacters() {
-		for (let key in winLine) {
-			let line = '';
-			let number;
-			for (i=0; i<3; i++) {
-				if (field[winLine[key][i]] != 0) {
-					line += field[winLine[key][i]];
+				let random = Math.round(Math.random() * 3);
+				let options = [0, 2, 6, 8];
+				if (field[options[random]] === 0) {
+					field[options[random]] = robot;
 				} else {
-					number = winLine[key][i];
+					let options = [1, 2, 5, 7];
+					if (field[options[random]] === 0) {
+						field[options[random]] = robot;
+					} else {
+						artificialIntelligence();
+					}
 				}
 			}
-			if (line === player + player) {
-				//console.log('xx');
-				//console.log(number+' number');
-				field[number] = ai;
-				return true
-			} else if (line === ai + ai) {
-				//console.log('oo');
-				//field[number] = ai;
-				return true
+			doYouWin();
+			visualization();
+		}
+		function twoIdenticalCharacters() {
+			for (let key in winLine) {
+				let line = '';
+				let number;
+				for (i=0; i<3; i++) {
+					if (field[winLine[key][i]] != 0) {
+						line += field[winLine[key][i]];
+					} else {
+						number = winLine[key][i];
+					}
+				}
+				if (line === robot + robot && playing === true) {
+					field[number] = robot;
+					playing = false;
+					return true
+				}
 			}
+			for (let key in winLine) {
+				let line = '';
+				let number;
+				for (i=0; i<3; i++) {
+					if (field[winLine[key][i]] != 0) {
+						line += field[winLine[key][i]];
+					} else {
+						number = winLine[key][i];
+					}
+				}
+				if (line === player + player && playing === true) {
+					field[number] = robot;
+					playing = false;
+					return true
+				}
+			}
+			playing = true;
 		}
-	}*/
+	}
 	// Искусственный идиот
-	if (playing === true) {
-		let random = Math.round(Math.random() * 8);
-		if (field[random] === 0) {
-			field[random] = ai;
-		} else {
-			artificialIdiot();
+	if (artificialIdiot === true) {
+		if (playing === true) {
+			let random = Math.round(Math.random() * 8);
+			if (field[random] === 0) {
+				field[random] = robot;
+			} else {
+				artificialIntelligence();
+			}
+			doYouWin();
+			visualization();
 		}
-		doYouWin();
-		visualization();
 	}
 }
 
@@ -160,20 +182,20 @@ function play() {
 	// Выбор крестика
 	cross.onclick = function() {
 		player = 'x';
-		ai = 'o';
+		robot = 'o';
 		play.style.display = "none";
 	}
 	// Выбор нолика
 	zero.onclick = function() {
 		player = 'o';
-		ai = 'x';
+		robot = 'x';
 		play.style.display = "none";
 	}
 	// Закрытие окна начала игры
 	window.onclick = function(event) {
 		if (event.target == play) {
 			player = 'x';
-			ai = 'o';
+			robot = 'o';
 			play.style.display = "none";
 		}
 	}
