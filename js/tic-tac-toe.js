@@ -2,6 +2,7 @@ cells = document.querySelectorAll(".tic-tac-toe__field_cell");
 
 let player;
 let robot;
+let step = 1;
 
 let field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -81,23 +82,50 @@ let artificialIdiot = false;
 function artificialIntelligence() {
 	if (artificialIdiot === false) {
 		if (playing === true) {
-			if (field[4] === 0) {
-				field[4] = robot;
-			} else if (twoIdenticalCharacters() === true) {
-				twoIdenticalCharacters();
-			} else {
-				let random = Math.round(Math.random() * 3);
-				let options = [0, 2, 6, 8];
-				if (field[options[random]] === 0) {
-					field[options[random]] = robot;
-				} else {
-					let options = [1, 2, 5, 7];
-					if (field[options[random]] === 0) {
-						field[options[random]] = robot;
+			let random = Math.round(Math.random() * 3);
+			let corners = [0, 2, 6, 8];
+			let sides = [1, 2, 5, 7];
+			switch (step) {
+				case 2:
+					if (field[4] === 0) {
+						field[4] = robot;
 					} else {
-						artificialIntelligence();
+						field[corners[random]] = robot;
 					}
-				}
+					break;
+				case 4:
+					if (twoIdenticalCharacters() === true) {
+						twoIdenticalCharacters();
+					} else {
+						if (field[4] === robot) {
+							if (field[sides[random]] === 0) {
+								field[sides[random]] = robot;
+							} else {
+								artificialIntelligence();
+							}
+						} else {
+							if (field[corners[random]] === 0) {
+								field[corners[random]] = robot;
+							} else {
+								artificialIntelligence();
+							}
+						}
+					}
+					break;
+				default:
+					if (twoIdenticalCharacters() === true) {
+						twoIdenticalCharacters();
+					} else {
+						if (field[corners[random]] === 0) {
+							field[corners[random]] = robot;
+						} else {
+							if (field[sides[random]] === 0) {
+								field[sides[random]] = robot;
+							} else {
+								artificialIntelligence();
+							}
+						}
+					}
 			}
 			doYouWin();
 			visualization();
@@ -170,6 +198,7 @@ function visualization() {
 			break;
 		}
 	}
+	step++;
 }
 
 // Экран начала игры
@@ -224,6 +253,7 @@ function gameOver(p) {
 		playing = true;
 		gameOver.style.display = "none";
 		visualization();
+		step = 1;
 		play();
 	}
 	// Закрытие окна конца игры
