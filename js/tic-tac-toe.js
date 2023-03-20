@@ -84,7 +84,7 @@ function artificialIntelligence() {
 		if (playing === true) {
 			let random = Math.round(Math.random() * 3);
 			let corners = [0, 2, 6, 8];
-			let sides = [1, 2, 5, 7];
+			let sides = [1, 3, 5, 7];
 			switch (step) {
 				case 2:
 					if (field[4] === 0) {
