@@ -98,10 +98,20 @@ function artificialIntelligence() {
 						twoIdenticalCharacters();
 					} else {
 						if (field[4] === robot) {
-							if (field[sides[random]] === 0) {
-								field[sides[random]] = robot;
+							if (field[1] === player && field[5] === player) {
+								field[2] = robot;
+							} else if (field[5] === player && field[7] === player) {
+								field[8] = robot;
+							} else if (field[7] === player && field[3] === player) {
+								field[6] = robot;
+							} else if (field[3] === player && field[1] === player) {
+								field[0] = robot;
 							} else {
-								artificialIntelligence();
+								if (field[sides[random]] === 0) {
+									field[sides[random]] = robot;
+								} else {
+									artificialIntelligence();
+								}
 							}
 						} else {
 							if (field[corners[random]] === 0) {
@@ -130,54 +140,58 @@ function artificialIntelligence() {
 			doYouWin();
 			visualization();
 		}
-		function twoIdenticalCharacters() {
-			for (let key in winLine) {
-				let line = '';
-				let number;
-				for (i=0; i<3; i++) {
-					if (field[winLine[key][i]] != 0) {
-						line += field[winLine[key][i]];
-					} else {
-						number = winLine[key][i];
-					}
-				}
-				if (line === robot + robot && playing === true) {
-					field[number] = robot;
-					playing = false;
-					return true
-				}
-			}
-			for (let key in winLine) {
-				let line = '';
-				let number;
-				for (i=0; i<3; i++) {
-					if (field[winLine[key][i]] != 0) {
-						line += field[winLine[key][i]];
-					} else {
-						number = winLine[key][i];
-					}
-				}
-				if (line === player + player && playing === true) {
-					field[number] = robot;
-					playing = false;
-					return true
-				}
-			}
-			playing = true;
-		}
 	}
 	// Искусственный идиот
 	if (artificialIdiot === true) {
 		if (playing === true) {
 			let random = Math.round(Math.random() * 8);
-			if (field[random] === 0) {
-				field[random] = robot;
+			if (twoIdenticalCharacters() === true) {
+				twoIdenticalCharacters();
 			} else {
-				artificialIntelligence();
+				if (field[random] === 0) {
+					field[random] = robot;
+				} else {
+					artificialIntelligence();
+				}
 			}
 			doYouWin();
 			visualization();
 		}
+	}
+	function twoIdenticalCharacters() {
+		for (let key in winLine) {
+			let line = '';
+			let number;
+			for (i=0; i<3; i++) {
+				if (field[winLine[key][i]] != 0) {
+					line += field[winLine[key][i]];
+				} else {
+					number = winLine[key][i];
+				}
+			}
+			if (line === robot + robot && playing === true) {
+				field[number] = robot;
+				playing = false;
+				return true
+			}
+		}
+		for (let key in winLine) {
+			let line = '';
+			let number;
+			for (i=0; i<3; i++) {
+				if (field[winLine[key][i]] != 0) {
+					line += field[winLine[key][i]];
+				} else {
+					number = winLine[key][i];
+				}
+			}
+			if (line === player + player && playing === true) {
+				field[number] = robot;
+				playing = false;
+				return true
+			}
+		}
+		playing = true;
 	}
 }
 
