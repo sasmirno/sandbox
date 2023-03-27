@@ -67,3 +67,29 @@
   background: grey;
   cursor: pointer;
 }
+.tic-tac-toe__popUp_opt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 30px 0 10px 0;
+}
+.tic-tac-toe__popUp_opt p {
+  font-size: 14px;
+  padding: 0px;
+}
+.tic-tac-toe__popUp_selector {
+  display: block;
+  justify-content: right;
+  align-items: center;
+  width: 35px;
+  height: 24px;
+  border-radius: 15px;
+  background: DarkGrey;
+  padding: 2px;
+}
+.tic-tac-toe__popUp_selector div {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: white;
+}

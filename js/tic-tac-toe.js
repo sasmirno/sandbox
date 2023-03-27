@@ -220,6 +220,7 @@ function play() {
 	let play = document.querySelector('#play');
 	let cross = document.querySelector('#cross');
 	let zero = document.querySelector('#zero');
+	let idiot = document.querySelector('#artificialIdiot');
 	// Вызов окна начала игры
 	play.style.display = "flex";
 	// Выбор крестика
@@ -233,6 +234,18 @@ function play() {
 		player = 'o';
 		robot = 'x';
 		play.style.display = "none";
+	}
+	// Выбор сложности
+	idiot.onclick = function() {
+		if (artificialIdiot === false) {
+			artificialIdiot = true;
+			idiot.style.display = "flex";
+			idiot.style.background = "LimeGreen";
+		} else {
+			artificialIdiot = false;
+			idiot.style.display = "block";
+			idiot.style.background = "DarkGrey";
+		}
 	}
 	// Закрытие окна начала игры
 	window.onclick = function(event) {
