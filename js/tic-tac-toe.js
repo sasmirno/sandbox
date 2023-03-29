@@ -1,4 +1,5 @@
 cells = document.querySelectorAll(".tic-tac-toe__field_cell");
+cells2 = document.querySelectorAll(".tic-tac-toe__popUp_field_cell");
 
 let player;
 let robot;
@@ -79,6 +80,7 @@ function doYouWin() {
 
 // Мега-супер-пупер-искусственный интеллект
 let artificialIdiot = false;
+let firstMove = false;
 function artificialIntelligence() {
 	if (artificialIdiot === false) {
 		if (playing === true) {
@@ -86,11 +88,31 @@ function artificialIntelligence() {
 			let corners = [0, 2, 6, 8];
 			let sides = [1, 3, 5, 7];
 			switch (step) {
+				case 1:
+					let random2 = Math.round(Math.random() * 2);
+					//let random2 = 2;
+					if (random2 === 0) {
+						field[4] = robot;
+					} else if (random2 === 1) {
+						field[corners[random]] = robot;
+					} else {
+						field[sides[random]] = robot;
+					}
+					break;
 				case 2:
 					if (field[4] === 0) {
 						field[4] = robot;
 					} else {
 						field[corners[random]] = robot;
+					}
+					break;
+				case 3:
+					if (field[4] === 0) {
+						field[4] = robot;
+					} else if (field[corners[random]] === 0) {
+						field[corners[random]] = robot;
+					} else {
+						artificialIntelligence();
 					}
 					break;
 				case 4:
@@ -123,19 +145,19 @@ function artificialIntelligence() {
 					}
 					break;
 				default:
-					if (twoIdenticalCharacters() === true) {
-						twoIdenticalCharacters();
+				if (twoIdenticalCharacters() === true) {
+					twoIdenticalCharacters();
+				} else {
+					if (field[corners[random]] === 0) {
+						field[corners[random]] = robot;
 					} else {
-						if (field[corners[random]] === 0) {
-							field[corners[random]] = robot;
+						if (field[sides[random]] === 0) {
+							field[sides[random]] = robot;
 						} else {
-							if (field[sides[random]] === 0) {
-								field[sides[random]] = robot;
-							} else {
-								artificialIntelligence();
-							}
+							artificialIntelligence();
 						}
 					}
+				}
 			}
 			doYouWin();
 			visualization();
@@ -221,6 +243,7 @@ function play() {
 	let cross = document.querySelector('#cross');
 	let zero = document.querySelector('#zero');
 	let idiot = document.querySelector('#artificialIdiot');
+	let first = document.querySelector('#firstMove');
 	// Вызов окна начала игры
 	play.style.display = "flex";
 	// Выбор крестика
@@ -228,12 +251,18 @@ function play() {
 		player = 'x';
 		robot = 'o';
 		play.style.display = "none";
+		if (firstMove === true) {
+			artificialIntelligence();
+		}
 	}
 	// Выбор нолика
 	zero.onclick = function() {
 		player = 'o';
 		robot = 'x';
 		play.style.display = "none";
+		if (firstMove === true) {
+			artificialIntelligence();
+		}
 	}
 	// Выбор сложности
 	idiot.onclick = function() {
@@ -245,6 +274,18 @@ function play() {
 			artificialIdiot = false;
 			idiot.style.display = "block";
 			idiot.style.background = "DarkGrey";
+		}
+	}
+	// Выбор первого хода
+	first.onclick = function() {
+		if (firstMove === false) {
+			firstMove = true;
+			first.style.display = "flex";
+			first.style.background = "LimeGreen";
+		} else {
+			firstMove = false;
+			first.style.display = "block";
+			first.style.background = "DarkGrey";
 		}
 	}
 	// Закрытие окна начала игры
@@ -262,9 +303,28 @@ function gameOver(p) {
 	let gameOver = document.querySelector('#gameOver');
 	let newGame = document.querySelector('#newGame_btn');
 	playing = false;
+	for (let key in field) {
+		switch (field[key]) {
+			case 0:
+				cells2[key].innerHTML="";
+			break;
+			case 'x':
+				cells2[key].innerHTML="&#215;";
+				cells2[key].style.color="black";
+			break;
+			case 'o':
+				cells2[key].innerHTML="&#9675;";
+				cells2[key].style.color="black";
+			break;
+		}
+	}
 	// Вызов окна конца игры
 	if (player === p) {
-		document.querySelector('#result').innerHTML = "Смерть челавекам!";
+		if (artificialIdiot === true) {
+			document.querySelector('#result').innerHTML = "Человек победил";
+		} else {
+			document.querySelector('#result').innerHTML = "Смерть челавекам!";
+		}
 	} else {
 		document.querySelector('#result').innerHTML = "Слава роботам!";
 	}
