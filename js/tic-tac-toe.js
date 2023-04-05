@@ -144,6 +144,25 @@ function artificialIntelligence() {
 						}
 					}
 					break;
+				case 5:
+					if (twoIdenticalCharacters() === true) {
+						twoIdenticalCharacters();
+					} else {
+						if (field[0] === 0 || field[2] === 0 || field[6] === 0 || field[8] === 0) {
+							if (field[corners[random]] === 0) {
+								field[corners[random]] = robot;
+							} else {
+								artificialIntelligence();
+							}
+						} else {
+							if (field[sides[random]] === 0) {
+								field[sides[random]] = robot;
+							} else {
+								artificialIntelligence();
+							}
+						}
+					}
+					break;
 				default:
 				if (twoIdenticalCharacters() === true) {
 					twoIdenticalCharacters();
@@ -235,6 +254,7 @@ function visualization() {
 		}
 	}
 	step++;
+	console.log(step);
 }
 
 // Экран начала игры
@@ -276,6 +296,17 @@ function play() {
 			idiot.style.background = "DarkGrey";
 		}
 	}
+	// Закрытие окна начала игры
+	window.onclick = function(event) {
+		if (event.target == play) {
+			player = 'x';
+			robot = 'o';
+			play.style.display = "none";
+			if (firstMove === true) {
+				artificialIntelligence();
+			}
+		}
+	}
 	// Выбор первого хода
 	first.onclick = function() {
 		if (firstMove === false) {
@@ -286,14 +317,6 @@ function play() {
 			firstMove = false;
 			first.style.display = "block";
 			first.style.background = "DarkGrey";
-		}
-	}
-	// Закрытие окна начала игры
-	window.onclick = function(event) {
-		if (event.target == play) {
-			player = 'x';
-			robot = 'o';
-			play.style.display = "none";
 		}
 	}
 }
