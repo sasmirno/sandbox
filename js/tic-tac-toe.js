@@ -3,7 +3,7 @@ cells2 = document.querySelectorAll(".tic-tac-toe__popUp_field_cell");
 
 let player;
 let robot;
-let step = 1;
+let step = 1; // Счётчмк ходов
 
 let field = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -79,8 +79,8 @@ function doYouWin() {
 }
 
 // Мега-супер-пупер-искусственный интеллект
-let artificialIdiot = false;
-let firstMove = false;
+let artificialIdiot = false; // Вкл/выкл упрощение ИИ
+let firstMove = false; // Вкл/выкл первого хода компа
 function artificialIntelligence() {
 	if (artificialIdiot === false) {
 		if (playing === true) {
@@ -90,7 +90,7 @@ function artificialIntelligence() {
 			switch (step) {
 				case 1:
 					let random2 = Math.round(Math.random() * 2);
-					//let random2 = 2;
+					//let random2 = 0;
 					if (random2 === 0) {
 						field[4] = robot;
 					} else if (random2 === 1) {
@@ -107,12 +107,40 @@ function artificialIntelligence() {
 					}
 					break;
 				case 3:
-					if (field[4] === 0) {
-						field[4] = robot;
-					} else if (field[corners[random]] === 0) {
-						field[corners[random]] = robot;
+					if (field[1] === robot || field[3] === robot || field[5] === robot || field[7] === robot) {
+						if (field[1] === robot) {
+							if (field[5] === 0 && field[2] === 0) {
+								field[5] = robot;
+							} else {
+								field[3] = robot;
+							}
+						} else if (field[3] === robot) {
+							if (field[1] === 0 && field[0] === 0) {
+								field[1] = robot;
+							} else {
+								field[7] = robot;
+							}
+						} else if (field[5] === robot) {
+							if (field[7] === 0 && field[8] === 0) {
+								field[7] = robot;
+							} else {
+								field[1] = robot;
+							}
+						} else if (field[7] === robot) {
+							if (field[3] === 0 && field[6] === 0) {
+								field[3] = robot;
+							} else {
+								field[5] = robot;
+							}
+						} else {}
 					} else {
-						artificialIntelligence();
+						if (field[4] === 0) {
+							field[4] = robot;
+						} else if (field[corners[random]] === 0) {
+							field[corners[random]] = robot;
+						} else {
+							artificialIntelligence();
+						}
 					}
 					break;
 				case 4:
@@ -148,17 +176,45 @@ function artificialIntelligence() {
 					if (twoIdenticalCharacters() === true) {
 						twoIdenticalCharacters();
 					} else {
-						if (field[0] === 0 || field[2] === 0 || field[6] === 0 || field[8] === 0) {
-							if (field[corners[random]] === 0) {
-								field[corners[random]] = robot;
-							} else {
-								artificialIntelligence();
+						if (field[4] === robot) {
+							if (field[0] === robot) {
+								if (field[1] === 0) {
+									field[2] = robot;
+								} else {
+									field[6] = robot;
+								}
+							} else if (field[2] === robot) {
+								if (field[5] === 0) {
+									field[8] = robot;
+								} else {
+									field[0] = robot;
+								}
+							} else if (field[8] === robot) {
+								if (field[7] === 0) {
+									field[6] = robot;
+								} else {
+									field[2] = robot;
+								}
+							} else if (field[6] === robot) {
+								if (field[3] === 0) {
+									field[0] = robot;
+								} else {
+									field[8] = robot;
+								}
 							}
 						} else {
-							if (field[sides[random]] === 0) {
-								field[sides[random]] = robot;
+							if (field[0] === 0 || field[2] === 0 || field[6] === 0 || field[8] === 0) {
+								if (field[corners[random]] === 0) {
+									field[corners[random]] = robot;
+								} else {
+									artificialIntelligence();
+								}
 							} else {
-								artificialIntelligence();
+								if (field[sides[random]] === 0) {
+									field[sides[random]] = robot;
+								} else {
+									artificialIntelligence();
+								}
 							}
 						}
 					}
@@ -199,6 +255,7 @@ function artificialIntelligence() {
 			visualization();
 		}
 	}
+	// Проверка на два одинаковых знака подряд
 	function twoIdenticalCharacters() {
 		for (let key in winLine) {
 			let line = '';
@@ -254,7 +311,6 @@ function visualization() {
 		}
 	}
 	step++;
-	console.log(step);
 }
 
 // Экран начала игры
@@ -326,6 +382,7 @@ function gameOver(p) {
 	let gameOver = document.querySelector('#gameOver');
 	let newGame = document.querySelector('#newGame_btn');
 	playing = false;
+	// Прорисовка игрового поля на экране кнца игры
 	for (let key in field) {
 		switch (field[key]) {
 			case 0:
