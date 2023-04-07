@@ -90,7 +90,6 @@ function artificialIntelligence() {
 			switch (step) {
 				case 1:
 					let random2 = Math.round(Math.random() * 2);
-					//let random2 = 0;
 					if (random2 === 0) {
 						field[4] = robot;
 					} else if (random2 === 1) {
@@ -201,6 +200,30 @@ function artificialIntelligence() {
 								} else {
 									field[8] = robot;
 								}
+							}
+						} else if (field[1] === robot && field[5] === robot) {
+							if (field[2] === 0) {
+								field[2] = robot;
+							} else {
+								field[4] = robot;
+							}
+						} else if (field[5] === robot && field[7] === robot) {
+							if (field[8] === 0) {
+								field[8] = robot;
+							} else {
+								field[4] = robot;
+							}
+						} else if (field[7] === robot && field[3] === robot) {
+							if (field[6] === 0) {
+								field[6] = robot;
+							} else {
+								field[4] = robot;
+							}
+						} else if (field[3] === robot && field[1] === robot) {
+							if (field[0] === 0) {
+								field[0] = robot;
+							} else {
+								field[4] = robot;
 							}
 						} else {
 							if (field[0] === 0 || field[2] === 0 || field[6] === 0 || field[8] === 0) {
