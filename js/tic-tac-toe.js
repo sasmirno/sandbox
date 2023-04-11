@@ -12,16 +12,18 @@ for  (i = 0; i < cells.length; i++) {
 	cells[i].addEventListener("mouseover", function() {
 		if (field[this.id] === 0) {
 			if (player === 'x') {
-				cells[this.id].innerHTML="&#215;";
+				cells[this.id].classList.add("tic-tac-toe__field_cross");
 			} else {
-				cells[this.id].innerHTML="&#9675;";
+				cells[this.id].classList.add("tic-tac-toe__field_zero");
 			}
-			cells[this.id].style.color="grey";
+			cells[this.id].classList.add("tic-tac-toe__hover");
 		}
 	});
 	cells[i].addEventListener("mouseout", function() {
 		if (field[this.id] === 0) {
-			cells[this.id].style.color="white";
+			cells[this.id].classList.remove("tic-tac-toe__field_cross");
+			cells[this.id].classList.remove("tic-tac-toe__field_zero");
+			cells[this.id].classList.remove("tic-tac-toe__hover");
 		}
 	});
 }
@@ -321,15 +323,16 @@ function visualization() {
 	for (let key in field) {
 		switch (field[key]) {
 			case 0:
-				cells[key].innerHTML="";
+				cells[key].classList.remove("tic-tac-toe__field_cross");
+				cells[key].classList.remove("tic-tac-toe__field_zero");
 			break;
 			case 'x':
-				cells[key].innerHTML="&#215;";
-				cells[key].style.color="black";
+				cells[key].classList.add("tic-tac-toe__field_cross");
+				cells[key].classList.remove("tic-tac-toe__hover");
 			break;
 			case 'o':
-				cells[key].innerHTML="&#9675;";
-				cells[key].style.color="black";
+				cells[key].classList.add("tic-tac-toe__field_zero");
+				cells[key].classList.remove("tic-tac-toe__hover");
 			break;
 		}
 	}
@@ -409,15 +412,16 @@ function gameOver(p) {
 	for (let key in field) {
 		switch (field[key]) {
 			case 0:
-				cells2[key].innerHTML="";
+				cells2[key].classList.remove("tic-tac-toe__popUp_field_cross");
+				cells2[key].classList.remove("tic-tac-toe__popUp_field_zero");
 			break;
 			case 'x':
-				cells2[key].innerHTML="&#215;";
-				cells2[key].style.color="black";
+				cells2[key].classList.add("tic-tac-toe__popUp_field_cross");
+				cells2[key].classList.remove("tic-tac-toe__popUp_field_zero");
 			break;
 			case 'o':
-				cells2[key].innerHTML="&#9675;";
-				cells2[key].style.color="black";
+				cells2[key].classList.add("tic-tac-toe__popUp_field_zero");
+				cells2[key].classList.remove("tic-tac-toe__popUp_field_cross");
 			break;
 		}
 	}

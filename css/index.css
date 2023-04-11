@@ -86,11 +86,45 @@
   background: black;
 }
 .link__tic-tac-toe_field div {
-  display: grid;
-  justify-content: center;
-  align-items: center;
-  font-size: 38px;
+  min-width: 40px;
+  min-height: 40px;
   background: white;
   width: 100%;
   height: 100%;
+}
+.link__tic-tac-toe_cross {
+  position: relative;
+}
+.link__tic-tac-toe_cross span {
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background: black;
+}
+.link__tic-tac-toe_cross span:nth-of-type(1) {
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 0%) rotate(45deg);
+}
+.link__tic-tac-toe_cross span:nth-of-type(2) {
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 0%) rotate(-45deg);
+}
+.link__tic-tac-toe_zero {
+  position: relative;
+}
+.link__tic-tac-toe_zero span {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+.link__tic-tac-toe_zero span:nth-of-type(1) {
+  left: 20%;
+  top: 20%;
+}
+.link__tic-tac-toe_zero span:nth-of-type(2) {
+  display: none;
 }
