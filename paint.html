@@ -55,18 +55,15 @@
 		</div>
 	</div>
 </header>
-	<main class="page container">
-		<div class="paint">
-			<div class="keyboard">
-				<div class="color btn black" id="black"></div>
-				<div class="color btn red" id="red"></div>
-				<div class="color btn green" id="green"></div>
-				<div class="size btn" id="5px">5px</div>
-				<div class="size btn" id="10px">10px</div>
-				<div class="size btn" id="15px">15px</div>
-			</div>
-			<div class="canvas"></div>
+	<main class="container paint">
+		<div id="toolbar">
+			<label for="stroke">Цвет</label>
+			<input id="stroke" name='stroke' type="color">
+			<label for="lineWidth">Толщина</label>
+			<input id="lineWidth" name='lineWidth' type="number" value="5">
+			<button id="clear">Очистить</button>
 		</div>
+		<canvas id="drawing-board"></canvas>
 	</main>
 <footer class="footer">
 	<div class="footer__container container">

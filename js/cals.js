@@ -16,7 +16,7 @@ function screen() {
 
 // Кнопка обнуления всего на свете
 zero.addEventListener("click", function() {
-	out = undefined;
+	out = null;
 	point = false;
 	screen();
 });
@@ -28,7 +28,7 @@ back.addEventListener("click", function() {
 	}
 	if (out != undefined) {
 		if (out.length <= 1) {
-			out = undefined;
+			out = null;
 		} else {
 			rewrite('');
 		}
@@ -73,7 +73,7 @@ for (i = 0; i < btn.length; i++) {
 				if (isNaN(check()) == true) {
 					if (check() == '-') {
 						if (out.length <= 1) {
-							out = undefined;
+							out = null;
 						} else {
 							rewrite('');
 							if (isNaN(check()) == false) {
@@ -109,7 +109,7 @@ for (i = 0; i < btn.length; i++) {
 				if (out != undefined) {
 					if (isNaN(check()) == true) {
 						if (check() == '-' && out.length <= 1) {
-							out = undefined;
+							out = null;
 						} else if (check() == '*' || check() == '/') {
 							out += input;
 						} else {
@@ -167,7 +167,7 @@ calc.addEventListener("click", function() {
 				}
 				notNumber = item;
 				arr.push(notNumber);
-				number = undefined;
+				number = null;
 			}
 		}
 	} else {
