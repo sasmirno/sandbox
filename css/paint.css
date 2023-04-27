@@ -2,8 +2,13 @@
   height: 100%;
   display: flex;
 }
+@media (max-width: 767px) {
+  .paint {
+    flex-direction: column;
+  }
+}
 
-#toolbar {
+.toolbar {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -11,25 +16,45 @@
   width: 90px;
   background-color: #202020;
 }
-
-#toolbar label {
+@media (max-width: 767px) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 10px 15px;
+  }
+}
+.toolbar label {
   color: white;
+  margin-bottom: 5px;
 }
-
-#toolbar input {
-  width: 100%;
+.toolbar input {
+  width: 80px;
 }
-
-#toolbar button {
+.toolbar button {
   background-color: #1565c0;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   color: white;
-  padding: 2px;
+  padding: 4px;
 }
-
-#lineWidth {
-  padding: 3px;
+.toolbar_color {
+  display: grid;
+}
+.toolbar__lineWidth {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  user-select: none;
+  width: 80px;
+  margin-top: 5px;
+}
+.toolbar__lineWidth span {
+  font-size: 26px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 3px;
 }
 
 #drawing-board {

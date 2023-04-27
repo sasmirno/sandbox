@@ -56,11 +56,19 @@
 	</div>
 </header>
 	<main class="container paint">
-		<div id="toolbar">
-			<label for="stroke">Цвет</label>
-			<input id="stroke" name='stroke' type="color">
-			<label for="lineWidth">Толщина</label>
-			<input id="lineWidth" name='lineWidth' type="number" value="5">
+		<div class="toolbar" id="toolbar">
+			<div class="toolbar_color">
+				<label for="stroke">Цвет</label>
+				<input id="stroke" name='stroke' type="color">
+			</div>
+			<div>
+				<label>Толщина</label>
+				<div class='toolbar__lineWidth'>
+					<span id="downWidth">&lt;</span>
+					<div id="lineWidth">5</div>
+					<span id="upWidth">&gt;</span>
+				</div>
+			</div>
 			<button id="clear">Очистить</button>
 		</div>
 		<canvas id="drawing-board"></canvas>
