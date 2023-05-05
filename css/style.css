@@ -90,6 +90,9 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.accordion {
+  cursor: pointer;
+}
 .accordion .arrow {
   width: 10px;
   transition: 0.5s;
@@ -216,4 +219,5 @@ h1, h2, h3, h4, h5, h6 {
 .footer {
   color: #fff;
   background: #0d1e5c;
+  margin-top: 25px;
 }

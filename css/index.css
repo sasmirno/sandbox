@@ -150,13 +150,12 @@
 }
 
 .linkHTML {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 15px;
 }
 .linkHTML h4 {
   font-size: 18px;
-  padding: 10px;
+  padding: 10px 0;
 }
 .linkHTML p {
   padding: 5px 0;
@@ -164,6 +163,11 @@
 .linkHTML a {
   font-size: 18px;
 }
+.linkHTML a:hover {
+  text-decoration: underline;
+}
 .linkHTML__tablet {
+  display: grid;
+  gap: 10px;
   padding: 10px 0;
 }
