@@ -23,6 +23,16 @@
   background: black;
 }
 
+.line {
+  display: flex;
+  justify-content: center;
+}
+.line div {
+  width: 95%;
+  height: 1px;
+  background: Silver;
+}
+
 .linkJS {
   display: flex;
   flex-wrap: wrap;
@@ -151,14 +161,13 @@
 
 .linkHTML {
   display: grid;
-  gap: 15px;
+  gap: 25px;
 }
 .linkHTML h4 {
   font-size: 18px;
-  padding: 10px 0;
 }
 .linkHTML p {
-  padding: 5px 0;
+  padding: 5px;
 }
 .linkHTML a {
   font-size: 18px;
@@ -166,8 +175,21 @@
 .linkHTML a:hover {
   text-decoration: underline;
 }
+.linkHTML img {
+  width: 200px;
+}
 .linkHTML__tablet {
+  display: flex;
+  gap: 20px;
+  padding: 10px 0;
+}
+@media (max-width: 767px) {
+  .linkHTML__tablet {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+.linkHTML__description {
   display: grid;
   gap: 10px;
-  padding: 10px 0;
 }
