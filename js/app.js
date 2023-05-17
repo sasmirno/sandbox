@@ -21,3 +21,18 @@ for (i = 0; i < acc.length; i++) {
 		} 
 	});
 }
+
+// up button
+let btnPgTop = document.querySelector(".btnPgTop");
+window.onscroll = function() {scrollFunction()};
+function scrollFunction() {
+	if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+		btnPgTop.style.display = "block";
+	} else {
+		btnPgTop.style.display = "none";
+	}
+}
+btnPgTop.addEventListener('click', function(){
+	document.body.scrollTop = 0; // For Safari
+	document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+})
