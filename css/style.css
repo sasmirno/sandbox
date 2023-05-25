@@ -92,6 +92,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .accordion {
   cursor: pointer;
+  transition: 1s;
+}
+.accordion:hover {
+  background: Gainsboro;
 }
 .accordion .arrow {
   width: 10px;
