@@ -219,8 +219,8 @@
 
 .linkHTML {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 25px;
 }
 .linkHTML a {
@@ -230,14 +230,15 @@
   text-decoration: underline;
 }
 .linkHTML img {
-  width: 230px;
+  width: 260px;
 }
 .linkHTML__tablet {
   display: grid;
   justify-items: center;
+  align-content: start;
   gap: 20px;
   padding: 20px 10px;
-  width: 260px;
+  width: 300px;
   border: 1px solid Silver;
 }
 .linkHTML__description {
