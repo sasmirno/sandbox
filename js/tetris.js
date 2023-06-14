@@ -3,42 +3,48 @@ cells = document.querySelectorAll(".tetris_cell");
 buttons = document.querySelectorAll(".tetris_btn");
 infoCells = document.querySelectorAll(".tetris__info_cell");
 
-let score = 0; // Счёт
+// Объект с общими переменными и механиками
+let common = {
+	score: 0, // Счёт
 
-// Имитация игрового поля
-let matrix = [
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-];
+	// Имитация игрового поля
+	matrix: [
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	],
+	
+	// Экран следующей фигуры
+	screenNextFigure: [0, 0, 0, 0, 0, 0, 0, 0],
+};
 
-// Экран следующей фигуры
-let screenNextFigure = [0, 0, 0, 0, 0, 0, 0, 0];
+
+
 
 // Копия игрового поля
-let buffer = Array.from(matrix);
+let buffer = Array.from(common.matrix);
 
 // Функция обнуления ячеек промежуточного поля
 function zeroing() {
-	for (let key in matrix) {
-		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+	for (let key in common.matrix) {
+		if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 			buffer[key] = 0;
 		}
 	}
@@ -52,8 +58,8 @@ let tetris = {
 		buffer[b] = clr;
 		buffer[c] = clr;
 		buffer[d] = clr;
-		left = l;
-		right = r;
+		tetris.left = l;
+		tetris.right = r;
 	},
 
 	// Создание случайной фигуры
@@ -68,8 +74,8 @@ let tetris = {
 		}
 		tetris.nextFigure = random;
 		// Создание фигуры в экране следующей фигуры
-		for (let key in screenNextFigure) {
-			screenNextFigure[key] = 0;
+		for (let key in common.screenNextFigure) {
+			common.screenNextFigure[key] = 0;
 		}
 		switch (tetris.nextFigure) {
 			case 0:
@@ -95,10 +101,10 @@ let tetris = {
 			break;
 		}
 		function figureNext(a, b, c, d, clr) {
-			screenNextFigure[a] = clr;
-			screenNextFigure[b] = clr;
-			screenNextFigure[c] = clr;
-			screenNextFigure[d] = clr;
+			common.screenNextFigure[a] = clr;
+			common.screenNextFigure[b] = clr;
+			common.screenNextFigure[c] = clr;
+			common.screenNextFigure[d] = clr;
 		}
 		// Создание фигуры в игровом поле
 		switch (tetris.currentFigure) {
@@ -131,10 +137,10 @@ let tetris = {
 	move: function() {
 		// Проверка есть ли свободное место под фигурой
 		let free = true;
-		for (let key in matrix) {
+		for (let key in common.matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
-			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-				if (isNaN(matrix[parseInt(key)+10]) == true) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+10]) == true) {
 					free = false;
 				} else {
 					zeroing();
@@ -142,29 +148,29 @@ let tetris = {
 			}
 		}
 		if (free == true) {
-			for (let key in matrix) {
+			for (let key in common.matrix) {
 				// Ищем все числа кроме нуля в массиве игрового поля
-				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 					// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
-					buffer[parseInt(key)+10] = matrix[key];
+					buffer[parseInt(key)+10] = common.matrix[key];
 				}
 			}
 		} else {
 			let raz = 0;
-			for (let key in matrix) {
+			for (let key in common.matrix) {
 				// Ищем все числа кроме нуля в массиве игрового поля
-				if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-					if (matrix[parseInt(key)-10] == null) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					if (common.matrix[parseInt(key)-10] == null) {
 						// Если верхния ячейка отсуствует останавливаем таймер
 						clearInterval(downMove);
 						clearInterval(speed);
 						gameOver();
 					} else {
 						// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
-						buffer[key] = matrix[key]+'s';
-						osX = 0;
-						osY = -1;
-						orientation = 0;
+						buffer[key] = common.matrix[key]+'s';
+						tetris.osX = 0;
+						tetris.osY = -1;
+						tetris.orientation = 0;
 						// Костыль чтобы срабатывало только один раз, а  не четыре
 						raz += 1;
 						if (raz == 3){
@@ -174,12 +180,282 @@ let tetris = {
 				}
 			}
 		}
-		osY += 1;
+		tetris.osY += 1;
 		// Перезаписываем игровое поле из промежуточного поля
-		matrix = Array.from(buffer);
+		common.matrix = Array.from(buffer);
 		// Убираем целые линии
-		destroy();
+		tetris.destroy();
 		// Визуализируем массив игрового поля на странице
+		visualization();
+	},
+
+	// Кнопки управления
+	orientation: 0, // Угол поворота фигуры
+	osX: 0, // Отслеживание фигуры по горизонтали
+	osY: -1, // Отслеживание фигуры по вертикали
+	left: null, // Левая граница, для разных фигур своя
+	right: null, // Правая граница, для разных фигур своя
+	leftMove: function() {
+		let free = true;
+		// Проверка есть ли свободное место слева от фигуры
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)-1]) == true) {
+					free = false;
+				}
+			}
+		}
+		// Если свободное место есть двигаем фигуру влево
+		if (free == true) {
+			zeroing();
+			tetris.osX -= 1;
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					buffer[parseInt(key)-1] = common.matrix[key];
+				}
+			}
+		}
+	},
+	rightMove: function() {
+		let free = true;
+		// Проверка есть ли свободное место слева от фигуры
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+1]) == true) {
+					free = false;
+				}
+			}
+		}
+		// Если свободное место есть двигаем фигуру вправо
+		if (free == true) {
+			zeroing();
+			tetris.osX += 1;
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					buffer[parseInt(key)+1] = common.matrix[key];
+				}
+			}
+		}
+	},
+	turn: function() {
+		let position = 10*tetris.osY+tetris.osX; // Поправка положения фигуры на игровом поле
+		// Функция проверки свободных ячеек
+		function check(a, b, c, d) {
+			let arr = [a, b, c, d];
+			for (let key of arr) {
+				if (isNaN(common.matrix[parseInt(key)]) == true) {
+					return false;
+				}
+			}
+		}
+		// Пошла моча по трубам
+		switch(copyFigure[0][0]) {
+			case 'figure1': // Поворот палки
+				switch(tetris.orientation) {
+					case 0:
+						if (check(-6+position, 4+position, 14+position, 24+position) != false) {
+							zeroing();
+							tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+							tetris.orientation = 90;
+						} else if (check(-6+position+10, 4+position+10, 14+position+10, 24+position+10) != false) {
+							zeroing();
+							position += 10;
+							tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+							tetris.orientation = 90;
+						} else if (check(-6+position-10, 4+position-10, 14+position-10, 24+position-10) != false) {
+							zeroing();
+							position -= 10;
+							tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+							tetris.orientation = 90;
+						} else if (check(-6+position+1, 4+position+1, 14+position+1, 24+position+1) != false) {
+							zeroing();
+							position += 1;
+							tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+							tetris.orientation = 90;
+						} else if (check(-6+position-9, 4+position-9, 14+position-9, 24+position-9) != false) {
+							zeroing();
+							position -= 9;
+							tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
+							tetris.orientation = 90;
+						}
+					break;
+					case 90:
+						if (tetris.osX == tetris.left) {
+							if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
+								zeroing();
+								position += 1;
+								tetris.osX += 1;
+								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								tetris.orientation = 0;
+							}
+						} else if (tetris.osX == tetris.right) {
+							if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+								zeroing();
+								position -= 2;
+								tetris.osX -= 2;
+								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								tetris.orientation = 0;
+							}
+						} else if (tetris.osX == tetris.right-1) {
+							if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
+								zeroing();
+								position -= 1;
+								tetris.osX -= 1;
+								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								tetris.orientation = 0;
+							} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+								zeroing();
+								position -= 2;
+								tetris.osX -= 2;
+								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								tetris.orientation = 0;
+							}
+						} else {
+							if (check(3+position, 4+position, 5+position, 6+position) != false) {
+								zeroing();
+								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+								tetris.orientation = 0;
+							} else if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
+								if (tetris.osX != tetris.right-2) {
+									zeroing();
+									position += 1;
+									tetris.osX += 1;
+									tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+									tetris.orientation = 0;
+								}
+							} else if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
+								if (tetris.osX != tetris.left+1) {
+									zeroing();
+									position -= 1;
+									tetris.osX -= 1;
+									tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+									tetris.orientation = 0;
+								}
+							} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
+								if (tetris.osX != tetris.left+2) {
+									zeroing();
+									position -= 2;
+									tetris.osX -= 2;
+									tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
+									tetris.orientation = 0;
+								}
+							}
+						}
+					break;
+				}
+			break;
+			case 'figure2': // Поворот других фигур кроме палки и квадрата
+				switch(tetris.orientation) {
+					case 0:
+						if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
+							zeroing();
+							tetris.figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+							tetris.orientation = 90;
+						} else if (check(copyFigure[2][0]+position+10, copyFigure[2][1]+position+10, copyFigure[2][2]+position+10, copyFigure[2][3]+position+10) != false) {
+							zeroing();
+							position += 10;
+							tetris.osY += 1;
+							tetris.figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
+							tetris.orientation = 90;
+						}
+					break;
+					case 90:
+						if (tetris.osX == tetris.right) {
+							position -= 1;
+							tetris.osX -= 1;
+						}
+						if (check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position) != false) {
+							zeroing();
+							tetris.figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
+							tetris.orientation = 180;
+						} else if (check(copyFigure[3][0]+position-1, copyFigure[3][1]+position-1, copyFigure[3][2]+position-1, copyFigure[3][3]+position-1) != false) {
+							if (tetris.osX != tetris.left) {
+								zeroing();
+								position -= 1;
+								tetris.osX -= 1;
+								tetris.figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
+								tetris.orientation = 180;
+							}
+						}
+					break;
+					case 180:
+						if (check(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position) != false) {
+							zeroing();
+							tetris.figure(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position, copyFigure[4][4], copyFigure[4][5], copyFigure[4][6]);
+							tetris.orientation = 270;
+						}
+					break;
+					case 270:
+						if (tetris.osX == tetris.left) {
+							position += 1;
+							tetris.osX += 1;
+						}
+						if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
+							zeroing();
+							tetris.figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+							tetris.orientation = 0;
+						} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
+							if (tetris.osX != tetris.right) {
+								zeroing();
+								position += 1;
+								tetris.osX += 1;
+								tetris.figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
+								tetris.orientation = 0;
+							}
+						}
+					break;
+				}
+			break;
+			case 'figure3': // "Поворот" квадрата
+			break;
+		}
+	},
+	// Функция удаления целых линий
+	destroy: function() {
+		let fire = true;
+		let multiplier = 0; // Множитель за комбо
+		// Перебираеи ряды поля
+		for (line=0; line<20; line++) {
+			// Ищем заполнненый ряд и если не находим таковой, запрещаем дальнейшее действие
+			for (i=0; i<10; i++) {
+				if (isNaN(common.matrix[i+line*10]) != true) {
+					fire = false;
+				}
+			}
+			// Если разрешение есть, то стираем текущий ряд, переписываем игровое поле и обращаемся к функции сдвига тектонических плит
+			if (fire == true) {
+				for (i=0; i<10; i++) {
+					buffer[i+line*10] = 0;
+				}
+				common.matrix = Array.from(buffer);
+				drop();
+			}
+			fire = true;
+		}
+		function drop() {
+			// Обнуляем промежуточное поле
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == true) {
+					buffer[key] = 0;
+				}
+			}
+			// И создаем свой новый, дивный поле
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == true) {
+					// Всё что выше удаленного ряда сдвигаем на один ряд ниже
+					if (key <= line*10) {
+						buffer[parseInt(key)+10] = common.matrix[key];
+					}
+					// Всё что ниже, оставляем на своих местах
+					if (key > line*10) {
+						buffer[parseInt(key)] = common.matrix[key];
+					}
+				}
+			}
+			multiplier += 1;
+			common.score += 1*multiplier;
+			common.matrix = Array.from(buffer);
+		}
 		visualization();
 	}
 }
@@ -238,227 +514,6 @@ let figures = {
 	],
 };
 
-// Кнопки управления
-let orientation = 0; // Угол поворота фигуры
-let osX = 0; // Отслеживание фигуры по горизонтали
-let osY = -1; // Отслеживание фигуры по вертикали
-let left; // Левая граница, для разных фигур своя
-let right; // Правая граница, для разных фигур своя
-function leftMove() {
-	let free = true;
-	// Проверка есть ли свободное место слева от фигуры
-	for (let key in matrix) {
-		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-			if (isNaN(matrix[parseInt(key)-1]) == true) {
-				free = false;
-			}
-		}
-	}
-	// Если свободное место есть двигаем фигуру влево
-	if (free == true) {
-		zeroing();
-		osX -= 1;
-		for (let key in matrix) {
-			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-				buffer[parseInt(key)-1] = matrix[key];
-			}
-		}
-	}
-}
-function rightMove() {
-	let free = true;
-	// Проверка есть ли свободное место слева от фигуры
-	for (let key in matrix) {
-		if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-			if (isNaN(matrix[parseInt(key)+1]) == true) {
-				free = false;
-			}
-		}
-	}
-	// Если свободное место есть двигаем фигуру вправо
-	if (free == true) {
-		zeroing();
-		osX += 1;
-		for (let key in matrix) {
-			if (isNaN(matrix[key]) == false && matrix[key] != 0) {
-				buffer[parseInt(key)+1] = matrix[key];
-			}
-		}
-	}
-}
-function turn() {
-	let position = 10*osY+osX; // Поправка положения фигуры на игровом поле
-	// Функция проверки свободных ячеек
-	function check(a, b, c, d) {
-		let arr = [a, b, c, d];
-		for (let key of arr) {
-			if (isNaN(matrix[parseInt(key)]) == true) {
-				return false;
-			}
-		}
-	}
-	// Пошла моча по трубам
-	switch(copyFigure[0][0]) {
-		case 'figure1': // Поворот палки
-			switch(orientation) {
-				case 0:
-					if (check(-6+position, 4+position, 14+position, 24+position) != false) {
-						zeroing();
-						tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
-						orientation = 90;
-					} else if (check(-6+position+10, 4+position+10, 14+position+10, 24+position+10) != false) {
-						zeroing();
-						position += 10;
-						tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
-						orientation = 90;
-					} else if (check(-6+position-10, 4+position-10, 14+position-10, 24+position-10) != false) {
-						zeroing();
-						position -= 10;
-						tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
-						orientation = 90;
-					} else if (check(-6+position+1, 4+position+1, 14+position+1, 24+position+1) != false) {
-						zeroing();
-						position += 1;
-						tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
-						orientation = 90;
-					} else if (check(-6+position-9, 4+position-9, 14+position-9, 24+position-9) != false) {
-						zeroing();
-						position -= 9;
-						tetris.figure(-6+position, 4+position, 14+position, 24+position, -4, 5, 1);
-						orientation = 90;
-					}
-				break;
-				case 90:
-					if (osX == left) {
-						if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
-							zeroing();
-							position += 1;
-							osX += 1;
-							tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-							orientation = 0;
-						}
-					} else if (osX == right) {
-						if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
-							zeroing();
-							position -= 2;
-							osX -= 2;
-							tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-							orientation = 0;
-						}
-					} else if (osX == right-1) {
-						if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
-							zeroing();
-							position -= 1;
-							osX -= 1;
-							tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-							orientation = 0;
-						} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
-							zeroing();
-							position -= 2;
-							osX -= 2;
-							tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-							orientation = 0;
-						}
-					} else {
-						if (check(3+position, 4+position, 5+position, 6+position) != false) {
-							zeroing();
-							tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-							orientation = 0;
-						} else if (check(3+position+1, 4+position+1, 5+position+1, 6+position+1) != false) {
-							if (osX != right-2) {
-								zeroing();
-								position += 1;
-								osX += 1;
-								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-								orientation = 0;
-							}
-						} else if (check(3+position-1, 4+position-1, 5+position-1, 6+position-1) != false) {
-							if (osX != left+1) {
-								zeroing();
-								position -= 1;
-								osX -= 1;
-								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-								orientation = 0;
-							}
-						} else if (check(3+position-2, 4+position-2, 5+position-2, 6+position-2) != false) {
-							if (osX != left+2) {
-								zeroing();
-								position -= 2;
-								osX -= 2;
-								tetris.figure(3+position, 4+position, 5+position, 6+position, -3, 3, 1);
-								orientation = 0;
-							}
-						}
-					}
-				break;
-			}
-		break;
-		case 'figure2': // Поворот других фигур кроме палки и квадрата
-			switch(orientation) {
-				case 0:
-					if (check(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position) != false) {
-						zeroing();
-						tetris.figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-						orientation = 90;
-					} else if (check(copyFigure[2][0]+position+10, copyFigure[2][1]+position+10, copyFigure[2][2]+position+10, copyFigure[2][3]+position+10) != false) {
-						zeroing();
-						position += 10;
-						osY += 1;
-						tetris.figure(copyFigure[2][0]+position, copyFigure[2][1]+position, copyFigure[2][2]+position, copyFigure[2][3]+position, copyFigure[2][4], copyFigure[2][5], copyFigure[2][6]);
-						orientation = 90;
-					}
-				break;
-				case 90:
-					if (osX == right) {
-						position -= 1;
-						osX -= 1;
-					}
-					if (check(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position) != false) {
-						zeroing();
-						tetris.figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
-						orientation = 180;
-					} else if (check(copyFigure[3][0]+position-1, copyFigure[3][1]+position-1, copyFigure[3][2]+position-1, copyFigure[3][3]+position-1) != false) {
-						if (osX != left) {
-							zeroing();
-							position -= 1;
-							osX -= 1;
-							tetris.figure(copyFigure[3][0]+position, copyFigure[3][1]+position, copyFigure[3][2]+position, copyFigure[3][3]+position, copyFigure[3][4], copyFigure[3][5], copyFigure[3][6]);
-							orientation = 180;
-						}
-					}
-				break;
-				case 180:
-					if (check(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position) != false) {
-						zeroing();
-						tetris.figure(copyFigure[4][0]+position, copyFigure[4][1]+position, copyFigure[4][2]+position, copyFigure[4][3]+position, copyFigure[4][4], copyFigure[4][5], copyFigure[4][6]);
-						orientation = 270;
-					}
-				break;
-				case 270:
-					if (osX == left) {
-						position += 1;
-						osX += 1;
-					}
-					if (check(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position) != false) {
-						zeroing();
-						tetris.figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-						orientation = 0;
-					} else if (check(copyFigure[1][0]+position+1, copyFigure[1][1]+position+1, copyFigure[1][2]+position+1, copyFigure[1][3]+position+1) != false) {
-						if (osX != right) {
-							zeroing();
-							position += 1;
-							osX += 1;
-							tetris.figure(copyFigure[1][0]+position, copyFigure[1][1]+position, copyFigure[1][2]+position, copyFigure[1][3]+position, copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
-							orientation = 0;
-						}
-					}
-				break;
-			}
-		break;
-		case 'figure3': // "Поворот" квадрата
-		break;
-	}
-}
 // Управление с экрана
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
@@ -468,94 +523,45 @@ for (i = 0; i < buttons.length; i++) {
 			tetris.move();
 		}
 		// Кнопка влево
-		if (input == 'left' && osX>left) {
-			leftMove();
+		if (input == 'left' && tetris.osX>tetris.left) {
+			tetris.leftMove();
 		}
 		// Кнопка вправо
-		if (input == 'right' && osX<right) {
-			rightMove();
+		if (input == 'right' && tetris.osX<tetris.right) {
+			tetris.rightMove();
 		}
 		// Кнопка поворота фигуры
 		if (input == 'turn') {
-			turn();
+			tetris.turn();
 		}
 		// Перезаписываем игровое поле и визуализируем на странице
-		matrix = Array.from(buffer);
+		common.matrix = Array.from(buffer);
 		visualization();
 	});
 }
 // Управление с клавиатуры
 document.addEventListener('keydown', function(event) {
-	if (event.code === 'ArrowLeft' && osX>left) {
-		leftMove();
+	if (event.code === 'ArrowLeft' && tetris.osX>tetris.left) {
+		tetris.leftMove();
 	}
-	if (event.code === 'ArrowRight' && osX<right) {
-		rightMove();
+	if (event.code === 'ArrowRight' && tetris.osX<tetris.right) {
+		tetris.rightMove();
 	}
 	if (event.code === 'ArrowDown') {
 		tetris.move();
 	}
 	if (event.code === 'ArrowUp' || event.code === 'Space') {
-		turn();
+		tetris.turn();
 	}
 	// Перезаписываем игровое поле и визуализируем на странице
-	matrix = Array.from(buffer);
+	common.matrix = Array.from(buffer);
 	visualization();
 });
 
-// Функция удаления целых линий
-function destroy() {
-	let fire = true;
-	let multiplier = 0; // Множитель за комбо
-	// Перебираеи ряды поля
-	for (line=0; line<20; line++) {
-		// Ищем заполнненый ряд и если не находим таковой, запрещаем дальнейшее действие
-		for (i=0; i<10; i++) {
-			if (isNaN(matrix[i+line*10]) != true) {
-				fire = false;
-			}
-		}
-		// Если разрешение есть, то стираем текущий ряд, переписываем игровое поле и обращаемся к функции сдвига тектонических плит
-		if (fire == true) {
-			for (i=0; i<10; i++) {
-				buffer[i+line*10] = 0;
-			}
-			matrix = Array.from(buffer);
-			drop();
-		}
-		fire = true;
-	}
-	function drop() {
-		// Обнуляем промежуточное поле
-		for (let key in matrix) {
-			if (isNaN(matrix[key]) == true) {
-				buffer[key] = 0;
-			}
-		}
-		// И создаем свой новый, дивный поле
-		for (let key in matrix) {
-			if (isNaN(matrix[key]) == true) {
-				// Всё что выше удаленного ряда сдвигаем на один ряд ниже
-				if (key <= line*10) {
-					buffer[parseInt(key)+10] = matrix[key];
-				}
-				// Всё что ниже, оставляем на своих местах
-				if (key > line*10) {
-					buffer[parseInt(key)] = matrix[key];
-				}
-			}
-		}
-		multiplier += 1;
-		score += 1*multiplier;
-		matrix = Array.from(buffer);
-	}
-	visualization();
-}
-
 // Функция визуализации
 function visualization() {
-	for (let key in matrix) {
-		switch (matrix[key]) {
+	for (let key in common.matrix) {
+		switch (common.matrix[key]) {
 			case '0s':
 			case 0:
 				cells[key].style.background="white";
@@ -593,8 +599,8 @@ function visualization() {
 			break;
 		}
 	}
-	for (let key in screenNextFigure) {
-		switch (screenNextFigure[key]) {
+	for (let key in common.screenNextFigure) {
+		switch (common.screenNextFigure[key]) {
 			case 0:
 				infoCells[key].style.background="white";
 			break;
@@ -622,8 +628,9 @@ function visualization() {
 		}
 	}
 	// Вывод счёта на табло
-	document.querySelector(".tetris__info_score").innerHTML = score;
+	document.querySelector(".tetris__info_score").innerHTML = common.score;
 }
+
 tetris.figureCreation();
 tetris.move();
 visualization();
@@ -647,28 +654,28 @@ function gameOver() {
 	let gameOver = document.querySelector('.tetris__gameOver');
 	let newGame = document.querySelector(".tetris__gameOver_newGame");
 	// Запись счета в окно конца игры
-	document.querySelector(".tetris__gameOver_score").innerHTML = score;
+	document.querySelector(".tetris__gameOver_score").innerHTML = common.score;
 	// Вызов окна конца игры
 	gameOver.style.display = "flex";
 	// Начало новой игры
 	newGame.onclick = function() {
-		score = 0;
+		common.score = 0;
 		figureNext = null;
 		currentFigure = null;
-		orientation = 0;
-		osX = 0;
-		osY = -1;
-		left = null;
-		right = null;
+		tetris.orientation = 0;
+		tetris.osX = 0;
+		tetris.osY = -1;
+		tetris.left = null;
+		tetris.right = null;
 		time = 1000;
 		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
-		for (let key in screenNextFigure) {
-			screenNextFigure[key] = 0;
+		for (let key in common.screenNextFigure) {
+			common.screenNextFigure[key] = 0;
 		}
-		for (let key in matrix) {
+		for (let key in common.matrix) {
 			buffer[key] = 0;
 		}
-		matrix = Array.from(buffer);
+		common.matrix = Array.from(buffer);
 		gameOver.style.display = "none";
 		tetris.figureCreation();
 		tetris.move();
