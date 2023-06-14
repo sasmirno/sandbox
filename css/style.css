@@ -90,27 +90,6 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.accordion {
-  cursor: pointer;
-  transition: 1s;
-  margin: 10px;
-}
-.accordion:hover {
-  background: Gainsboro;
-}
-.accordion .arrow {
-  width: 10px;
-  transition: 0.5s;
-}
-.accordion_panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-}
-.accordion_open .arrow {
-  transform: rotate(90deg);
-}
-
 .header {
   background: #0d1e5c;
 }

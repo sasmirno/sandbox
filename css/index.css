@@ -56,6 +56,27 @@
   opacity: 1;
 }
 
+.accordion {
+  cursor: pointer;
+  transition: 1s;
+  margin: 10px;
+}
+.accordion:hover {
+  background: Gainsboro;
+}
+.accordion_panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+}
+.accordion .arrow {
+  width: 10px;
+  transition: 0.5s;
+}
+.accordion_open .arrow {
+  transform: rotate(90deg);
+}
+
 .linkJS {
   display: flex;
   flex-wrap: wrap;
