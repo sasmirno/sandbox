@@ -35,17 +35,60 @@ let common = {
 	screenNextFigure: [0, 0, 0, 0, 0, 0, 0, 0],
 
 	// Функция обнуления ячеек промежуточного поля
-	 zeroing: function() {
+	zeroing: function() {
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 				buffer[key] = 0;
 			}
 		}
 	},
+	// Функция визуализации
+	visualization: function(a, b) {
+		for (let key in a) {
+			switch (a[key]) {
+				case '0s':
+				case 0:
+					b[key].style.background="white";
+				break;
+				case '1s':
+				case 1:
+					b[key].style.background="red";
+				break;
+				case '2s':
+				case 2:
+					b[key].style.background="green";
+				break;
+				case '3s':
+				case 3:
+					b[key].style.background="purple";
+				break;
+				case '4s':
+				case 4:
+					b[key].style.background="orange";
+				break;
+				case '5s':
+				case 5:
+					b[key].style.background="blue";
+				break;
+				case '6s':
+				case 6:
+					b[key].style.background="gold";
+				break;
+				case '7s':
+				case 7:
+					b[key].style.background="dodgerblue";
+				break;
+			}
+		}
+		// Вывод счёта на табло
+		document.querySelector(".tetris__info_score").innerHTML = common.score;
+	},
+	//buffer: matrix,
 };
 
 // Копия игрового поля
 let buffer = Array.from(common.matrix);
+//let buffer = common.matrix;
 
 // Объект с тетрисом
 let tetris = {
@@ -183,7 +226,8 @@ let tetris = {
 		// Убираем целые линии
 		tetris.destroy();
 		// Визуализируем массив игрового поля на странице
-		visualization();
+		common.visualization(common.matrix, cells);
+		common.visualization(common.screenNextFigure, infoCells);
 	},
 
 	// Кнопки управления
@@ -237,6 +281,7 @@ let tetris = {
 	turn: function() {
 		let position = 10*tetris.osY+tetris.osX; // Поправка положения фигуры на игровом поле
 		// Функция проверки свободных ячеек
+		// Ячейка заполненная не числом, не свободна
 		function check(a, b, c, d) {
 			let arr = [a, b, c, d];
 			for (let key of arr) {
@@ -453,8 +498,8 @@ let tetris = {
 			common.score += 1*multiplier;
 			common.matrix = Array.from(buffer);
 		}
-		visualization();
-	}
+		common.visualization(common.matrix, cells);
+	},
 }
 
 // Корбочка с фигурами
@@ -533,7 +578,7 @@ for (i = 0; i < buttons.length; i++) {
 		}
 		// Перезаписываем игровое поле и визуализируем на странице
 		common.matrix = Array.from(buffer);
-		visualization();
+		common.visualization(common.matrix, cells);
 	});
 }
 // Управление с клавиатуры
@@ -552,85 +597,13 @@ document.addEventListener('keydown', function(event) {
 	}
 	// Перезаписываем игровое поле и визуализируем на странице
 	common.matrix = Array.from(buffer);
-	visualization();
+	common.visualization(common.matrix, cells);
 });
-
-// Функция визуализации
-function visualization() {
-	for (let key in common.matrix) {
-		switch (common.matrix[key]) {
-			case '0s':
-			case 0:
-				cells[key].style.background="white";
-			break;
-			case '1s':
-			case 1:
-				cells[key].style.background="red";
-			break;
-			case '2s':
-			case 2:
-				cells[key].style.background="green";
-			break;
-			case '3s':
-			case 3:
-				cells[key].style.background="purple";
-			break;
-			case '4s':
-			case 4:
-				cells[key].style.background="orange";
-			break;
-			case '5s':
-			case 5:
-				cells[key].style.background="blue";
-			break;
-			case '6s':
-			case 6:
-				cells[key].style.background="gold";
-			break;
-			case '7s':
-			case 7:
-				cells[key].style.background="dodgerblue";
-			break;
-			case 'gg':
-				cells[key].style.background="black";
-			break;
-		}
-	}
-	for (let key in common.screenNextFigure) {
-		switch (common.screenNextFigure[key]) {
-			case 0:
-				infoCells[key].style.background="white";
-			break;
-			case 1:
-				infoCells[key].style.background="red";
-			break;
-			case 2:
-				infoCells[key].style.background="green";
-			break;
-			case 3:
-				infoCells[key].style.background="purple";
-			break;
-			case 4:
-				infoCells[key].style.background="orange";
-			break;
-			case 5:
-				infoCells[key].style.background="blue";
-			break;
-			case 6:
-				infoCells[key].style.background="gold";
-			break;
-			case 7:
-				infoCells[key].style.background="dodgerblue";
-			break;
-		}
-	}
-	// Вывод счёта на табло
-	document.querySelector(".tetris__info_score").innerHTML = common.score;
-}
 
 tetris.figureCreation();
 tetris.move();
-visualization();
+common.visualization(common.matrix, cells); // Рисует основное поле
+common.visualization(common.screenNextFigure, infoCells); // Рисует поле следущий фигуры
 
 // Таймер
 let time = 1000;
@@ -676,7 +649,8 @@ function gameOver() {
 		gameOver.style.display = "none";
 		tetris.figureCreation();
 		tetris.move();
-		visualization();
+		common.visualization(common.matrix, cells);
+		common.visualization(common.screenNextFigure, infoCells);
 		downMove = setInterval(tetris.move, time);
 		speed = setInterval(speedUp, 60000);
 	}
