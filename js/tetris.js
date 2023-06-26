@@ -6,6 +6,7 @@ infoCells = document.querySelectorAll(".tetris__info_cell");
 // Объект с общими переменными и механиками
 let common = {
 	score: 0, // Счёт
+	play: true, // Игра запущена и идёт
 
 	// Имитация игрового поля
 	matrix: [
@@ -42,6 +43,7 @@ let common = {
 			}
 		}
 	},
+	
 	// Функция визуализации
 	visualization: function(a, b) {
 		for (let key in a) {
@@ -201,9 +203,7 @@ let tetris = {
 				// Ищем все числа кроме нуля в массиве игрового поля
 				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 					if (common.matrix[parseInt(key)-10] == null) {
-						// Если верхния ячейка отсуствует останавливаем таймер
-						clearInterval(downMove);
-						clearInterval(speed);
+						// Если верхния ячейка отсуствует заканчиваем игру
 						gameOver();
 					} else {
 						// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
@@ -591,6 +591,7 @@ document.addEventListener('keydown', function(event) {
 	}
 	if (event.code === 'ArrowDown') {
 		tetris.move();
+		console.log(timer.time);
 	}
 	if (event.code === 'ArrowUp' || event.code === 'Space') {
 		tetris.turn();
@@ -600,29 +601,40 @@ document.addEventListener('keydown', function(event) {
 	common.visualization(common.matrix, cells);
 });
 
+// Таймер
+let timer = {
+	time: 1000,
+	startTimer: function() {
+		let downMove = setInterval(tetris.move, timer.time);
+		let speed = setInterval(speedUp, 60000);
+		function speedUp() {
+			if (common.play === true) {
+				if (timer.time > 200) {
+					clearInterval(downMove);
+					timer.time -= 100;
+					downMove = setInterval(tetris.move, timer.time);
+					document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
+				}
+			} else {
+				clearInterval(downMove);
+				clearInterval(speed);
+			}
+		}
+	},
+}
+
 tetris.figureCreation();
 tetris.move();
 common.visualization(common.matrix, cells); // Рисует основное поле
 common.visualization(common.screenNextFigure, infoCells); // Рисует поле следущий фигуры
-
-// Таймер
-let time = 1000;
-let downMove = setInterval(tetris.move, time);
-// Ускорятор таймера
-let speed = setInterval(speedUp, 60000);
-function speedUp() {
-	if (time > 200) {
-		clearInterval(downMove);
-		time -= 100;
-		downMove = setInterval(tetris.move, time);
-		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
-	}
-}
+timer.startTimer();
 
 // Экран конца игры
 function gameOver() {
 	let gameOver = document.querySelector('.tetris__gameOver');
 	let newGame = document.querySelector(".tetris__gameOver_newGame");
+	//
+	common.play = false;
 	// Запись счета в окно конца игры
 	document.querySelector(".tetris__gameOver_score").innerHTML = common.score;
 	// Вызов окна конца игры
@@ -637,7 +649,7 @@ function gameOver() {
 		tetris.osY = -1;
 		tetris.left = null;
 		tetris.right = null;
-		time = 1000;
+		timer.time = 1000;
 		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
 		for (let key in common.screenNextFigure) {
 			common.screenNextFigure[key] = 0;
@@ -651,8 +663,6 @@ function gameOver() {
 		tetris.move();
 		common.visualization(common.matrix, cells);
 		common.visualization(common.screenNextFigure, infoCells);
-		downMove = setInterval(tetris.move, time);
-		speed = setInterval(speedUp, 60000);
 	}
 	// Закрытие окна конца игры
 	window.onclick = function(event) {
