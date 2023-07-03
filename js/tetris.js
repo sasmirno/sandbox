@@ -85,15 +85,22 @@ let common = {
 		// Вывод счёта на табло
 		document.querySelector(".tetris__info_score").innerHTML = common.score;
 	},
-	//buffer: matrix,
+	//buffer: Array.from(common.matrix),
 };
 
 // Копия игрового поля
 let buffer = Array.from(common.matrix);
-//let buffer = common.matrix;
 
 // Объект с тетрисом
 let tetris = {
+	//
+	tetrisPlay: function() {
+		tetris.figureCreation();
+		tetris.move();
+		common.visualization(common.matrix, cells);
+		common.visualization(common.screenNextFigure, infoCells);
+		timer.startTimer();
+	},
 	// Создание фигуры
 	figure: function (a, b, c, d, l, r, clr) {
 		buffer[a] = clr;
@@ -204,7 +211,7 @@ let tetris = {
 				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 					if (common.matrix[parseInt(key)-10] == null) {
 						// Если верхния ячейка отсуствует заканчиваем игру
-						gameOver();
+						popUp.gameOver();
 					} else {
 						// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
 						buffer[key] = common.matrix[key]+'s';
@@ -502,6 +509,22 @@ let tetris = {
 	},
 }
 
+// Объект со змейкой
+let shake = {
+	move: function() {
+		console.log('змейка ползёт');
+	},
+	leftMove: function() {
+		console.log('змейка лево ползёт');
+	},
+	rightMove: function() {
+		console.log('змейка право ползёт');
+	},
+	turn: function() {
+		console.log('змейка вниз ползёт');
+	},
+}
+
 // Корбочка с фигурами
 let figures = {
 	// Фигура ''''
@@ -556,6 +579,30 @@ let figures = {
 	],
 };
 
+// Объект с таймер
+let timer = {
+	time: 1000,
+	downMove: null,
+	speed: null,
+	startTimer: function() {
+		timer.downMove = setInterval(tetris.move, timer.time);
+		timer.speed = setInterval(timer.speedUp, 60000);
+		
+	},
+	speedUp: function() {
+		if (timer.time > 200) {
+			clearInterval(timer.downMove);
+			timer.time -= 100;
+			timer.downMove = setInterval(tetris.move, timer.time);
+			document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
+		}
+	},
+	stopTimer: function() {
+		clearInterval(timer.downMove);
+		clearInterval(timer.speed);
+	},
+}
+
 // Управление с экрана
 for (i = 0; i < buttons.length; i++) {
 	buttons[i].addEventListener("click", function() {
@@ -565,11 +612,11 @@ for (i = 0; i < buttons.length; i++) {
 			tetris.move();
 		}
 		// Кнопка влево
-		if (input == 'left' && tetris.osX>tetris.left) {
+		if (input == 'left' && tetris.osX > tetris.left) {
 			tetris.leftMove();
 		}
 		// Кнопка вправо
-		if (input == 'right' && tetris.osX<tetris.right) {
+		if (input == 'right' && tetris.osX < tetris.right) {
 			tetris.rightMove();
 		}
 		// Кнопка поворота фигуры
@@ -581,17 +628,17 @@ for (i = 0; i < buttons.length; i++) {
 		common.visualization(common.matrix, cells);
 	});
 }
+
 // Управление с клавиатуры
 document.addEventListener('keydown', function(event) {
-	if (event.code === 'ArrowLeft' && tetris.osX>tetris.left) {
+	if (event.code === 'ArrowLeft' && tetris.osX > tetris.left) {
 		tetris.leftMove();
 	}
-	if (event.code === 'ArrowRight' && tetris.osX<tetris.right) {
+	if (event.code === 'ArrowRight' && tetris.osX < tetris.right) {
 		tetris.rightMove();
 	}
 	if (event.code === 'ArrowDown') {
 		tetris.move();
-		console.log(timer.time);
 	}
 	if (event.code === 'ArrowUp' || event.code === 'Space') {
 		tetris.turn();
@@ -601,56 +648,23 @@ document.addEventListener('keydown', function(event) {
 	common.visualization(common.matrix, cells);
 });
 
-// Таймер
-let timer = {
-	time: 1000,
-	startTimer: function() {
-		let downMove = setInterval(tetris.move, timer.time);
-		let speed = setInterval(speedUp, 60000);
-		function speedUp() {
-			if (common.play === true) {
-				if (timer.time > 200) {
-					clearInterval(downMove);
-					timer.time -= 100;
-					downMove = setInterval(tetris.move, timer.time);
-					document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
-				}
-			} else {
-				clearInterval(downMove);
-				clearInterval(speed);
-			}
-		}
-	},
-}
-
-tetris.figureCreation();
-tetris.move();
-common.visualization(common.matrix, cells); // Рисует основное поле
-common.visualization(common.screenNextFigure, infoCells); // Рисует поле следущий фигуры
-timer.startTimer();
-
-// Экран конца игры
-function gameOver() {
-	let gameOver = document.querySelector('.tetris__gameOver');
-	let newGame = document.querySelector(".tetris__gameOver_newGame");
-	//
-	common.play = false;
-	// Запись счета в окно конца игры
-	document.querySelector(".tetris__gameOver_score").innerHTML = common.score;
-	// Вызов окна конца игры
-	gameOver.style.display = "flex";
-	// Начало новой игры
-	newGame.onclick = function() {
-		common.score = 0;
-		figureNext = null;
-		currentFigure = null;
+// Объект с 
+let popUp = {
+	// Экран начала игры
+	games: function() {
+		let games = document.querySelector(".games");
+		let playTetris = document.querySelector(".games_tetris");
+		//
+		tetris.figureNext = null;
+		tetris.currentFigure = null;
 		tetris.orientation = 0;
 		tetris.osX = 0;
 		tetris.osY = -1;
 		tetris.left = null;
 		tetris.right = null;
 		timer.time = 1000;
-		document.querySelector(".tetris__info_speed").innerHTML = 11-time/100;
+		common.score = 0;
+		document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
 		for (let key in common.screenNextFigure) {
 			common.screenNextFigure[key] = 0;
 		}
@@ -658,16 +672,44 @@ function gameOver() {
 			buffer[key] = 0;
 		}
 		common.matrix = Array.from(buffer);
-		gameOver.style.display = "none";
-		tetris.figureCreation();
-		tetris.move();
-		common.visualization(common.matrix, cells);
-		common.visualization(common.screenNextFigure, infoCells);
-	}
-	// Закрытие окна конца игры
-	window.onclick = function(event) {
-		if (event.target == gameOver) {
+		common.play = true;
+		// Вызов окна  начала игры
+		games.style.display = "flex";
+		// Начало новой игры
+		playTetris.onclick = function() {
+			games.style.display = "none";
+			tetris.tetrisPlay();
+		}
+		// Закрытие окна конца игры
+		window.onclick = function(event) {
+			if (event.target == games) {
+				games.style.display = "none";
+			}
+		}
+	},
+	// Экран конца игры
+	gameOver: function() {
+		let gameOver = document.querySelector(".gameOver");
+		let newGame = document.querySelector(".gameOver_newGame");
+		//
+		common.play = false;
+		timer.stopTimer();
+		// Запись счета в окно конца игры
+		document.querySelector(".gameOver_score").innerHTML = common.score;
+		// Вызов окна конца игры
+		gameOver.style.display = "flex";
+		// Вызов окна  начала игры
+		newGame.onclick = function() {
 			gameOver.style.display = "none";
+			popUp.games();
+		}
+		// Закрытие окна конца игры
+		window.onclick = function(event) {
+			if (event.target == gameOver) {
+				gameOver.style.display = "none";
+			}
 		}
 	}
 }
+
+popUp.games();
