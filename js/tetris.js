@@ -7,7 +7,6 @@ infoCells = document.querySelectorAll(".tetris__info_cell");
 let common = {
 	score: 0, // Счёт
 	play: true, // Игра запущена и идёт
-
 	// Имитация игрового поля
 	matrix: [
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -31,19 +30,16 @@ let common = {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 	],
-	
 	// Экран следующей фигуры
 	screenNextFigure: [0, 0, 0, 0, 0, 0, 0, 0],
-
 	// Функция обнуления ячеек промежуточного поля
 	zeroing: function() {
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
-				buffer[key] = 0;
+				common.buffer[key] = 0;
 			}
 		}
 	},
-	
 	// Функция визуализации
 	visualization: function(a, b) {
 		for (let key in a) {
@@ -85,15 +81,16 @@ let common = {
 		// Вывод счёта на табло
 		document.querySelector(".tetris__info_score").innerHTML = common.score;
 	},
-	//buffer: Array.from(common.matrix),
+	// Копия игрового поля
+	buffer: null,
+	copyMatrix: function() {
+		common.buffer = Array.from(common.matrix);
+	},
 };
-
-// Копия игрового поля
-let buffer = Array.from(common.matrix);
 
 // Объект с тетрисом
 let tetris = {
-	//
+	// Запуск тетриса
 	tetrisPlay: function() {
 		tetris.figureCreation();
 		tetris.move();
@@ -103,14 +100,13 @@ let tetris = {
 	},
 	// Создание фигуры
 	figure: function (a, b, c, d, l, r, clr) {
-		buffer[a] = clr;
-		buffer[b] = clr;
-		buffer[c] = clr;
-		buffer[d] = clr;
+		common.buffer[a] = clr;
+		common.buffer[b] = clr;
+		common.buffer[c] = clr;
+		common.buffer[d] = clr;
 		tetris.left = l;
 		tetris.right = r;
 	},
-
 	// Создание случайной фигуры
 	nextFigure: null,
 	currentFigure: null,
@@ -181,7 +177,6 @@ let tetris = {
 		}
 		return tetris.figure(copyFigure[1][0], copyFigure[1][1], copyFigure[1][2], copyFigure[1][3], copyFigure[1][4], copyFigure[1][5], copyFigure[1][6]);
 	},
-
 	// Движение фигуры вниз
 	move: function() {
 		// Проверка есть ли свободное место под фигурой
@@ -201,7 +196,7 @@ let tetris = {
 				// Ищем все числа кроме нуля в массиве игрового поля
 				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 					// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
-					buffer[parseInt(key)+10] = common.matrix[key];
+					common.buffer[parseInt(key)+10] = common.matrix[key];
 				}
 			}
 		} else {
@@ -214,7 +209,7 @@ let tetris = {
 						popUp.gameOver();
 					} else {
 						// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
-						buffer[key] = common.matrix[key]+'s';
+						common.buffer[key] = common.matrix[key]+'s';
 						tetris.osX = 0;
 						tetris.osY = -1;
 						tetris.orientation = 0;
@@ -229,14 +224,13 @@ let tetris = {
 		}
 		tetris.osY += 1;
 		// Перезаписываем игровое поле из промежуточного поля
-		common.matrix = Array.from(buffer);
+		common.matrix = Array.from(common.buffer);
 		// Убираем целые линии
 		tetris.destroy();
 		// Визуализируем массив игрового поля на странице
 		common.visualization(common.matrix, cells);
 		common.visualization(common.screenNextFigure, infoCells);
 	},
-
 	// Кнопки управления
 	orientation: 0, // Угол поворота фигуры
 	osX: 0, // Отслеживание фигуры по горизонтали
@@ -259,7 +253,7 @@ let tetris = {
 			tetris.osX -= 1;
 			for (let key in common.matrix) {
 				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
-					buffer[parseInt(key)-1] = common.matrix[key];
+					common.buffer[parseInt(key)-1] = common.matrix[key];
 				}
 			}
 		}
@@ -280,7 +274,7 @@ let tetris = {
 			tetris.osX += 1;
 			for (let key in common.matrix) {
 				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
-					buffer[parseInt(key)+1] = common.matrix[key];
+					common.buffer[parseInt(key)+1] = common.matrix[key];
 				}
 			}
 		}
@@ -474,9 +468,9 @@ let tetris = {
 			// Если разрешение есть, то стираем текущий ряд, переписываем игровое поле и обращаемся к функции сдвига тектонических плит
 			if (fire == true) {
 				for (i=0; i<10; i++) {
-					buffer[i+line*10] = 0;
+					common.buffer[i+line*10] = 0;
 				}
-				common.matrix = Array.from(buffer);
+				common.matrix = Array.from(common.buffer);
 				drop();
 			}
 			fire = true;
@@ -485,7 +479,7 @@ let tetris = {
 			// Обнуляем промежуточное поле
 			for (let key in common.matrix) {
 				if (isNaN(common.matrix[key]) == true) {
-					buffer[key] = 0;
+					common.buffer[key] = 0;
 				}
 			}
 			// И создаем свой новый, дивный поле
@@ -493,17 +487,17 @@ let tetris = {
 				if (isNaN(common.matrix[key]) == true) {
 					// Всё что выше удаленного ряда сдвигаем на один ряд ниже
 					if (key <= line*10) {
-						buffer[parseInt(key)+10] = common.matrix[key];
+						common.buffer[parseInt(key)+10] = common.matrix[key];
 					}
 					// Всё что ниже, оставляем на своих местах
 					if (key > line*10) {
-						buffer[parseInt(key)] = common.matrix[key];
+						common.buffer[parseInt(key)] = common.matrix[key];
 					}
 				}
 			}
 			multiplier += 1;
 			common.score += 1*multiplier;
-			common.matrix = Array.from(buffer);
+			common.matrix = Array.from(common.buffer);
 		}
 		common.visualization(common.matrix, cells);
 	},
@@ -587,7 +581,6 @@ let timer = {
 	startTimer: function() {
 		timer.downMove = setInterval(tetris.move, timer.time);
 		timer.speed = setInterval(timer.speedUp, 60000);
-		
 	},
 	speedUp: function() {
 		if (timer.time > 200) {
@@ -624,7 +617,7 @@ for (i = 0; i < buttons.length; i++) {
 			tetris.turn();
 		}
 		// Перезаписываем игровое поле и визуализируем на странице
-		common.matrix = Array.from(buffer);
+		common.matrix = Array.from(common.buffer);
 		common.visualization(common.matrix, cells);
 	});
 }
@@ -644,7 +637,7 @@ document.addEventListener('keydown', function(event) {
 		tetris.turn();
 	}
 	// Перезаписываем игровое поле и визуализируем на странице
-	common.matrix = Array.from(buffer);
+	common.matrix = Array.from(common.buffer);
 	common.visualization(common.matrix, cells);
 });
 
@@ -664,14 +657,15 @@ let popUp = {
 		tetris.right = null;
 		timer.time = 1000;
 		common.score = 0;
+		common.copyMatrix();
 		document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
 		for (let key in common.screenNextFigure) {
 			common.screenNextFigure[key] = 0;
 		}
 		for (let key in common.matrix) {
-			buffer[key] = 0;
+			common.buffer[key] = 0;
 		}
-		common.matrix = Array.from(buffer);
+		common.matrix = Array.from(common.buffer);
 		common.play = true;
 		// Вызов окна  начала игры
 		games.style.display = "flex";
