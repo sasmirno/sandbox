@@ -94,8 +94,8 @@ let tetris = {
 	tetrisPlay: function() {
 		tetris.figureCreation();
 		tetris.move();
-		common.visualization(common.matrix, cells);
-		common.visualization(common.screenNextFigure, infoCells);
+		//common.visualization(common.matrix, cells);
+		//common.visualization(common.screenNextFigure, infoCells);
 		timer.startTimer();
 	},
 	// Создание фигуры
@@ -453,6 +453,10 @@ let tetris = {
 			break;
 		}
 	},
+	//
+	downMove: function() {
+		tetris.move();
+	},
 	// Функция удаления целых линий
 	destroy: function() {
 		let fire = true;
@@ -505,17 +509,119 @@ let tetris = {
 
 // Объект со змейкой
 let shake = {
+	shakePlay: function() {
+		shake.figureCreation();
+		shake.move();
+		//common.matrix = Array.from(common.buffer);
+		//common.visualization(common.matrix, cells);
+		//timer.startTimer();
+	},
+	figureCreation: function() {
+		common.buffer[95] = 3;
+		tetris.left = -5;
+		tetris.right = 4;
+	},
 	move: function() {
 		console.log('змейка ползёт');
+		// Перезаписываем игровое поле из промежуточного поля
+		common.matrix = Array.from(common.buffer);
+		// Визуализируем массив игрового поля на странице
+		common.visualization(common.matrix, cells);
+	},
+	//upMove: function() {},
+	downMove: function() {
+		console.log('змейка вниз ползёт');
+		// Проверка есть ли свободное место под фигурой
+		let free = true;
+		for (let key in common.matrix) {
+			// Ищем все числа кроме нуля в массиве игрового поля
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+10]) == true) {
+					free = false;
+				} else {
+					common.zeroing();
+				}
+			}
+		}
+		if (free == true) {
+			for (let key in common.matrix) {
+				// Ищем все числа кроме нуля в массиве игрового поля
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
+					common.buffer[parseInt(key)+10] = common.matrix[key];
+				}
+			}
+		} else {
+			let raz = 0;
+			for (let key in common.matrix) {
+				// Ищем все числа кроме нуля в массиве игрового поля
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					if (common.matrix[parseInt(key)-10] == null) {
+						// Если верхния ячейка отсуствует заканчиваем игру
+						popUp.gameOver();
+					} else {
+						// Если внизу нет свободных ячеек, то записывает в текущую ячейку некий текст и создаем новую фигуру
+						common.buffer[key] = common.matrix[key]+'s';
+						tetris.osX = 0;
+						tetris.osY = -1;
+						tetris.orientation = 0;
+						// Костыль чтобы срабатывало только один раз, а  не четыре
+						raz += 1;
+						if (raz == 3){
+							tetris.figureCreation();
+						}
+					}
+				}
+			}
+		}
+		tetris.osY += 1;
 	},
 	leftMove: function() {
 		console.log('змейка лево ползёт');
+		let free = true;
+		// Проверка есть ли свободное место слева от фигуры
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)-1]) == true) {
+					free = false;
+				}
+			}
+		}
+		// Если свободное место есть двигаем фигуру влево
+		if (free == true) {
+			common.zeroing();
+			tetris.osX -= 1;
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					common.buffer[parseInt(key)-1] = common.matrix[key];
+				}
+			}
+		}
 	},
 	rightMove: function() {
 		console.log('змейка право ползёт');
+		let free = true;
+		// Проверка есть ли свободное место слева от фигуры
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+1]) == true) {
+					free = false;
+				}
+			}
+		}
+		// Если свободное место есть двигаем фигуру вправо
+		if (free == true) {
+			common.zeroing();
+			tetris.osX += 1;
+			for (let key in common.matrix) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+					common.buffer[parseInt(key)+1] = common.matrix[key];
+				}
+			}
+		}
 	},
 	turn: function() {
-		console.log('змейка вниз ползёт');
+		console.log('змейка вверх ползёт');
 	},
 }
 
@@ -524,6 +630,8 @@ let racing = {
 	move: function() {
 		console.log('болид едет');
 	},
+	//upMove: function() {},
+	downMove: function() {},
 	leftMove: function() {
 		console.log('болид налево едет');
 	},
@@ -620,7 +728,7 @@ let control = {
 				let input = this.id;
 				// Кнопка вниз
 				if (input == 'down') {
-					game.move();
+					game.downMove();
 				}
 				// Кнопка влево
 				if (input == 'left' && tetris.osX > tetris.left) {
@@ -648,7 +756,7 @@ let control = {
 				game.rightMove();
 			}
 			if (event.code === 'ArrowDown') {
-				game.move();
+				game.downMove();
 			}
 			if (event.code === 'ArrowUp' || event.code === 'Space') {
 				game.turn();
@@ -695,6 +803,11 @@ let popUp = {
 			control.control(tetris);
 			games.style.display = "none";
 			tetris.tetrisPlay();
+		}
+		playSnake.onclick = function() {		
+			control.control(shake);
+			games.style.display = "none";
+			shake.shakePlay();
 		}
 		// Закрытие окна конца игры
 		window.onclick = function(event) {
