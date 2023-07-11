@@ -6,7 +6,6 @@ infoCells = document.querySelectorAll(".tetris__info_cell");
 // Объект с общими переменными и механиками
 let common = {
 	score: 0, // Счёт
-	play: true, // Игра запущена и идёт
 	// Кнопки управления
 	orientation: 0, // Угол поворота фигуры
 	osX: 0, // Отслеживание фигуры по горизонтали
@@ -96,6 +95,7 @@ let common = {
 
 // Объект с тетрисом
 let tetris = {
+	play: true,
 	// Запуск тетриса
 	tetrisPlay: function() {
 		tetris.figureCreation();
@@ -510,6 +510,7 @@ let tetris = {
 
 // Объект со змейкой
 let shake = {
+	play: true,
 	shakePlay: function() {
 		shake.figureCreation();
 		shake.move();
@@ -534,6 +535,7 @@ let shake = {
 		console.log('змейка ползёт');
 	},
 	upMove: function() {
+		console.log('змейка ползёт вверх');
 		let free = true;
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
@@ -557,6 +559,7 @@ let shake = {
 		}
 	},
 	downMove: function() {
+		console.log('змейка ползёт вниз');
 		let free = true;
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
@@ -580,6 +583,7 @@ let shake = {
 		}
 	},
 	leftMove: function() {
+		console.log('змейка ползёт влево');
 		let free = true;
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
@@ -603,6 +607,7 @@ let shake = {
 		}
 	},
 	rightMove: function() {
+		console.log('змейка ползёт вправо');
 		let free = true;
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
@@ -630,6 +635,7 @@ let shake = {
 
 // Объект с гонкой
 let racing = {
+	//racing: true,
 	move: function() {
 		console.log('болид едет');
 	},
@@ -732,49 +738,53 @@ let control = {
 		for (i = 0; i < buttons.length; i++) {
 			buttons[i].addEventListener("click", function() {
 				let input = this.id;
-				// Кнопка вверх
-				if (input == 'up') {
-					game.upMove();
+				if (game.play == true) {
+					// Кнопка вверх
+					if (input == 'up') {
+						game.upMove();
+					}
+					// Кнопка вниз
+					if (input == 'down') {
+						game.downMove();
+					}
+					// Кнопка влево
+					if (input == 'left' && common.osX > common.left) {
+						game.leftMove();
+					}
+					// Кнопка вправо
+					if (input == 'right' && common.osX < common.right) {
+						game.rightMove();
+					}
+					// Кнопка поворота фигуры
+					if (input == 'turn') {
+						game.turn();
+					}
+					// Перезаписываем игровое поле и визуализируем на странице
+					common.matrix = Array.from(common.buffer);
+					common.visualization(common.matrix, cells);
 				}
-				// Кнопка вниз
-				if (input == 'down') {
-					game.downMove();
-				}
-				// Кнопка влево
-				if (input == 'left' && common.osX > common.left) {
-					game.leftMove();
-				}
-				// Кнопка вправо
-				if (input == 'right' && common.osX < common.right) {
-					game.rightMove();
-				}
-				// Кнопка поворота фигуры
-				if (input == 'turn') {
-					game.turn();
-				}
-				// Перезаписываем игровое поле и визуализируем на странице
-				common.matrix = Array.from(common.buffer);
-				common.visualization(common.matrix, cells);
 			});
 		}
 		// Управление с клавиатуры
 		document.addEventListener('keydown', function(event) {
-			if (event.code === 'ArrowLeft' && common.osX > common.left) {
-				game.leftMove();
+			if (game.play == true) {
+				if (event.code === 'ArrowLeft' && common.osX > common.left) {
+					game.leftMove();
+				}
+				if (event.code === 'ArrowRight' && common.osX < common.right) {
+					game.rightMove();
+				}
+				if (event.code === 'ArrowDown') {
+					game.downMove();
+				}
+				if (event.code === 'ArrowUp' || event.code === 'Space') {
+					game.turn();
+					game.upMove();
+				}
+				// Перезаписываем игровое поле и визуализируем на странице
+				common.matrix = Array.from(common.buffer);
+				common.visualization(common.matrix, cells);
 			}
-			if (event.code === 'ArrowRight' && common.osX < common.right) {
-				game.rightMove();
-			}
-			if (event.code === 'ArrowDown') {
-				game.downMove();
-			}
-			if (event.code === 'ArrowUp' || event.code === 'Space') {
-				game.turn();
-				game.upMove();
-			}
-			// Перезаписываем игровое поле и визуализируем на странице
-			common.matrix = Array.from(common.buffer);
-			common.visualization(common.matrix, cells);
 		});
 	},
 }
@@ -809,18 +819,21 @@ let popUp = {
 			common.buffer[key] = 0;
 		}
 		common.matrix = Array.from(common.buffer);
-		common.play = true;
 		// Вызов окна  начала игры
 		games.style.display = "flex";
 		// Начало новой игры
 		playTetris.onclick = function() {
-			control.control(tetris);
+			tetris.play = true;
+			shake.play = false;
+			racing.play = false;
 			controlPanel.classList.add('game_tetris');
 			games.style.display = "none";
 			tetris.tetrisPlay();
 		}
 		playSnake.onclick = function() {
-			control.control(shake);
+			tetris.play = false;
+			shake.play = true;
+			racing.play = false;
 			controlPanel.classList.add('game_shake');
 			games.style.display = "none";
 			shake.shakePlay();
@@ -837,7 +850,6 @@ let popUp = {
 		let gameOver = document.querySelector(".gameOver");
 		let newGame = document.querySelector(".gameOver_newGame");
 		//
-		common.play = false;
 		timer.stopTimer();
 		// Запись счета в окно конца игры
 		document.querySelector(".gameOver_score").innerHTML = common.score;
@@ -856,5 +868,6 @@ let popUp = {
 		}
 	}
 }
-
+control.control(tetris);
+control.control(shake);
 popUp.games();
