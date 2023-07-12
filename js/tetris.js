@@ -1,10 +1,7 @@
-field = document.querySelector(".tetris_field");
-cells = document.querySelectorAll(".tetris_cell");
-buttons = document.querySelectorAll(".tetris_btn");
-infoCells = document.querySelectorAll(".tetris__info_cell");
-
 // Объект с общими переменными и механиками
 let common = {
+	cells: document.querySelectorAll(".tetris_cell"),
+	infoCells: document.querySelectorAll(".tetris__info_cell"),
 	score: 0, // Счёт
 	// Кнопки управления
 	orientation: 0, // Угол поворота фигуры
@@ -40,7 +37,7 @@ let common = {
 	// Функция обнуления ячеек промежуточного поля
 	zeroing: function() {
 		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				common.buffer[key] = 0;
 			}
 		}
@@ -81,6 +78,9 @@ let common = {
 				case 7:
 					b[key].style.background="dodgerblue";
 				break;
+				case 10:
+					b[key].style.background="gray";
+				break;
 			}
 		}
 		// Вывод счёта на табло
@@ -95,13 +95,11 @@ let common = {
 
 // Объект с тетрисом
 let tetris = {
-	play: true,
+	play: false,
 	// Запуск тетриса
 	tetrisPlay: function() {
 		tetris.figureCreation();
 		tetris.move();
-		//common.visualization(common.matrix, cells);
-		//common.visualization(common.screenNextFigure, infoCells);
 		timer.startTimer();
 	},
 	// Создание фигуры
@@ -234,8 +232,8 @@ let tetris = {
 		// Убираем целые линии
 		tetris.destroy();
 		// Визуализируем массив игрового поля на странице
-		common.visualization(common.matrix, cells);
-		common.visualization(common.screenNextFigure, infoCells);
+		common.visualization(common.matrix, common.cells);
+		common.visualization(common.screenNextFigure, common.infoCells);
 	},
 	leftMove: function() {
 		let free = true;
@@ -504,82 +502,88 @@ let tetris = {
 			common.score += 1*multiplier;
 			common.matrix = Array.from(common.buffer);
 		}
-		common.visualization(common.matrix, cells);
+		common.visualization(common.matrix, common.cells);
 	},
 }
 
 // Объект со змейкой
 let shake = {
-	play: true,
+	play: false,
 	shakePlay: function() {
 		shake.figureCreation();
 		shake.move();
-		//common.matrix = Array.from(common.buffer);
-		//common.visualization(common.matrix, cells);
+		// Перезаписываем игровое поле из промежуточного поля
+		common.matrix = Array.from(common.buffer);
+		// Визуализируем массив игрового поля на странице
+		common.visualization(common.matrix, common.cells);
 		//timer.startTimer();
 	},
 	figureCreation: function() {
 		common.buffer[95] = 3;
-		common.buffer[91] = '4s';
-		common.buffer[99] = '5s';
-		common.buffer[125] = '6s';
-		common.buffer[35] = '7s';
+		//common.buffer[91] = 10;
+		//common.buffer[99] = '5s';
+		//common.buffer[125] = '6s';
+		common.buffer[35] = '6s';
+		common.buffer[55] = 10;
 		common.left = -6;
 		common.right = 5;
 	},
+	mouse: function() {
+		common.buffer[35] = 10;
+	},
 	move: function() {
-		// Перезаписываем игровое поле из промежуточного поля
-		common.matrix = Array.from(common.buffer);
-		// Визуализируем массив игрового поля на странице
-		common.visualization(common.matrix, cells);
 		console.log('змейка ползёт');
 	},
 	upMove: function() {
 		console.log('змейка ползёт вверх');
 		let free = true;
-		// Проверка есть ли свободное место слева от фигуры
+		// Проверка есть ли свободное место сверху от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 				if (isNaN(common.matrix[parseInt(key)-10]) == true) {
 					free = false;
+					popUp.gameOver();
+				}
+				if (common.matrix[parseInt(key)-10] == 10) {
+					console.log('съели мышь');
 				}
 			}
 		}
-		// Если свободное место есть двигаем фигуру влево
+		// Если свободное место есть двигаем фигуру вверх
 		if (free == true && common.osY !== 8) {
 			common.zeroing();
 			common.osY += 1;
 			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 					common.buffer[parseInt(key)-10] = common.matrix[key];
 				}
 			}
-		} else {
-			popUp.gameOver();
 		}
 	},
 	downMove: function() {
 		console.log('змейка ползёт вниз');
 		let free = true;
-		// Проверка есть ли свободное место слева от фигуры
+		// Проверка есть ли свободное место снизу от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 				if (isNaN(common.matrix[parseInt(key)+10]) == true) {
 					free = false;
+					popUp.gameOver();
+				}
+				if (common.matrix[parseInt(key)+10] == 10) {
+					console.log('съели мышь');
 				}
 			}
 		}
-		// Если свободное место есть двигаем фигуру влево
+		// Если свободное место есть двигаем фигуру вниз
 		if (free == true && common.osY !== -11) {
 			common.zeroing();
 			common.osY -= 1;
 			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 					common.buffer[parseInt(key)+10] = common.matrix[key];
 				}
 			}
-		} else {
-			popUp.gameOver();
 		}
 	},
 	leftMove: function() {
@@ -590,6 +594,10 @@ let shake = {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 				if (isNaN(common.matrix[parseInt(key)-1]) == true) {
 					free = false;
+					popUp.gameOver();
+				}
+				if (common.matrix[parseInt(key)-1] == 10) {
+					console.log('съели мышь');
 				}
 			}
 		}
@@ -598,22 +606,24 @@ let shake = {
 			common.zeroing();
 			common.osX -= 1;
 			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 					common.buffer[parseInt(key)-1] = common.matrix[key];
 				}
 			}
-		} else {
-			popUp.gameOver();
 		}
 	},
 	rightMove: function() {
 		console.log('змейка ползёт вправо');
 		let free = true;
-		// Проверка есть ли свободное место слева от фигуры
+		// Проверка есть ли свободное место справа от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
 				if (isNaN(common.matrix[parseInt(key)+1]) == true) {
 					free = false;
+					popUp.gameOver();
+				}
+				if (common.matrix[parseInt(key)+1] == 10) {
+					console.log('съели мышь');
 				}
 			}
 		}
@@ -622,12 +632,10 @@ let shake = {
 			common.zeroing();
 			common.osX += 1;
 			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 					common.buffer[parseInt(key)+1] = common.matrix[key];
 				}
 			}
-		} else {
-			popUp.gameOver();
 		}
 	},
 	turn: function() {},
@@ -734,6 +742,7 @@ let timer = {
 
 let control = {
 	control: function(game) {
+		buttons = document.querySelectorAll(".tetris_btn");
 		// Управление с экрана
 		for (i = 0; i < buttons.length; i++) {
 			buttons[i].addEventListener("click", function() {
@@ -761,7 +770,7 @@ let control = {
 					}
 					// Перезаписываем игровое поле и визуализируем на странице
 					common.matrix = Array.from(common.buffer);
-					common.visualization(common.matrix, cells);
+					common.visualization(common.matrix, common.cells);
 				}
 			});
 		}
@@ -783,7 +792,7 @@ let control = {
 				}
 				// Перезаписываем игровое поле и визуализируем на странице
 				common.matrix = Array.from(common.buffer);
-				common.visualization(common.matrix, cells);
+				common.visualization(common.matrix, common.cells);
 			}
 		});
 	},
@@ -851,6 +860,9 @@ let popUp = {
 		let newGame = document.querySelector(".gameOver_newGame");
 		//
 		timer.stopTimer();
+		tetris.play = false;
+		shake.play = false;
+		racing.play = false;
 		// Запись счета в окно конца игры
 		document.querySelector(".gameOver_score").innerHTML = common.score;
 		// Вызов окна конца игры
@@ -870,4 +882,5 @@ let popUp = {
 }
 control.control(tetris);
 control.control(shake);
+//control.control(racing);
 popUp.games();
