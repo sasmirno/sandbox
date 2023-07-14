@@ -520,11 +520,6 @@ let shake = {
 	},
 	figureCreation: function() {
 		common.buffer[95] = 3;
-		//common.buffer[91] = 10;
-		//common.buffer[99] = '5s';
-		//common.buffer[125] = '6s';
-		//common.buffer[35] = '6s';
-		//common.buffer[99] = 10;
 		shake.mouse();
 		common.left = -6;
 		common.right = 5;
@@ -543,105 +538,95 @@ let shake = {
 		//console.log('змейка ползёт');
 	},
 	upMove: function() {
+		//console.log(common.osY);
 		//console.log('змейка ползёт вверх');
-		let free = true;
 		// Проверка есть ли свободное место сверху от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
-					free = false;
 					popUp.gameOver();
+				} else {
+					// Если свободное место есть двигаем фигуру вверх
+					common.zeroing();
+					common.osY += 1;
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							common.buffer[parseInt(key)-10] = common.matrix[key];
+						}
+					}
 				}
 				if (common.matrix[parseInt(key)-10] == 10) {
 					shake.mouse();
-				}
-			}
-		}
-		// Если свободное место есть двигаем фигуру вверх
-		if (free == true) {
-			common.zeroing();
-			common.osY += 1;
-			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-					common.buffer[parseInt(key)-10] = common.matrix[key];
+					//common.buffer[key] = 3;
 				}
 			}
 		}
 	},
 	downMove: function() {
 		//console.log('змейка ползёт вниз');
-		let free = true;
 		// Проверка есть ли свободное место снизу от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
-					free = false;
 					popUp.gameOver();
+				} else {
+					// Если свободное место есть двигаем фигуру вниз
+					common.zeroing();
+					common.osY -= 1;
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							common.buffer[parseInt(key)+10] = common.matrix[key];
+						}
+					}
 				}
 				if (common.matrix[parseInt(key)+10] == 10) {
 					shake.mouse();
 				}
 			}
 		}
-		// Если свободное место есть двигаем фигуру вниз
-		if (free == true) {
-			common.zeroing();
-			common.osY -= 1;
-			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-					common.buffer[parseInt(key)+10] = common.matrix[key];
-				}
-			}
-		}
 	},
 	leftMove: function() {
 		//console.log('змейка ползёт влево');
-		let free = true;
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
-					free = false;
 					popUp.gameOver();
+				} else {
+					// Если свободное место есть двигаем фигуру влево
+					common.zeroing();
+					common.osX -= 1;
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							common.buffer[parseInt(key)-1] = common.matrix[key];
+						}
+					}
 				}
 				if (common.matrix[parseInt(key)-1] == 10) {
 					shake.mouse();
 				}
 			}
 		}
-		// Если свободное место есть двигаем фигуру влево
-		if (free == true) {
-			common.zeroing();
-			common.osX -= 1;
-			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-					common.buffer[parseInt(key)-1] = common.matrix[key];
-				}
-			}
-		}
 	},
 	rightMove: function() {
 		//console.log('змейка ползёт вправо');
-		let free = true;
 		// Проверка есть ли свободное место справа от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
-					free = false;
 					popUp.gameOver();
+				} else {
+					// Если свободное место есть двигаем фигуру вправо
+					common.zeroing();
+					common.osX += 1;
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							common.buffer[parseInt(key)+1] = common.matrix[key];
+						}
+					}
 				}
 				if (common.matrix[parseInt(key)+1] == 10) {
 					shake.mouse();
-				}
-			}
-		}
-		// Если свободное место есть двигаем фигуру вправо
-		if (free == true) {
-			common.zeroing();
-			common.osX += 1;
-			for (let key in common.matrix) {
-				if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-					common.buffer[parseInt(key)+1] = common.matrix[key];
 				}
 			}
 		}
