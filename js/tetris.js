@@ -518,19 +518,39 @@ let shake = {
 		common.visualization(common.matrix, common.cells);
 		//timer.startTimer();
 	},
+	tail: {
+		//95: 3,
+		//105: '1s',
+		//115: '2s',
+		//125: '4s',
+	},
+	/*tail: [
+		[0, 0],
+		//[105, '1s'],
+		//[115, '2s'],
+		//[125, '4s'],
+	],*/
 	figureCreation: function() {
 		common.buffer[95] = 3;
+		//shake.tail[95] = 3;
+		//shake.tail[0][0] = 95;
+		//shake.tail[0][1] = 3;
 		shake.mouse();
 		common.left = -6;
 		common.right = 5;
 	},
 	mouse: function() {
+		// Постановка точки в случайное место
 		let random = Math.round(Math.random() * 199);
 		if (common.matrix[random] != 0) {
 			shake.mouse();
 		} else {
 			common.score += 1;
 			common.buffer[random] = 10;
+		}
+		// Транслирование хвоста из объекта с хвостом
+		for (let key in shake.tail) {
+			common.buffer[shake.tail[key]] = key;
 		}
 		console.log('съели мышь');
 	},
@@ -552,12 +572,21 @@ let shake = {
 					for (let key in common.matrix) {
 						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 							common.buffer[parseInt(key)-10] = common.matrix[key];
+							//console.log(key);
+							//shake.tail[key] = shake.tail[key];
+							for (let k in shake.tail) {
+								//console.log(k);
+								//common.buffer[key] = shake.tail[key];
+							}
 						}
 					}
 				}
 				if (common.matrix[parseInt(key)-10] == 10) {
+					// Случайный цвет
+					let random = Math.ceil(Math.random() * 7);
+					shake.tail[random+'s'] = parseInt(key);
 					shake.mouse();
-					//common.buffer[key] = 3;
+					console.log(shake.tail);
 				}
 			}
 		}
