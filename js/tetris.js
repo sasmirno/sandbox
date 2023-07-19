@@ -524,38 +524,47 @@ let shake = {
 		//115: '2s',
 		//125: '4s',
 	},
-	/*tail: [
-		[0, 0],
-		//[105, '1s'],
-		//[115, '2s'],
-		//[125, '4s'],
-	],*/
 	figureCreation: function() {
 		common.buffer[95] = 3;
-		//shake.tail[95] = 3;
-		//shake.tail[0][0] = 95;
-		//shake.tail[0][1] = 3;
 		shake.mouse();
 		common.left = -6;
 		common.right = 5;
 	},
-	mouse: function() {
+	mouse: function(x) {
 		// Постановка точки в случайное место
-		let random = Math.round(Math.random() * 199);
-		if (common.matrix[random] != 0) {
+		let randomCoordinates = Math.round(Math.random() * 199);
+		if (common.matrix[randomCoordinates] != 0) {
 			shake.mouse();
 		} else {
 			common.score += 1;
-			common.buffer[random] = 10;
+			common.buffer[randomCoordinates] = 10;
 		}
+		// Рисуем хвост
+		let randomColor = Math.ceil(Math.random() * 7);
+		shake.tail[randomColor+'s'] = parseInt(x);
 		// Транслирование хвоста из объекта с хвостом
 		for (let key in shake.tail) {
 			common.buffer[shake.tail[key]] = key;
 		}
+		console.log(shake.tail);
 		console.log('съели мышь');
 	},
 	move: function() {
 		//console.log('змейка ползёт');
+	},
+	tailMove: function(y) {
+		//console.log(y);
+		let odin = parseInt(y);
+		let dva = null;
+		for (let k in shake.tail) {
+			//console.log(odin);
+			dva = shake.tail[k];
+			shake.tail[k] = odin;
+			odin = dva;
+			//console.log(odin);
+			//console.log(k);
+			common.buffer[shake.tail[k]] = k;
+		}
 	},
 	upMove: function() {
 		//console.log(common.osY);
@@ -572,21 +581,13 @@ let shake = {
 					for (let key in common.matrix) {
 						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 							common.buffer[parseInt(key)-10] = common.matrix[key];
-							//console.log(key);
-							//shake.tail[key] = shake.tail[key];
-							for (let k in shake.tail) {
-								//console.log(k);
-								//common.buffer[key] = shake.tail[key];
-							}
+							shake.tailMove(key);
 						}
 					}
 				}
+				// Нашли и съели мышь
 				if (common.matrix[parseInt(key)-10] == 10) {
-					// Случайный цвет
-					let random = Math.ceil(Math.random() * 7);
-					shake.tail[random+'s'] = parseInt(key);
-					shake.mouse();
-					console.log(shake.tail);
+					shake.mouse(key);
 				}
 			}
 		}
@@ -605,11 +606,12 @@ let shake = {
 					for (let key in common.matrix) {
 						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 							common.buffer[parseInt(key)+10] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
 				}
 				if (common.matrix[parseInt(key)+10] == 10) {
-					shake.mouse();
+					shake.mouse(key);
 				}
 			}
 		}
@@ -628,11 +630,12 @@ let shake = {
 					for (let key in common.matrix) {
 						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 							common.buffer[parseInt(key)-1] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
 				}
 				if (common.matrix[parseInt(key)-1] == 10) {
-					shake.mouse();
+					shake.mouse(key);
 				}
 			}
 		}
@@ -651,11 +654,12 @@ let shake = {
 					for (let key in common.matrix) {
 						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 							common.buffer[parseInt(key)+1] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
 				}
 				if (common.matrix[parseInt(key)+1] == 10) {
-					shake.mouse();
+					shake.mouse(key);
 				}
 			}
 		}
@@ -848,6 +852,9 @@ let popUp = {
 		}
 		for (let key in common.matrix) {
 			common.buffer[key] = 0;
+		}
+		for (let key in shake.tail) {
+			delete shake.tail[key];
 		}
 		common.matrix = Array.from(common.buffer);
 		// Вызов окна  начала игры
