@@ -519,11 +519,17 @@ let shake = {
 		//timer.startTimer();
 	},
 	tail: {
-		//95: 3,
-		//105: '1s',
-		//115: '2s',
-		//125: '4s',
+		//3: 95,
+		//'1s': 105,
+		//'2s': 115,
+		//'4s': 125,
 	},
+	/*tail: [
+		[3, 95],
+		['1s', 105],
+		['2s', 115],
+		['4s', 125,],
+	],*/
 	figureCreation: function() {
 		common.buffer[95] = 3;
 		shake.mouse();
@@ -545,7 +551,7 @@ let shake = {
 		// Транслирование хвоста из объекта с хвостом
 		for (let key in shake.tail) {
 			common.buffer[shake.tail[key]] = key;
-		}
+		}/**/
 		console.log(shake.tail);
 		console.log('съели мышь');
 	},
@@ -553,21 +559,31 @@ let shake = {
 		//console.log('змейка ползёт');
 	},
 	tailMove: function(y) {
-		//console.log(y);
+		for (let key in common.matrix) {
+			if (common.matrix[key] != 0 && common.matrix[key] != 10) {
+				common.buffer[key] = 0;
+			}
+		}/**/
 		let odin = parseInt(y);
 		let dva = null;
-		for (let k in shake.tail) {
-			//console.log(odin);
-			dva = shake.tail[k];
-			shake.tail[k] = odin;
-			odin = dva;
-			//console.log(odin);
-			//console.log(k);
-			common.buffer[shake.tail[k]] = k;
+		let keys = null;
+		for (let key in shake.tail) {
+			keys++;
 		}
+		if (keys > 1) {
+			for (let k in shake.tail) {
+				//console.log(odin);
+				dva = shake.tail[k];
+				shake.tail[k] = odin;
+				odin = dva;
+				//console.log(odin);
+				//console.log(k);
+				common.buffer[shake.tail[k]] = k;
+			}
+		}
+		//console.log(keys);
 	},
 	upMove: function() {
-		//console.log(common.osY);
 		//console.log('змейка ползёт вверх');
 		// Проверка есть ли свободное место сверху от фигуры
 		for (let key in common.matrix) {
@@ -588,7 +604,7 @@ let shake = {
 				// Нашли и съели мышь
 				if (common.matrix[parseInt(key)-10] == 10) {
 					shake.mouse(key);
-				}
+				}/**/
 			}
 		}
 	},
