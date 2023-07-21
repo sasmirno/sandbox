@@ -510,33 +510,29 @@ let tetris = {
 let shake = {
 	play: false,
 	shakePlay: function() {
-		shake.figureCreation();
-		shake.move();
+		common.buffer[95] = 3;
+		common.left = -6;
+		common.right = 5;
+		shake.mouse();
 		// Перезаписываем игровое поле из промежуточного поля
 		common.matrix = Array.from(common.buffer);
 		// Визуализируем массив игрового поля на странице
 		common.visualization(common.matrix, common.cells);
+		//shake.move();
 		//timer.startTimer();
 	},
-	tail: {
-		//3: 95,
-		//'1s': 105,
-		//'2s': 115,
-		//'4s': 125,
-	},
-	/*tail: [
-		[3, 95],
-		['1s', 105],
-		['2s', 115],
-		['4s', 125,],
-	],*/
-	figureCreation: function() {
-		common.buffer[95] = 3;
-		shake.mouse();
-		common.left = -6;
-		common.right = 5;
-	},
+	tail: [],
 	mouse: function(x) {
+		// Постановка точки в случайное место
+		let randomCoordinates = Math.round(Math.random() * 199);
+		if (common.matrix[randomCoordinates] != 0) {
+			shake.mouse();
+		} else {
+			common.score += 1;
+			common.buffer[randomCoordinates] = 10;
+		}
+	},
+	ateaMouse: function(x) {
 		// Постановка точки в случайное место
 		let randomCoordinates = Math.round(Math.random() * 199);
 		if (common.matrix[randomCoordinates] != 0) {
@@ -547,41 +543,35 @@ let shake = {
 		}
 		// Рисуем хвост
 		let randomColor = Math.ceil(Math.random() * 7);
-		shake.tail[randomColor+'s'] = parseInt(x);
+		shake.tail.push([randomColor+'s', parseInt(x)]);
 		// Транслирование хвоста из объекта с хвостом
 		for (let key in shake.tail) {
-			common.buffer[shake.tail[key]] = key;
-		}/**/
+			common.buffer[shake.tail[key][1]] = shake.tail[key][0];
+		}
 		console.log(shake.tail);
-		console.log('съели мышь');
 	},
 	move: function() {
 		//console.log('змейка ползёт');
 	},
 	tailMove: function(y) {
+		//
 		for (let key in common.matrix) {
 			if (common.matrix[key] != 0 && common.matrix[key] != 10) {
 				common.buffer[key] = 0;
 			}
-		}/**/
+		}
+		//if (common.matrix[parseInt(y)-10] != 10) {}
 		let odin = parseInt(y);
 		let dva = null;
-		let keys = null;
-		for (let key in shake.tail) {
-			keys++;
-		}
-		if (keys > 1) {
-			for (let k in shake.tail) {
-				//console.log(odin);
-				dva = shake.tail[k];
-				shake.tail[k] = odin;
+		if (shake.tail.length > 0) {
+			for (let key in shake.tail) {
+				dva = shake.tail[key][1];
+				shake.tail[key][1] = odin;
 				odin = dva;
-				//console.log(odin);
-				//console.log(k);
-				common.buffer[shake.tail[k]] = k;
+				common.buffer[shake.tail[key][1]] = shake.tail[key][0];
 			}
 		}
-		//console.log(keys);
+
 	},
 	upMove: function() {
 		//console.log('змейка ползёт вверх');
@@ -603,8 +593,8 @@ let shake = {
 				}
 				// Нашли и съели мышь
 				if (common.matrix[parseInt(key)-10] == 10) {
-					shake.mouse(key);
-				}/**/
+					shake.ateaMouse(key);
+				}
 			}
 		}
 	},
@@ -627,7 +617,7 @@ let shake = {
 					}
 				}
 				if (common.matrix[parseInt(key)+10] == 10) {
-					shake.mouse(key);
+					shake.ateaMouse(key);
 				}
 			}
 		}
@@ -651,7 +641,7 @@ let shake = {
 					}
 				}
 				if (common.matrix[parseInt(key)-1] == 10) {
-					shake.mouse(key);
+					shake.ateaMouse(key);
 				}
 			}
 		}
@@ -675,7 +665,7 @@ let shake = {
 					}
 				}
 				if (common.matrix[parseInt(key)+1] == 10) {
-					shake.mouse(key);
+					shake.ateaMouse(key);
 				}
 			}
 		}
@@ -870,7 +860,7 @@ let popUp = {
 			common.buffer[key] = 0;
 		}
 		for (let key in shake.tail) {
-			delete shake.tail[key];
+			shake.tail.splice(0, shake.tail.length);
 		}
 		common.matrix = Array.from(common.buffer);
 		// Вызов окна  начала игры
