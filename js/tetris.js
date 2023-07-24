@@ -78,6 +78,9 @@ let common = {
 				case 7:
 					b[key].style.background="dodgerblue";
 				break;
+				case 8:
+					b[key].style.background="black";
+				break;
 				case 10:
 					b[key].style.background="gray";
 				break;
@@ -508,12 +511,12 @@ let tetris = {
 
 // Объект со змейкой
 let shake = {
-	play: false,
+	play: false, // Указатель на то какая игра сейчас запущена
 	shakePlay: function() {
-		common.buffer[95] = 3;
-		common.left = -6;
+		common.buffer[95] = 8; // Голова змейки
+		common.left = -6; // Ограничитель на правое и левое
 		common.right = 5;
-		shake.mouse();
+		shake.mouse(); // Постановка точки в случайное место
 		// Перезаписываем игровое поле из промежуточного поля
 		common.matrix = Array.from(common.buffer);
 		// Визуализируем массив игрового поля на странице
@@ -521,9 +524,8 @@ let shake = {
 		//shake.move();
 		//timer.startTimer();
 	},
-	tail: [],
+	// Постановка точки в случайное место
 	mouse: function(x) {
-		// Постановка точки в случайное место
 		let randomCoordinates = Math.round(Math.random() * 199);
 		if (common.matrix[randomCoordinates] != 0) {
 			shake.mouse();
@@ -532,27 +534,35 @@ let shake = {
 			common.buffer[randomCoordinates] = 10;
 		}
 	},
-	ateaMouse: function(x) {
-		// Постановка точки в случайное место
-		let randomCoordinates = Math.round(Math.random() * 199);
-		if (common.matrix[randomCoordinates] != 0) {
-			shake.mouse();
-		} else {
-			common.score += 1;
-			common.buffer[randomCoordinates] = 10;
-		}
-		// Рисуем хвост
+	// Рисуем хвост
+	tail: [],
+	tailGrowth: function(x) {
+		shake.mouse();
 		let randomColor = Math.ceil(Math.random() * 7);
 		shake.tail.push([randomColor+'s', parseInt(x)]);
 		// Транслирование хвоста из объекта с хвостом
 		for (let key in shake.tail) {
 			common.buffer[shake.tail[key][1]] = shake.tail[key][0];
 		}
-		console.log(shake.tail);
 	},
 	move: function() {
 		//console.log('змейка ползёт');
+		switch (common.orientation) {
+				case 0:
+					console.log('0');
+				break;
+				case 90:
+					console.log('90');
+				break;
+				case 180:
+					console.log('180');
+				break;
+				case 240:
+					console.log('240');
+				break;
+			}
 	},
+	// Движение хвоста
 	tailMove: function(y) {
 		//
 		for (let key in common.matrix) {
@@ -560,24 +570,26 @@ let shake = {
 				common.buffer[key] = 0;
 			}
 		}
-		//if (common.matrix[parseInt(y)-10] != 10) {}
 		let odin = parseInt(y);
 		let dva = null;
-		if (shake.tail.length > 0) {
-			for (let key in shake.tail) {
-				dva = shake.tail[key][1];
-				shake.tail[key][1] = odin;
-				odin = dva;
-				common.buffer[shake.tail[key][1]] = shake.tail[key][0];
-			}
+		for (let key in shake.tail) {
+			dva = shake.tail[key][1];
+			shake.tail[key][1] = odin;
+			odin = dva;
+			common.buffer[shake.tail[key][1]] = shake.tail[key][0];
 		}
-
 	},
 	upMove: function() {
+		common.orientation = 0;
+		//shake.move();
 		//console.log('змейка ползёт вверх');
 		// Проверка есть ли свободное место сверху от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+				// Нашли и съели мышь
+				if (common.matrix[parseInt(key)-10] == 10) {
+					shake.tailGrowth(key);
+				}
 				if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
 					popUp.gameOver();
 				} else {
@@ -591,18 +603,19 @@ let shake = {
 						}
 					}
 				}
-				// Нашли и съели мышь
-				if (common.matrix[parseInt(key)-10] == 10) {
-					shake.ateaMouse(key);
-				}
 			}
 		}
 	},
 	downMove: function() {
+		common.orientation = 180;
+		//shake.move();
 		//console.log('змейка ползёт вниз');
 		// Проверка есть ли свободное место снизу от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+				if (common.matrix[parseInt(key)+10] == 10) {
+					shake.tailGrowth(key);
+				}
 				if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
 					popUp.gameOver();
 				} else {
@@ -616,17 +629,19 @@ let shake = {
 						}
 					}
 				}
-				if (common.matrix[parseInt(key)+10] == 10) {
-					shake.ateaMouse(key);
-				}
 			}
 		}
 	},
 	leftMove: function() {
+		common.orientation = 240;
+		//shake.move();
 		//console.log('змейка ползёт влево');
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+				if (common.matrix[parseInt(key)-1] == 10) {
+					shake.tailGrowth(key);
+				}
 				if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
 					popUp.gameOver();
 				} else {
@@ -640,17 +655,19 @@ let shake = {
 						}
 					}
 				}
-				if (common.matrix[parseInt(key)-1] == 10) {
-					shake.ateaMouse(key);
-				}
 			}
 		}
 	},
 	rightMove: function() {
+		common.orientation = 90;
+		//shake.move();
 		//console.log('змейка ползёт вправо');
 		// Проверка есть ли свободное место справа от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+				if (common.matrix[parseInt(key)+1] == 10) {
+					shake.tailGrowth(key);
+				}
 				if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
 					popUp.gameOver();
 				} else {
@@ -663,9 +680,6 @@ let shake = {
 							shake.tailMove(key);
 						}
 					}
-				}
-				if (common.matrix[parseInt(key)+1] == 10) {
-					shake.ateaMouse(key);
 				}
 			}
 		}
