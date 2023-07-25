@@ -103,7 +103,7 @@ let tetris = {
 	tetrisPlay: function() {
 		tetris.figureCreation();
 		tetris.move();
-		timer.startTimer();
+		timer.startTimer(tetris);
 	},
 	// Создание фигуры
 	figure: function (a, b, c, d, l, r, clr) {
@@ -516,13 +516,10 @@ let shake = {
 		common.buffer[95] = 8; // Голова змейки
 		common.left = -6; // Ограничитель на правое и левое
 		common.right = 5;
+		timer.time = 600;
 		shake.mouse(); // Постановка точки в случайное место
-		// Перезаписываем игровое поле из промежуточного поля
-		common.matrix = Array.from(common.buffer);
-		// Визуализируем массив игрового поля на странице
-		common.visualization(common.matrix, common.cells);
-		//shake.move();
-		//timer.startTimer();
+		shake.move();
+		timer.startTimer(shake);
 	},
 	// Постановка точки в случайное место
 	mouse: function(x) {
@@ -530,7 +527,6 @@ let shake = {
 		if (common.matrix[randomCoordinates] != 0) {
 			shake.mouse();
 		} else {
-			common.score += 1;
 			common.buffer[randomCoordinates] = 10;
 		}
 	},
@@ -538,6 +534,7 @@ let shake = {
 	tail: [],
 	tailGrowth: function(x) {
 		shake.mouse();
+		common.score += 1;
 		let randomColor = Math.ceil(Math.random() * 7);
 		shake.tail.push([randomColor+'s', parseInt(x)]);
 		// Транслирование хвоста из объекта с хвостом
@@ -549,18 +546,22 @@ let shake = {
 		//console.log('змейка ползёт');
 		switch (common.orientation) {
 				case 0:
-					console.log('0');
+					shake.upMove();
 				break;
 				case 90:
-					console.log('90');
+					shake.rightMove();
 				break;
 				case 180:
-					console.log('180');
+					shake.downMove();
 				break;
 				case 240:
-					console.log('240');
+					shake.leftMove();
 				break;
 			}
+		// Перезаписываем игровое поле из промежуточного поля
+		common.matrix = Array.from(common.buffer);
+		// Визуализируем массив игрового поля на странице
+		common.visualization(common.matrix, common.cells);
 	},
 	// Движение хвоста
 	tailMove: function(y) {
@@ -581,7 +582,6 @@ let shake = {
 	},
 	upMove: function() {
 		common.orientation = 0;
-		//shake.move();
 		//console.log('змейка ползёт вверх');
 		// Проверка есть ли свободное место сверху от фигуры
 		for (let key in common.matrix) {
@@ -590,6 +590,10 @@ let shake = {
 				if (common.matrix[parseInt(key)-10] == 10) {
 					shake.tailGrowth(key);
 				}
+				/*if (common.orientation != 180) {
+					console.log('180');
+				}*/
+				// Двигаем голову змейки
 				if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
 					popUp.gameOver();
 				} else {
@@ -608,7 +612,6 @@ let shake = {
 	},
 	downMove: function() {
 		common.orientation = 180;
-		//shake.move();
 		//console.log('змейка ползёт вниз');
 		// Проверка есть ли свободное место снизу от фигуры
 		for (let key in common.matrix) {
@@ -634,7 +637,6 @@ let shake = {
 	},
 	leftMove: function() {
 		common.orientation = 240;
-		//shake.move();
 		//console.log('змейка ползёт влево');
 		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
@@ -660,7 +662,6 @@ let shake = {
 	},
 	rightMove: function() {
 		common.orientation = 90;
-		//shake.move();
 		//console.log('змейка ползёт вправо');
 		// Проверка есть ли свободное место справа от фигуры
 		for (let key in common.matrix) {
@@ -767,9 +768,11 @@ let timer = {
 	time: 1000,
 	downMove: null,
 	speed: null,
-	startTimer: function() {
-		timer.downMove = setInterval(tetris.move, timer.time);
-		timer.speed = setInterval(timer.speedUp, 60000);
+	startTimer: function(q) {
+		timer.downMove = setInterval(q.move, timer.time);
+		if (tetris.play == true) {
+			timer.speed = setInterval(timer.speedUp, 60000);
+		}
 	},
 	speedUp: function() {
 		if (timer.time > 200) {
