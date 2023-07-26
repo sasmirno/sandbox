@@ -516,7 +516,7 @@ let shake = {
 		common.buffer[95] = 8; // Голова змейки
 		common.left = -6; // Ограничитель на правое и левое
 		common.right = 5;
-		timer.time = 600;
+		timer.time = 700;
 		shake.mouse(); // Постановка точки в случайное место
 		shake.move();
 		timer.startTimer(shake);
@@ -530,8 +530,8 @@ let shake = {
 			common.buffer[randomCoordinates] = 10;
 		}
 	},
+	tail: [], // Массив с хвостом змейки
 	// Рисуем хвост
-	tail: [],
 	tailGrowth: function(x) {
 		shake.mouse();
 		common.score += 1;
@@ -565,7 +565,7 @@ let shake = {
 	},
 	// Движение хвоста
 	tailMove: function(y) {
-		//
+		// Обнуляем игровое поле
 		for (let key in common.matrix) {
 			if (common.matrix[key] != 0 && common.matrix[key] != 10) {
 				common.buffer[key] = 0;
@@ -581,105 +581,90 @@ let shake = {
 		}
 	},
 	upMove: function() {
-		common.orientation = 0;
 		//console.log('змейка ползёт вверх');
-		// Проверка есть ли свободное место сверху от фигуры
+		// Перебираем все клетки игрового поля
 		for (let key in common.matrix) {
+			// Ищим все числа кроме нуля и десятки
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-				// Нашли и съели мышь
+				// Если в ячейке сверху нашли мышь, едим её и наращиваем хвост
 				if (common.matrix[parseInt(key)-10] == 10) {
 					shake.tailGrowth(key);
 				}
-				/*if (common.orientation != 180) {
-					console.log('180');
-				}*/
-				// Двигаем голову змейки
-				if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
-					popUp.gameOver();
-				} else {
-					// Если свободное место есть двигаем фигуру вверх
-					common.zeroing();
-					common.osY += 1;
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							common.buffer[parseInt(key)-10] = common.matrix[key];
-							shake.tailMove(key);
-						}
+				// Проверка есть ли у змейки жопа и можно ли туда двигаться
+				if (common.orientation != 180 || common.matrix[parseInt(key)-10] == 0) {
+					common.orientation = 0; // Указатель направления движения
+					// Проверка есть ли свободное место сверху от фигуры
+					if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
+						popUp.gameOver();
+					} else {
+						// Если свободное место есть двигаем фигуру вверх
+						common.zeroing();
+						common.osY += 1;
+						common.buffer[parseInt(key)-10] = common.matrix[key];
+						shake.tailMove(key);
 					}
 				}
 			}
 		}
 	},
 	downMove: function() {
-		common.orientation = 180;
 		//console.log('змейка ползёт вниз');
-		// Проверка есть ли свободное место снизу от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)+10] == 10) {
 					shake.tailGrowth(key);
 				}
-				if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
-					popUp.gameOver();
-				} else {
-					// Если свободное место есть двигаем фигуру вниз
-					common.zeroing();
-					common.osY -= 1;
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							common.buffer[parseInt(key)+10] = common.matrix[key];
-							shake.tailMove(key);
-						}
+				if (common.orientation != 0 || common.matrix[parseInt(key)+10] == 0) {
+					common.orientation = 180;
+					if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
+						popUp.gameOver();
+					} else {
+						common.zeroing();
+						common.osY -= 1;
+						common.buffer[parseInt(key)+10] = common.matrix[key];
+						shake.tailMove(key);
 					}
 				}
 			}
 		}
 	},
 	leftMove: function() {
-		common.orientation = 240;
 		//console.log('змейка ползёт влево');
-		// Проверка есть ли свободное место слева от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)-1] == 10) {
 					shake.tailGrowth(key);
 				}
-				if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
-					popUp.gameOver();
-				} else {
-					// Если свободное место есть двигаем фигуру влево
-					common.zeroing();
-					common.osX -= 1;
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							common.buffer[parseInt(key)-1] = common.matrix[key];
-							shake.tailMove(key);
-						}
+				if (common.orientation != 90 || common.matrix[parseInt(key)-1] == 0) {
+					common.orientation = 240;
+					if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
+						popUp.gameOver();
+					} else {
+						common.zeroing();
+						common.osX -= 1;
+						common.buffer[parseInt(key)-1] = common.matrix[key];
+						shake.tailMove(key);
 					}
 				}
 			}
 		}
 	},
 	rightMove: function() {
-		common.orientation = 90;
 		//console.log('змейка ползёт вправо');
-		// Проверка есть ли свободное место справа от фигуры
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)+1] == 10) {
 					shake.tailGrowth(key);
 				}
-				if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
-					popUp.gameOver();
-				} else {
-					// Если свободное место есть двигаем фигуру вправо
-					common.zeroing();
-					common.osX += 1;
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							common.buffer[parseInt(key)+1] = common.matrix[key];
-							shake.tailMove(key);
-						}
+				if (common.orientation != 240 || common.matrix[parseInt(key)+1] == 0) {
+					common.orientation = 90;
+					if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
+						popUp.gameOver();
+					} else {
+						common.zeroing();
+						common.osX += 1;
+						common.buffer[parseInt(key)+1] = common.matrix[key];
+						shake.tailMove(key);
 					}
 				}
 			}
