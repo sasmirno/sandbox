@@ -3,6 +3,7 @@ let common = {
 	cells: document.querySelectorAll(".tetris_cell"),
 	infoCells: document.querySelectorAll(".tetris__info_cell"),
 	score: 0, // Счёт
+	game: null, // Текущая игра
 	// Кнопки управления
 	orientation: 0, // Угол поворота фигуры
 	osX: 0, // Отслеживание фигуры по горизонтали
@@ -98,7 +99,6 @@ let common = {
 
 // Объект с тетрисом
 let tetris = {
-	play: false,
 	// Запуск тетриса
 	tetrisPlay: function() {
 		tetris.figureCreation();
@@ -511,7 +511,6 @@ let tetris = {
 
 // Объект со змейкой
 let shake = {
-	play: false, // Указатель на то какая игра сейчас запущена
 	shakePlay: function() {
 		common.buffer[95] = 8; // Голова змейки
 		common.left = -6; // Ограничитель на правое и левое
@@ -544,6 +543,7 @@ let shake = {
 	},
 	move: function() {
 		//console.log('змейка ползёт');
+		//console.log(timer.time);
 		switch (common.orientation) {
 				case 0:
 					shake.upMove();
@@ -675,7 +675,6 @@ let shake = {
 
 // Объект с гонкой
 let racing = {
-	//racing: true,
 	move: function() {
 		console.log('болид едет');
 	},
@@ -755,7 +754,7 @@ let timer = {
 	speed: null,
 	startTimer: function(q) {
 		timer.downMove = setInterval(q.move, timer.time);
-		if (tetris.play == true) {
+		if (common.game == tetris) {
 			timer.speed = setInterval(timer.speedUp, 60000);
 		}
 	},
@@ -776,12 +775,21 @@ let timer = {
 
 let control = {
 	control: function(game) {
-		buttons = document.querySelectorAll(".tetris_btn");
+		let buttons = document.querySelectorAll(".tetris_btn");
+		let pauseBtn = document.querySelector(".tetris_pause");
+		// Вызов окна паузы
+		pauseBtn.onclick = function() {
+			if (common.game != null) {
+				popUp.pause();
+			} else {
+				popUp.games();
+			}
+		}
 		// Управление с экрана
 		for (i = 0; i < buttons.length; i++) {
 			buttons[i].addEventListener("click", function() {
 				let input = this.id;
-				if (game.play == true) {
+				if (common.game == game) {
 					// Кнопка вверх
 					if (input == 'up') {
 						game.upMove();
@@ -810,7 +818,7 @@ let control = {
 		}
 		// Управление с клавиатуры
 		document.addEventListener('keydown', function(event) {
-			if (game.play == true) {
+			if (common.game == game) {
 				if (event.code === 'ArrowLeft' && common.osX > common.left) {
 					game.leftMove();
 				}
@@ -869,17 +877,13 @@ let popUp = {
 		games.style.display = "flex";
 		// Начало новой игры
 		playTetris.onclick = function() {
-			tetris.play = true;
-			shake.play = false;
-			racing.play = false;
+			common.game = tetris;
 			controlPanel.classList.add('game_tetris');
 			games.style.display = "none";
 			tetris.tetrisPlay();
 		}
 		playSnake.onclick = function() {
-			tetris.play = false;
-			shake.play = true;
-			racing.play = false;
+			common.game = shake;
 			controlPanel.classList.add('game_shake');
 			games.style.display = "none";
 			shake.shakePlay();
@@ -891,15 +895,46 @@ let popUp = {
 			}
 		}
 	},
+	// Экран паузы
+	pause: function() {
+		let pause = document.querySelector(".pause");
+		let continueGame = document.querySelector(".pause_continue");
+		let newGame = document.querySelector(".pause_newGame");
+		// Запоминаем таймер
+		let time = timer.time;
+		// Останавливаем таймер
+		timer.stopTimer();
+		// Запись счета в окно паузы
+		document.querySelector(".pause_score").innerHTML = common.score;
+		// Вызов окна паузы
+		pause.style.display = "flex";
+		// Закрытие окна паузы и продолжение игры
+		continueGame.onclick = function() {
+			timer.time = time; // Записываем таймер
+			timer.startTimer(common.game); // Стартуем таймер заново
+			pause.style.display = "none"; // Закрываем окно
+		}
+		// Вызов окна начала игры
+		newGame.onclick = function() {
+			pause.style.display = "none";
+			popUp.games();
+		}
+		// Закрытие окна паузы
+		window.onclick = function(event) {
+			if (event.target == pause) {
+				timer.time = time;
+				timer.startTimer(common.game);
+				pause.style.display = "none";
+			}
+		}
+	},
 	// Экран конца игры
 	gameOver: function() {
 		let gameOver = document.querySelector(".gameOver");
 		let newGame = document.querySelector(".gameOver_newGame");
 		//
 		timer.stopTimer();
-		tetris.play = false;
-		shake.play = false;
-		racing.play = false;
+		common.game = null;
 		// Запись счета в окно конца игры
 		document.querySelector(".gameOver_score").innerHTML = common.score;
 		// Вызов окна конца игры
