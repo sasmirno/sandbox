@@ -103,6 +103,7 @@ let tetris = {
 	tetrisPlay: function() {
 		tetris.figureCreation();
 		tetris.move();
+		timer.time = 1000;
 		timer.startTimer(tetris);
 	},
 	// Создание фигуры
@@ -513,12 +514,12 @@ let tetris = {
 let shake = {
 	shakePlay: function() {
 		common.buffer[95] = 8; // Голова змейки
-		common.left = -6; // Ограничитель на правое и левое
-		common.right = 5;
-		timer.time = 700;
-		shake.mouse(); // Постановка точки в случайное место
-		shake.move();
-		timer.startTimer(shake);
+		common.left = -6; // Указатель левой границы
+		common.right = 5; // Указатель правой границы
+		timer.time = 700; // Интервал движения змейки
+		shake.mouse(); // Постановка точки(цель, 'мышь', 'яблоко') в случайное место
+		shake.move(); // Запуск змейки
+		timer.startTimer(shake); // Запуск таймера
 	},
 	// Постановка точки в случайное место
 	mouse: function(x) {
@@ -542,8 +543,6 @@ let shake = {
 		}
 	},
 	move: function() {
-		//console.log('змейка ползёт');
-		//console.log(timer.time);
 		switch (common.orientation) {
 				case 0:
 					shake.upMove();
@@ -571,8 +570,10 @@ let shake = {
 				common.buffer[key] = 0;
 			}
 		}
+		// Запоминаем координаты первых частей тела змеи
 		let odin = parseInt(y);
 		let dva = null;
+		// Двигаем хвост
 		for (let key in shake.tail) {
 			dva = shake.tail[key][1];
 			shake.tail[key][1] = odin;
@@ -581,7 +582,6 @@ let shake = {
 		}
 	},
 	upMove: function() {
-		//console.log('змейка ползёт вверх');
 		// Перебираем все клетки игрового поля
 		for (let key in common.matrix) {
 			// Ищим все числа кроме нуля и десятки
@@ -608,7 +608,6 @@ let shake = {
 		}
 	},
 	downMove: function() {
-		//console.log('змейка ползёт вниз');
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)+10] == 10) {
@@ -629,7 +628,6 @@ let shake = {
 		}
 	},
 	leftMove: function() {
-		//console.log('змейка ползёт влево');
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)-1] == 10) {
@@ -650,7 +648,6 @@ let shake = {
 		}
 	},
 	rightMove: function() {
-		//console.log('змейка ползёт вправо');
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)+1] == 10) {
@@ -749,7 +746,7 @@ let figures = {
 
 // Объект с таймер
 let timer = {
-	time: 1000,
+	time: null,
 	downMove: null,
 	speed: null,
 	startTimer: function(q) {
@@ -769,7 +766,7 @@ let timer = {
 	stopTimer: function() {
 		clearInterval(timer.downMove);
 		clearInterval(timer.speed);
-		timer.time = 1000;
+		//timer.time = 1000;
 	},
 }
 
@@ -837,6 +834,7 @@ let control = {
 				common.visualization(common.matrix, common.cells);
 			}
 		});
+
 	},
 }
 
@@ -849,10 +847,10 @@ let popUp = {
 		let playSnake = document.querySelector(".games_snake");
 		let playRacing = document.querySelector(".games_racing");
 		let controlPanel = document.querySelector(".tetris_keyboard");
+		// Обнуление всего что только можно
 		controlPanel.classList.remove('game_tetris');
 		controlPanel.classList.remove('game_shake');
 		controlPanel.classList.remove('game_racing');
-		//
 		tetris.figureNext = null;
 		tetris.currentFigure = null;
 		common.orientation = 0;
@@ -860,9 +858,11 @@ let popUp = {
 		common.osY = -1;
 		common.left = null;
 		common.right = null;
+		common.game = null;
 		common.score = 0;
+		document.querySelector(".tetris__info_speed").innerHTML = 1;
+		//document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
 		common.copyMatrix();
-		document.querySelector(".tetris__info_speed").innerHTML = 11-timer.time/100;
 		for (let key in common.screenNextFigure) {
 			common.screenNextFigure[key] = 0;
 		}
