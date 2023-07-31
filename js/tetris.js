@@ -770,8 +770,9 @@ let timer = {
 	},
 }
 
+// Управление
 let control = {
-	control: function(game) {
+	control: function() {
 		let buttons = document.querySelectorAll(".tetris_btn");
 		let pauseBtn = document.querySelector(".tetris_pause");
 		// Вызов окна паузы
@@ -786,26 +787,26 @@ let control = {
 		for (i = 0; i < buttons.length; i++) {
 			buttons[i].addEventListener("click", function() {
 				let input = this.id;
-				if (common.game == game) {
+				if (common.game != null) {
 					// Кнопка вверх
 					if (input == 'up') {
-						game.upMove();
+						common.game.upMove();
 					}
 					// Кнопка вниз
 					if (input == 'down') {
-						game.downMove();
+						common.game.downMove();
 					}
 					// Кнопка влево
 					if (input == 'left' && common.osX > common.left) {
-						game.leftMove();
+						common.game.leftMove();
 					}
 					// Кнопка вправо
 					if (input == 'right' && common.osX < common.right) {
-						game.rightMove();
+						common.game.rightMove();
 					}
 					// Кнопка поворота фигуры
 					if (input == 'turn') {
-						game.turn();
+						common.game.turn();
 					}
 					// Перезаписываем игровое поле и визуализируем на странице
 					common.matrix = Array.from(common.buffer);
@@ -815,19 +816,19 @@ let control = {
 		}
 		// Управление с клавиатуры
 		document.addEventListener('keydown', function(event) {
-			if (common.game == game) {
+			if (common.game != null) {
 				if (event.code === 'ArrowLeft' && common.osX > common.left) {
-					game.leftMove();
+					common.game.leftMove();
 				}
 				if (event.code === 'ArrowRight' && common.osX < common.right) {
-					game.rightMove();
+					common.game.rightMove();
 				}
 				if (event.code === 'ArrowDown') {
-					game.downMove();
+					common.game.downMove();
 				}
 				if (event.code === 'ArrowUp' || event.code === 'Space') {
-					game.turn();
-					game.upMove();
+					common.game.turn();
+					common.game.upMove();
 				}
 				// Перезаписываем игровое поле и визуализируем на странице
 				common.matrix = Array.from(common.buffer);
@@ -952,7 +953,5 @@ let popUp = {
 		}
 	}
 }
-control.control(tetris);
-control.control(shake);
-//control.control(racing);
+control.control();
 popUp.games();
