@@ -545,16 +545,77 @@ let shake = {
 	move: function() {
 		switch (common.orientation) {
 				case 0:
-					shake.upMove();
+					// Перебираем все клетки игрового поля
+					for (let key in common.matrix) {
+						// Ищим все числа кроме нуля и десятки
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							// Если в ячейке сверху нашли мышь, едим её и наращиваем хвост
+							if (common.matrix[parseInt(key)-10] == 10) {
+								shake.tailGrowth(key);
+							}
+							// Проверка есть ли свободное место сверху от фигуры
+							if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
+								popUp.gameOver();
+							} else {
+								// Если свободное место есть двигаем фигуру вверх
+								common.zeroing();
+								common.osY += 1;
+								common.buffer[parseInt(key)-10] = common.matrix[key];
+								shake.tailMove(key);
+							}
+						}
+					}
 				break;
 				case 90:
-					shake.rightMove();
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							if (common.matrix[parseInt(key)+1] == 10) {
+								shake.tailGrowth(key);
+							}
+							if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
+								popUp.gameOver();
+							} else {
+								common.zeroing();
+								common.osX += 1;
+								common.buffer[parseInt(key)+1] = common.matrix[key];
+								shake.tailMove(key);
+							}
+						}
+					}
 				break;
 				case 180:
-					shake.downMove();
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							if (common.matrix[parseInt(key)+10] == 10) {
+								shake.tailGrowth(key);
+							}
+							if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
+								popUp.gameOver();
+							} else {
+								common.zeroing();
+								common.osY -= 1;
+								common.buffer[parseInt(key)+10] = common.matrix[key];
+								shake.tailMove(key);
+							}
+						}
+					}
 				break;
 				case 240:
-					shake.leftMove();
+					for (let key in common.matrix) {
+						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+							if (common.matrix[parseInt(key)-1] == 10) {
+								shake.tailGrowth(key);
+							}
+							if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
+								popUp.gameOver();
+							} else {
+								common.zeroing();
+								common.osX -= 1;
+								common.buffer[parseInt(key)-1] = common.matrix[key];
+								shake.tailMove(key);
+							}
+						}
+					}
 				break;
 			}
 		// Перезаписываем игровое поле из промежуточного поля
@@ -582,89 +643,36 @@ let shake = {
 		}
 	},
 	upMove: function() {
-		// Перебираем все клетки игрового поля
-		for (let key in common.matrix) {
-			// Ищим все числа кроме нуля и десятки
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-				// Если в ячейке сверху нашли мышь, едим её и наращиваем хвост
-				if (common.matrix[parseInt(key)-10] == 10) {
-					shake.tailGrowth(key);
-				}
-				// Проверка есть ли у змейки жопа и можно ли туда двигаться
-				if (common.orientation != 180 || common.matrix[parseInt(key)-10] == 0) {
-					common.orientation = 0; // Указатель направления движения
-					// Проверка есть ли свободное место сверху от фигуры
-					if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
-						popUp.gameOver();
-					} else {
-						// Если свободное место есть двигаем фигуру вверх
-						common.zeroing();
-						common.osY += 1;
-						common.buffer[parseInt(key)-10] = common.matrix[key];
-						shake.tailMove(key);
-					}
-				}
-			}
+		// Проверка на наличее хвоста, если он есть, запрещаем двигаться назад
+		if (common.orientation != 180 || shake.tail.length == 0) {
+			timer.stopTimer();
+			common.orientation = 0;
+			shake.move();
+			timer.startTimer(common.game);
 		}
 	},
 	downMove: function() {
-		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-				if (common.matrix[parseInt(key)+10] == 10) {
-					shake.tailGrowth(key);
-				}
-				if (common.orientation != 0 || common.matrix[parseInt(key)+10] == 0) {
-					common.orientation = 180;
-					if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
-						popUp.gameOver();
-					} else {
-						common.zeroing();
-						common.osY -= 1;
-						common.buffer[parseInt(key)+10] = common.matrix[key];
-						shake.tailMove(key);
-					}
-				}
-			}
+		if (common.orientation != 0 || shake.tail.length == 0) {
+			timer.stopTimer();
+			common.orientation = 180;
+			shake.move();
+			timer.startTimer(common.game);
 		}
 	},
 	leftMove: function() {
-		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-				if (common.matrix[parseInt(key)-1] == 10) {
-					shake.tailGrowth(key);
-				}
-				if (common.orientation != 90 || common.matrix[parseInt(key)-1] == 0) {
-					common.orientation = 240;
-					if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
-						popUp.gameOver();
-					} else {
-						common.zeroing();
-						common.osX -= 1;
-						common.buffer[parseInt(key)-1] = common.matrix[key];
-						shake.tailMove(key);
-					}
-				}
-			}
+		if (common.orientation != 90 || shake.tail.length == 0) {
+			timer.stopTimer();
+			common.orientation = 240;
+			shake.move();
+			timer.startTimer(common.game);
 		}
 	},
 	rightMove: function() {
-		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-				if (common.matrix[parseInt(key)+1] == 10) {
-					shake.tailGrowth(key);
-				}
-				if (common.orientation != 240 || common.matrix[parseInt(key)+1] == 0) {
-					common.orientation = 90;
-					if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
-						popUp.gameOver();
-					} else {
-						common.zeroing();
-						common.osX += 1;
-						common.buffer[parseInt(key)+1] = common.matrix[key];
-						shake.tailMove(key);
-					}
-				}
-			}
+		if (common.orientation != 240 || shake.tail.length == 0) {
+			timer.stopTimer();
+			common.orientation = 90;
+			shake.move();
+			timer.startTimer(common.game);
 		}
 	},
 	turn: function() {},
@@ -750,9 +758,12 @@ let timer = {
 	downMove: null,
 	speed: null,
 	startTimer: function(q) {
-		timer.downMove = setInterval(q.move, timer.time);
-		if (common.game == tetris) {
-			timer.speed = setInterval(timer.speedUp, 60000);
+		// Запрещаем запуск таймера если нет игры
+		if (common.game != null) {
+			timer.downMove = setInterval(q.move, timer.time);
+			if (common.game == tetris) {
+				timer.speed = setInterval(timer.speedUp, 60000);
+			}
 		}
 	},
 	speedUp: function() {
@@ -766,7 +777,6 @@ let timer = {
 	stopTimer: function() {
 		clearInterval(timer.downMove);
 		clearInterval(timer.speed);
-		//timer.time = 1000;
 	},
 }
 
