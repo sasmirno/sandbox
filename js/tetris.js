@@ -79,9 +79,11 @@ let common = {
 				case 7:
 					b[key].style.background="dodgerblue";
 				break;
+				case '8s':
 				case 8:
 					b[key].style.background="black";
 				break;
+				case '10s':
 				case 10:
 					b[key].style.background="gray";
 				break;
@@ -510,6 +512,60 @@ let tetris = {
 	},
 }
 
+// Корбочка с фигурами тетриса
+let figures = {
+	// Фигура ''''
+	figure1 : [
+		['figure1'],
+		[3, 4, 5, 6, -3, 3, 1],
+	],
+	// Фигура '|'
+	figure2 : [
+		['figure2'],
+		[4, 5, 6, 15, -4, 3, 2],
+		[-5, 4, 5, 15, -4, 4, 2],
+		[-5, 4, 5, 6, -4, 3, 2],
+		[-5, 6, 5, 15, -5, 3, 2]
+	],
+	// Фигура ||
+	figure3 : [
+		['figure3'],
+		[4, 5, 14, 15, -4, 4, 3]
+	],
+	// Фигура ''|
+	figure4 : [
+		['figure2'],
+		[4, 5, 6, 16, -4, 3, 4],
+		[-5, 5, 14, 15, -4, 4, 4],
+		[-6, 4, 5, 6, -4, 3, 4],
+		[-5, -4, 5, 15, -5, 3, 4]
+	],
+	// Фигура '|.
+	figure5 : [
+		['figure2'],
+		[4, 5, 15, 16, -4, 3, 5],
+		[-5, 4, 5, 14, -4, 4, 5],
+		[-6, -5, 5, 6, -4, 3, 5],
+		[-4, 5, 6, 15, -5, 3, 5]
+	],
+	// Фигура ..|
+	figure6 : [
+		['figure2'],
+		[4, 5, 6, 14, -4, 3, 6],
+		[-6, -5, 5, 15, -4, 4, 6],
+		[-4, 4, 5, 6, -4, 3, 6],
+		[-5, 5, 15, 16, -5, 3, 6]
+	],
+	// Фигура .|'
+	figure7 : [
+		['figure2'],
+		[5, 6, 14, 15, -4, 3, 7],
+		[-6, 4, 5, 15, -4, 4, 7],
+		[-5, -4, 4, 5, -4, 3, 7],
+		[-5, 5, 6, 16, -5, 3, 7]
+	],
+};
+
 // Объект со змейкой
 let shake = {
 	shakePlay: function() {
@@ -544,80 +600,80 @@ let shake = {
 	},
 	move: function() {
 		switch (common.orientation) {
-				case 0:
-					// Перебираем все клетки игрового поля
-					for (let key in common.matrix) {
-						// Ищим все числа кроме нуля и десятки
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							// Если в ячейке сверху нашли мышь, едим её и наращиваем хвост
-							if (common.matrix[parseInt(key)-10] == 10) {
-								shake.tailGrowth(key);
-							}
-							// Проверка есть ли свободное место сверху от фигуры
-							if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
-								popUp.gameOver();
-							} else {
-								// Если свободное место есть двигаем фигуру вверх
-								common.zeroing();
-								common.osY += 1;
-								common.buffer[parseInt(key)-10] = common.matrix[key];
-								shake.tailMove(key);
-							}
+			case 0:
+				// Перебираем все клетки игрового поля
+				for (let key in common.matrix) {
+					// Ищим все числа кроме нуля и десятки
+					if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+						// Если в ячейке сверху нашли мышь, едим её и наращиваем хвост
+						if (common.matrix[parseInt(key)-10] == 10) {
+							shake.tailGrowth(key);
+						}
+						// Проверка есть ли свободное место сверху от фигуры
+						if (isNaN(common.matrix[parseInt(key)-10]) == true || common.osY == 8) {
+							popUp.gameOver();
+						} else {
+							// Если свободное место есть двигаем фигуру вверх
+							common.zeroing();
+							common.osY += 1;
+							common.buffer[parseInt(key)-10] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
-				break;
-				case 90:
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							if (common.matrix[parseInt(key)+1] == 10) {
-								shake.tailGrowth(key);
-							}
-							if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
-								popUp.gameOver();
-							} else {
-								common.zeroing();
-								common.osX += 1;
-								common.buffer[parseInt(key)+1] = common.matrix[key];
-								shake.tailMove(key);
-							}
+				}
+			break;
+			case 90:
+				for (let key in common.matrix) {
+					if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+						if (common.matrix[parseInt(key)+1] == 10) {
+							shake.tailGrowth(key);
+						}
+						if (isNaN(common.matrix[parseInt(key)+1]) == true || common.osX == 4) {
+							popUp.gameOver();
+						} else {
+							common.zeroing();
+							common.osX += 1;
+							common.buffer[parseInt(key)+1] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
-				break;
-				case 180:
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							if (common.matrix[parseInt(key)+10] == 10) {
-								shake.tailGrowth(key);
-							}
-							if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
-								popUp.gameOver();
-							} else {
-								common.zeroing();
-								common.osY -= 1;
-								common.buffer[parseInt(key)+10] = common.matrix[key];
-								shake.tailMove(key);
-							}
+				}
+			break;
+			case 180:
+				for (let key in common.matrix) {
+					if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+						if (common.matrix[parseInt(key)+10] == 10) {
+							shake.tailGrowth(key);
+						}
+						if (isNaN(common.matrix[parseInt(key)+10]) == true || common.osY == -11) {
+							popUp.gameOver();
+						} else {
+							common.zeroing();
+							common.osY -= 1;
+							common.buffer[parseInt(key)+10] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
-				break;
-				case 240:
-					for (let key in common.matrix) {
-						if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
-							if (common.matrix[parseInt(key)-1] == 10) {
-								shake.tailGrowth(key);
-							}
-							if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
-								popUp.gameOver();
-							} else {
-								common.zeroing();
-								common.osX -= 1;
-								common.buffer[parseInt(key)-1] = common.matrix[key];
-								shake.tailMove(key);
-							}
+				}
+			break;
+			case 240:
+				for (let key in common.matrix) {
+					if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
+						if (common.matrix[parseInt(key)-1] == 10) {
+							shake.tailGrowth(key);
+						}
+						if (isNaN(common.matrix[parseInt(key)-1]) == true || common.osX == -5) {
+							popUp.gameOver();
+						} else {
+							common.zeroing();
+							common.osX -= 1;
+							common.buffer[parseInt(key)-1] = common.matrix[key];
+							shake.tailMove(key);
 						}
 					}
-				break;
-			}
+				}
+			break;
+		}
 		// Перезаписываем игровое поле из промежуточного поля
 		common.matrix = Array.from(common.buffer);
 		// Визуализируем массив игрового поля на странице
@@ -680,8 +736,58 @@ let shake = {
 
 // Объект с гонкой
 let racing = {
+	racingPlay: function() {
+		// Рисуем болид
+		let randomColor = Math.ceil(Math.random() * 7);
+		common.buffer[165] = randomColor;
+		common.buffer[175] = randomColor;
+		common.buffer[185] = randomColor;
+		common.buffer[195] = randomColor;
+		common.buffer[174] = randomColor;
+		common.buffer[176] = randomColor;
+		common.buffer[194] = randomColor;
+		common.buffer[196] = randomColor;
+
+		common.buffer[9] = '8s';
+		common.buffer[0] = '8s';
+		common.buffer[10] = '8s';
+		common.buffer[40] = '8s';
+		common.buffer[50] = '8s';
+		common.buffer[80] = '8s';
+		common.buffer[90] = '8s';
+		common.buffer[120] = '8s';
+		common.buffer[130] = '8s';
+		common.buffer[160] = '8s';
+		common.buffer[170] = '8s';
+		//common.buffer[190] = '8s';
+
+		/*for (i = 0; i < 100; i+=10) {
+			
+		}*/
+
+		common.left = -3; // Указатель левой границы
+		common.right = 2; // Указатель правой границы
+		timer.time = 700; // Интервал движения
+		//shake.mouse(); // Постановка точки(цель, 'мышь', 'яблоко') в случайное место
+		racing.move(); // Поехали
+		//timer.startTimer(racing); // Запуск таймера
+		console.log('игра запущена');
+	},
 	move: function() {
 		console.log('болид едет');
+		/*for (let key in common.matrix) {
+			// Ищем все числа кроме нуля в массиве игрового поля
+			if (isNaN(common.matrix[key]) == true) {
+				// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
+				common.buffer[parseInt(key)+10] = common.matrix[key];
+				//console.log(common.matrix[key]);
+				//console.log(parseInt(key));
+			}
+		}*/
+		// Перезаписываем игровое поле из промежуточного поля
+		common.matrix = Array.from(common.buffer);
+		// Визуализируем массив игрового поля на странице
+		common.visualization(common.matrix, common.cells);
 	},
 	upMove: function() {
 		console.log('болид разгоняется');
@@ -690,67 +796,35 @@ let racing = {
 		console.log('болид тормозит');
 	},
 	leftMove: function() {
-		console.log('болид налево едет');
+		common.zeroing();
+		common.osX -= 1;
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)-1]) == true) {
+					popUp.gameOver();
+				} else {
+					common.buffer[parseInt(key)-1] = common.matrix[key];
+				}
+			}
+		}
+		//console.log('болид налево едет');
 	},
 	rightMove: function() {
-		console.log('болид направо едет');
+		common.zeroing();
+		common.osX += 1;
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+1]) == true) {
+					popUp.gameOver();
+				} else {
+					common.buffer[parseInt(key)+1] = common.matrix[key];
+				}
+			}
+		}
+		//console.log('болид направо едет');
 	},
 	turn: function() {},
 }
-
-// Корбочка с фигурами
-let figures = {
-	// Фигура ''''
-	figure1 : [
-		['figure1'],
-		[3, 4, 5, 6, -3, 3, 1],
-	],
-	// Фигура '|'
-	figure2 : [
-		['figure2'],
-		[4, 5, 6, 15, -4, 3, 2],
-		[-5, 4, 5, 15, -4, 4, 2],
-		[-5, 4, 5, 6, -4, 3, 2],
-		[-5, 6, 5, 15, -5, 3, 2]
-	],
-	// Фигура ||
-	figure3 : [
-		['figure3'],
-		[4, 5, 14, 15, -4, 4, 3]
-	],
-	// Фигура ''|
-	figure4 : [
-		['figure2'],
-		[4, 5, 6, 16, -4, 3, 4],
-		[-5, 5, 14, 15, -4, 4, 4],
-		[-6, 4, 5, 6, -4, 3, 4],
-		[-5, -4, 5, 15, -5, 3, 4]
-	],
-	// Фигура '|.
-	figure5 : [
-		['figure2'],
-		[4, 5, 15, 16, -4, 3, 5],
-		[-5, 4, 5, 14, -4, 4, 5],
-		[-6, -5, 5, 6, -4, 3, 5],
-		[-4, 5, 6, 15, -5, 3, 5]
-	],
-	// Фигура ..|
-	figure6 : [
-		['figure2'],
-		[4, 5, 6, 14, -4, 3, 6],
-		[-6, -5, 5, 15, -4, 4, 6],
-		[-4, 4, 5, 6, -4, 3, 6],
-		[-5, 5, 15, 16, -5, 3, 6]
-	],
-	// Фигура .|'
-	figure7 : [
-		['figure2'],
-		[5, 6, 14, 15, -4, 3, 7],
-		[-6, 4, 5, 15, -4, 4, 7],
-		[-5, -4, 4, 5, -4, 3, 7],
-		[-5, 5, 6, 16, -5, 3, 7]
-	],
-};
 
 // Объект с таймер
 let timer = {
@@ -887,17 +961,26 @@ let popUp = {
 		// Вызов окна  начала игры
 		games.style.display = "flex";
 		// Начало новой игры
+		// Запуск тетриса
 		playTetris.onclick = function() {
 			common.game = tetris;
 			controlPanel.classList.add('game_tetris');
 			games.style.display = "none";
 			tetris.tetrisPlay();
 		}
+		// Запуск змейки
 		playSnake.onclick = function() {
 			common.game = shake;
 			controlPanel.classList.add('game_shake');
 			games.style.display = "none";
 			shake.shakePlay();
+		}
+		// Запуск гонкиS
+		playRacing.onclick = function() {
+			common.game = racing;
+			controlPanel.classList.add('game_racing');
+			games.style.display = "none";
+			racing.racingPlay();
 		}
 		// Закрытие окна конца игры
 		window.onclick = function(event) {
