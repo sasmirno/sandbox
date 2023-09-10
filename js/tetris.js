@@ -737,6 +737,11 @@ let shake = {
 // Объект с гонкой
 let racing = {
 	racingPlay: function() {
+		for (let key in common.matrix) {
+			//if (isNaN(common.matrix[key]) == true) {}
+			common.buffer[key] = 10;
+			
+		}
 		// Рисуем болид
 		let randomColor = Math.ceil(Math.random() * 7)+'s';
 		common.buffer[165] = randomColor;
@@ -752,52 +757,52 @@ let racing = {
 		common.buffer[9] = 8;
 		common.buffer[19] = 8;
 		common.buffer[29] = 8;
-		//common.buffer[39] = 8;
-		//common.buffer[49] = 8;
+		common.buffer[39] = 0;
+		common.buffer[49] = 0;
 		common.buffer[59] = 8;
 		common.buffer[69] = 8;
 		common.buffer[79] = 8;
-		//common.buffer[89] = 8;
-		//common.buffer[99] = 8;
+		common.buffer[89] = 0;
+		common.buffer[99] = 0;
 		common.buffer[109] = 8;
 		common.buffer[119] = 8;
 		common.buffer[129] = 8;
-		//common.buffer[139] = 8;
-		//common.buffer[149] = 8;
+		common.buffer[139] = 0;
+		common.buffer[149] = 0;
 		common.buffer[159] = 8;
 		common.buffer[169] = 8;
 		common.buffer[179] = 8;
-		//common.buffer[189] = 8;
-		//common.buffer[199] = 8;
+		common.buffer[189] = 0;
+		common.buffer[199] = 0;
 
 		// Левый пунктир
 		common.buffer[0] = 8;
 		common.buffer[10] = 8;
 		common.buffer[20] = 8;
-		//common.buffer[30] = 8;
-		//common.buffer[40] = 8;
+		common.buffer[30] = 0;
+		common.buffer[40] = 0;
 		common.buffer[50] = 8;
 		common.buffer[60] = 8;
 		common.buffer[70] = 8;
-		//common.buffer[80] = 8;
-		//common.buffer[90] = 8;
+		common.buffer[80] = 0;
+		common.buffer[90] = 0;
 		common.buffer[100] = 8;
 		common.buffer[110] = 8;
 		common.buffer[120] = 8;
-		//common.buffer[130] = 8;
-		//common.buffer[140] = 8;
+		common.buffer[130] = 0;
+		common.buffer[140] = 0;
 		common.buffer[150] = 8;
 		common.buffer[160] = 8;
 		common.buffer[170] = 8;
-		//common.buffer[180] = 8;
-		//common.buffer[190] = 8;
+		common.buffer[180] = 0;
+		common.buffer[190] = 0;
 
 		// клякса
-		/*common.buffer[3] = 1;
-		common.buffer[12] = 1;
-		common.buffer[13] = 1;
-		common.buffer[14] = 1;
-		common.buffer[23] = 1;*/
+		/*common.buffer[3] = 8;
+		common.buffer[12] = 8;
+		common.buffer[13] = 8;
+		common.buffer[14] = 8;
+		common.buffer[23] = 8;*/
 
 		common.left = -4; // Указатель левой границы
 		common.right = 3; // Указатель правой границы
@@ -811,7 +816,7 @@ let racing = {
 		common.zeroing();
 		for (let key in common.matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0 && common.matrix[key] != 10) {
 				if (common.matrix[parseInt(key)+10] == null) {
 					common.buffer[9] = 8;
 					common.buffer[0] = 8;
@@ -837,13 +842,13 @@ let racing = {
 		// Стираем все строчние значения
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == true) {
-				common.buffer[key] = 0;
+				common.buffer[key] = 10;
 			}
 		}
 		common.osX -= 1;
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == true) {
-				if (isNaN(common.matrix[parseInt(key)-1]) == false && common.matrix[key-1] != 0) {
+				if (isNaN(common.matrix[parseInt(key)-1]) == false && common.matrix[key-1] != 10) {
 					popUp.gameOver();
 				} else {
 					common.buffer[parseInt(key)-1] = common.matrix[key];
@@ -857,13 +862,13 @@ let racing = {
 		// Стираем все строчние значения
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == true) {
-				common.buffer[key] = 0;
+				common.buffer[key] = 10;
 			}
 		}
 		common.osX += 1;
 		for (let key in common.matrix) {
 			if (isNaN(common.matrix[key]) == true) {
-				if (isNaN(common.matrix[parseInt(key)+1]) == false && common.matrix[parseInt(key)+1] != 0) {
+				if (isNaN(common.matrix[parseInt(key)+1]) == false && common.matrix[parseInt(key)+1] != 10) {
 					popUp.gameOver();
 				} else {
 					common.buffer[parseInt(key)+1] = common.matrix[key];
