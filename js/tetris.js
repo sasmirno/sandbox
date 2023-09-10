@@ -738,7 +738,7 @@ let shake = {
 let racing = {
 	racingPlay: function() {
 		// Рисуем болид
-		let randomColor = Math.ceil(Math.random() * 7);
+		let randomColor = Math.ceil(Math.random() * 7)+'s';
 		common.buffer[165] = randomColor;
 		common.buffer[175] = randomColor;
 		common.buffer[185] = randomColor;
@@ -748,42 +748,79 @@ let racing = {
 		common.buffer[194] = randomColor;
 		common.buffer[196] = randomColor;
 
-		common.buffer[9] = '8s';
-		common.buffer[0] = '8s';
-		common.buffer[10] = '8s';
-		common.buffer[40] = '8s';
-		common.buffer[50] = '8s';
-		common.buffer[80] = '8s';
-		common.buffer[90] = '8s';
-		common.buffer[120] = '8s';
-		common.buffer[130] = '8s';
-		common.buffer[160] = '8s';
-		common.buffer[170] = '8s';
-		//common.buffer[190] = '8s';
+		// Правый пунктир
+		common.buffer[9] = 8;
+		common.buffer[19] = 8;
+		common.buffer[29] = 8;
+		//common.buffer[39] = 8;
+		//common.buffer[49] = 8;
+		common.buffer[59] = 8;
+		common.buffer[69] = 8;
+		common.buffer[79] = 8;
+		//common.buffer[89] = 8;
+		//common.buffer[99] = 8;
+		common.buffer[109] = 8;
+		common.buffer[119] = 8;
+		common.buffer[129] = 8;
+		//common.buffer[139] = 8;
+		//common.buffer[149] = 8;
+		common.buffer[159] = 8;
+		common.buffer[169] = 8;
+		common.buffer[179] = 8;
+		//common.buffer[189] = 8;
+		//common.buffer[199] = 8;
 
-		/*for (i = 0; i < 100; i+=10) {
-			
-		}*/
+		// Левый пунктир
+		common.buffer[0] = 8;
+		common.buffer[10] = 8;
+		common.buffer[20] = 8;
+		//common.buffer[30] = 8;
+		//common.buffer[40] = 8;
+		common.buffer[50] = 8;
+		common.buffer[60] = 8;
+		common.buffer[70] = 8;
+		//common.buffer[80] = 8;
+		//common.buffer[90] = 8;
+		common.buffer[100] = 8;
+		common.buffer[110] = 8;
+		common.buffer[120] = 8;
+		//common.buffer[130] = 8;
+		//common.buffer[140] = 8;
+		common.buffer[150] = 8;
+		common.buffer[160] = 8;
+		common.buffer[170] = 8;
+		//common.buffer[180] = 8;
+		//common.buffer[190] = 8;
 
-		common.left = -3; // Указатель левой границы
-		common.right = 2; // Указатель правой границы
-		timer.time = 700; // Интервал движения
-		//shake.mouse(); // Постановка точки(цель, 'мышь', 'яблоко') в случайное место
+		// клякса
+		/*common.buffer[3] = 1;
+		common.buffer[12] = 1;
+		common.buffer[13] = 1;
+		common.buffer[14] = 1;
+		common.buffer[23] = 1;*/
+
+		common.left = -4; // Указатель левой границы
+		common.right = 3; // Указатель правой границы
+		timer.time = 50; // Интервал движения
 		racing.move(); // Поехали
-		//timer.startTimer(racing); // Запуск таймера
+		timer.startTimer(racing); // Запуск таймера
 		console.log('игра запущена');
 	},
 	move: function() {
-		console.log('болид едет');
-		/*for (let key in common.matrix) {
+		//console.log('болид едет');
+		common.zeroing();
+		for (let key in common.matrix) {
 			// Ищем все числа кроме нуля в массиве игрового поля
-			if (isNaN(common.matrix[key]) == true) {
-				// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
-				common.buffer[parseInt(key)+10] = common.matrix[key];
-				//console.log(common.matrix[key]);
-				//console.log(parseInt(key));
+			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
+				if (common.matrix[parseInt(key)+10] == null) {
+					common.buffer[9] = 8;
+					common.buffer[0] = 8;
+				} else {
+					// Создаем их копию в промежуточном поле и смещаем их на один уровень вниз
+					common.buffer[parseInt(key)+10] = common.matrix[key];
+				}
 			}
-		}*/
+		}
 		// Перезаписываем игровое поле из промежуточного поля
 		common.matrix = Array.from(common.buffer);
 		// Визуализируем массив игрового поля на странице
@@ -796,11 +833,17 @@ let racing = {
 		console.log('болид тормозит');
 	},
 	leftMove: function() {
-		common.zeroing();
+		//common.zeroing();
+		// Стираем все строчние значения
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == true) {
+				common.buffer[key] = 0;
+			}
+		}
 		common.osX -= 1;
 		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
-				if (isNaN(common.matrix[parseInt(key)-1]) == true) {
+			if (isNaN(common.matrix[key]) == true) {
+				if (isNaN(common.matrix[parseInt(key)-1]) == false && common.matrix[key-1] != 0) {
 					popUp.gameOver();
 				} else {
 					common.buffer[parseInt(key)-1] = common.matrix[key];
@@ -810,11 +853,17 @@ let racing = {
 		//console.log('болид налево едет');
 	},
 	rightMove: function() {
-		common.zeroing();
+		//common.zeroing();
+		// Стираем все строчние значения
+		for (let key in common.matrix) {
+			if (isNaN(common.matrix[key]) == true) {
+				common.buffer[key] = 0;
+			}
+		}
 		common.osX += 1;
 		for (let key in common.matrix) {
-			if (isNaN(common.matrix[key]) == false && common.matrix[key] != 0) {
-				if (isNaN(common.matrix[parseInt(key)+1]) == true) {
+			if (isNaN(common.matrix[key]) == true) {
+				if (isNaN(common.matrix[parseInt(key)+1]) == false && common.matrix[parseInt(key)+1] != 0) {
 					popUp.gameOver();
 				} else {
 					common.buffer[parseInt(key)+1] = common.matrix[key];
