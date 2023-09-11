@@ -798,10 +798,10 @@ let racing = {
 
 		common.left = -4; // Указатель левой границы
 		common.right = 3; // Указатель правой границы
-		timer.time = 100; // Скорость движения
+		timer.time = 125; // Скорость движения
+		document.querySelector(".tetris__info_speed").innerHTML = 100-timer.time/5;
 		racing.move(); // Поехали
 		timer.startTimer(racing); // Запуск таймера
-		console.log('игра запущена');
 	},
 	barrier: function() {
 		let random = Math.ceil(Math.random() * 5);
@@ -841,6 +841,7 @@ let racing = {
 		}
 		if (barrier == false) {
 			racing.barrier();
+			common.score += 1;
 		}
 		// Перезаписываем игровое поле из промежуточного поля
 		common.matrix = Array.from(common.buffer);
@@ -848,10 +849,20 @@ let racing = {
 		common.visualization(common.matrix, common.cells);
 	},
 	upMove: function() {
-		console.log('болид разгоняется');
+		if (timer.time > 50) {
+			timer.stopTimer();
+			timer.time -= 25;
+			timer.startTimer(racing);
+			document.querySelector(".tetris__info_speed").innerHTML = 100-timer.time/5;
+		}
 	},
 	downMove: function() {
-		console.log('болид тормозит');
+		if (timer.time < 200) {
+			timer.stopTimer();
+			timer.time += 25;
+			timer.startTimer(racing);
+			document.querySelector(".tetris__info_speed").innerHTML = 100-timer.time/5;
+		}
 	},
 	leftMove: function() {
 		// Стираем все строчние значения
